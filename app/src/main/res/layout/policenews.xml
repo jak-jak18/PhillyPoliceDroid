@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        
+        <RelativeLayout
+        android:id="@+id/PoliceNewsVideoView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+            
+        <RelativeLayout
+        android:id="@+id/ImageHolder"    
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:id="@+id/PoliceImageHolder"
+                android:layout_width="264dp"
+                android:layout_height="164dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/novideo" />
+
+            <ImageView
+                android:id="@+id/ImagetubeHolder"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/playoverlay" />
+            
+    </RelativeLayout>
+
+    
+
+    <TextView
+        android:id="@+id/PoliceNewsInfoTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:layout_alignLeft="@+id/PoliceNewsDesc"
+        android:layout_alignRight="@+id/PoliceNewsDesc"
+        android:layout_below="@+id/ImageHolder"
+        android:layout_marginLeft="5px"
+        android:gravity="center"
+        android:text="TextView"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/PoliceNewsDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:gravity="left"
+        android:textSize="16dp"
+        android:layout_marginRight="10px"
+        android:layout_marginLeft="10px"
+        android:layout_below="@+id/PoliceNewsInfoTitle"
+        android:layout_marginTop="5px"
+        android:text="TextView"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        android:layout_below="@+id/PoliceNewsDesc"
+        android:padding="10sp"
+        android:layout_marginTop="5sp">
+
+        <Button
+            android:id="@+id/bookmarkButton1"
+            android:layout_centerHorizontal="true"
+            android:layout_width="310dp"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_layout"
+            android:text="Bookmark News Article" />
+        
+        
+    </RelativeLayout>
+    
+    </RelativeLayout>
+    
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

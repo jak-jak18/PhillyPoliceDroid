@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_marginLeft="10px"
+        android:layout_marginTop="10px"
+        android:src="@drawable/calendar" />
+
+    <TextView
+        android:id="@+id/MeetIngTextView"
+        android:layout_marginTop="10px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/textView1"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/MeetingDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/MeetingDate"
+        android:layout_alignLeft="@+id/MeetIngTextView"
+        android:layout_below="@+id/MeetIngTextView"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/MeetingPlace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/MeetingDate"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_below="@+id/MeetingDate"
+        android:gravity="center"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="10px"
+        android:layout_marginLeft="10px"
+		android:layout_toRightOf="@+id/imageView1"
+        android:text="What: " />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/MeetIngTextView"
+        android:text="When:" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_alignBaseline="@+id/MeetingPlace"
+        android:layout_alignBottom="@+id/MeetingPlace"
+        android:layout_alignLeft="@+id/textView2"
+        android:text="Where:" />
+
+
+</RelativeLayout>

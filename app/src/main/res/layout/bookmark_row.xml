@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/BookmarkImageView"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="10px"
+            android:src="@drawable/video_camera" />
+
+        <TextView
+            android:id="@+id/BookmarkTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6sp"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_alignTop="@+id/BookmarkImageView"
+            android:layout_toRightOf="@+id/BookmarkImageView"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/BookmarkVideoDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/BookmarkImageView"
+            android:layout_marginTop="5sp"
+            android:layout_marginRight="10px"
+            android:layout_alignParentRight="true"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/BookmarkRegion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/BookmarkTitle"
+            android:layout_below="@+id/BookmarkTitle"
+            android:layout_marginTop="10px"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/BookmarkDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:layout_alignLeft="@+id/BookmarkImageView"
+            android:layout_alignRight="@+id/BookmarkVideoDate"
+            android:layout_below="@+id/BookmarkVideoDate"
+            android:layout_marginTop="10px"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/BookmarkCrimeType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:layout_below="@+id/BookmarkRegion"
+            android:layout_alignLeft="@+id/BookmarkRegion"
+            android:text="TextView" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

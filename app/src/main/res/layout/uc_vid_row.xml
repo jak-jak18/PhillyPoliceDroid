@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/UCVideoImageView"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="10px"
+            android:src="@drawable/video_camera" />
+
+        <TextView
+            android:id="@+id/UCVideoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:layout_alignTop="@+id/UCVideoImageView"
+            android:layout_toRightOf="@+id/UCVideoImageView"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/UCVideoDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_below="@+id/UCVideoImageView"
+            android:layout_marginRight="10px"
+            android:layout_alignParentRight="true"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/UCVideoRegion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_alignLeft="@+id/UCVideoTitle"
+            android:layout_below="@+id/UCVideoTitle"
+            android:layout_marginTop="10px"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/UCVideoDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:layout_alignLeft="@+id/UCVideoImageView"
+            android:layout_alignRight="@+id/UCVideoDate"
+            android:layout_below="@+id/UCVideoDate"
+            android:layout_marginTop="10px"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/UCVideoCrimeType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:textStyle="bold"
+            android:layout_marginTop="10px"
+            android:layout_below="@+id/UCVideoRegion"
+            android:layout_alignLeft="@+id/UCVideoRegion"
+            android:text="TextView" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

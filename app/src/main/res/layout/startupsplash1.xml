@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Button
+        android:id="@+id/donebutton"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:enabled="false"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:text="Done" />
+
+    <Button
+        android:id="@+id/gotosettings"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_above="@+id/donebutton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="14dp"
+        android:text="Go to Settings" />
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/gotosettings"
+        android:layout_alignLeft="@+id/gotosettings"
+        android:layout_marginBottom="25dp"
+        android:text="Dont Show Again"
+        android:textSize="25dp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:padding="25dp"
+        android:text="kh ishih dihfdhgkjd kjfghdjsfhkjdfs kgjhdskjfghkl dsjhfk jd hklgjdklghlkdj flkjdhskl gjhds lkjg hldjsfk"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>

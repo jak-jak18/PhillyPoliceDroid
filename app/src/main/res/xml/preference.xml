@@ -1,0 +1,49 @@
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:title="News Alerts">
+ 
+        <CheckBoxPreference
+                android:key="checkbox_preference"
+                android:title="Enabled News Alerts"
+                android:summary="Allow the system to update news stories in the background and alert you via the notification bar." />
+        
+        <MultiSelectListPreference 
+            android:key="district_preference"
+            android:title="Select Districts "
+            android:summary="Select the districts that you would like alerts about. ALL DISTRICT NEWS IS THE DEFAULT ALERTS"
+            android:entries="@array/DistrictsNumbers"
+            android:entryValues="@array/DistrictsValues"
+            android:dialogTitle="Police Districts" />
+        
+        <CheckBoxPreference
+                android:key="UCV_checkbox_preference"
+                android:title="Enabled UC Video Alerts"
+                android:summary="Allow the system to check for updates of unsolved crime videos in the background and alert you via the notification bar." />
+        
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="News Preference">
+
+        <EditTextPreference
+                android:key="edittext_preference"
+                android:title="Find My District"
+                android:summary="Input your address to determine your local police district"
+                android:dialogTitle="Input your Address" />
+
+
+
+        <MultiSelectListPreference
+            android:key="district_newstype"
+            android:title="Select Crime Category"
+            android:summary="Select the districts that you would like alerts about. ALL DISTRICT NEWS IS THE DEFAULT ALERTS"
+            android:entries="@array/CrimeCategories"
+            android:entryValues="@array/CrimeCategories"
+            android:dialogTitle="Police Districts" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
