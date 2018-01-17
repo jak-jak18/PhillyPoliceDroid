@@ -13,12 +13,10 @@ public class HttpClientInfo{
 	
 
 
-//	public static final String URL = "http://pleasedonot.servebeer.com/phillyPD/phila_api.php";
-//	public static final String URL = "http://10.20.30.43/Konext/mobile/phillypolice.php";
 
 	
-//	public static final String URL = "http://fuckwit.me/apps/philapd/api/phila_api.php";
-	public static final String URL = "http://10.20.30.10/phillyPD/v1/phila_pd_api.php";
+//	
+	public static final String URL = "http://phillypd.info/api/v1/phila_pd_api.php";
 	//public static final String DEVICE_ID = "cfcd208495d565ef66e7dff9f98764da";
 	
 	public static String getMacAddress(Context context) {
