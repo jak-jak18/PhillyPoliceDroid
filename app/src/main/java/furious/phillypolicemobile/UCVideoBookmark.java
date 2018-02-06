@@ -187,30 +187,16 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 								NewsStoryBookmarkObject item = new NewsStoryBookmarkObject();
 								JSONObject vid_object = uc_vid_Array.getJSONObject(i);
 								item.setID(vid_object.getString("VideoID"));
-								item.setDivision(vid_object.getString("Division"));
 								item.setTitle(vid_object.getString("Title"));
 								item.setDescription(vid_object.getString("Description"));
 								item.setStoryDate(vid_object.getString("PubDate"));
 								item.setImageURL(vid_object.getString("ImageURL"));
 								item.setCategory(vid_object.getString("Category"));
 								item.setVideoURL(vid_object.getString("TubeURL"));
+								item.setDivision(vid_object.getString("Division"));
 								vidObjs.add(item);
 							}
-							
-//							for(int i=0;i<news_story_count;i++){
-//									
-//								NewsStoryBookmarkObject item = new NewsStoryBookmarkObject();
-//								JSONObject news_object = news_story_Array.getJSONObject(i);
-//								item.setDistrict(news_object.getInt("District"));
-//								item.setTitle(news_object.getString("Title"));
-//								item.setDescription(news_object.getString("Description"));
-//								item.setAuthor(news_object.getString("Author"));
-//								item.setStoryDate(news_object.getString("PubDate"));
-//								item.setImageURL(news_object.getString("ImageURL"));
-//								item.setCategory(news_object.getString("Category"));
-//								item.setVideoURL(news_object.getString("TubeURL"));
-//								newsObjs.add(item);
-//							}
+
 							
 
 							

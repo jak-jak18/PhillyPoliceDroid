@@ -3,53 +3,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/donebutton"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:enabled="false"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp"
-        android:text="Done" />
 
-    <Button
-        android:id="@+id/gotosettings"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_above="@+id/donebutton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
-        android:text="Go to Settings" />
+    <RelativeLayout
+        android:id="@+id/splash_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <CheckBox
-        android:id="@+id/checkBox1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/gotosettings"
-        android:layout_alignLeft="@+id/gotosettings"
-        android:layout_marginBottom="25dp"
-        android:text="Dont Show Again"
-        android:textSize="25dp" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_centerHorizontal="true"
+            android:padding="3dp"
+            android:textStyle="bold"
+            android:textSize="26dp"
+            android:layout_marginTop="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Terms and Agreement" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="25dp"
-        android:padding="25dp"
-        android:text="kh ishih dihfdhgkjd kjfghdjsfhkjdfs kgjhdskjfghkl dsjhfk jd hklgjdklghlkdj flkjdhskl gjhds lkjg hldjsfk"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
 
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        style="?android:attr/progressBarStyleLarge"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/splash_header">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="25dp"
+                android:padding="25dp"
+                android:text="@string/terms"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+            <Button
+                android:id="@+id/donebutton"
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:enabled="false"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="18dp"
+                android:text="Finish" />
+
+            <CheckBox
+                android:id="@+id/checkBox1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/gotosettings"
+                android:layout_alignLeft="@+id/gotosettings"
+                android:layout_marginBottom="25dp"
+                android:text="I agree to the terms"
+                android:textSize="25dp" />
+
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                style="?android:attr/progressBarStyleLarge"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </RelativeLayout>

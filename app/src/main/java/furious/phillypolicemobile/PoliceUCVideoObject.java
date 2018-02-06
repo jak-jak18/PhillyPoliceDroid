@@ -10,7 +10,19 @@ public class PoliceUCVideoObject{
 	private String VideoDate;
 	private String CrimeType;
 	private String VideoURL;
-	
+	private String Division;
+
+
+
+	public String getDivision() {
+		return Division;
+	}
+
+	public void setDivision(String division) {
+		Division = division;
+	}
+
+
 	public String getTitle() {
 		return Title;
 	}

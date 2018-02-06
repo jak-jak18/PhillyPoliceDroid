@@ -142,7 +142,7 @@ public class PoliceUCVideosAdapter extends BaseAdapter{
 		viewHolder.videoTitle.setText(UC_Obj.getTitle());
 		viewHolder.videoCrimeType.setText(UC_Obj.getCrimeType());
 		viewHolder.videoDate.setText(UC_Obj.getVideoDate());
-		viewHolder.videoRegion.setText(" Division");
+		viewHolder.videoRegion.setText(UC_Obj.getDivision()+" Detective Division");
 		
 		//new LoadImage(viewHolder.captionURL).execute(UC_Obj.getCaptionURL());
 		imageLoader.DisplayImage(UC_Obj.getCaptionURL(), viewHolder.captionURL);

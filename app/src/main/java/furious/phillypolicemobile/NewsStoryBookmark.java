@@ -211,6 +211,7 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 								item.setAuthor(news_object.getString("Author"));
 								item.setStoryDate(news_object.getString("PubDate"));
 								item.setImageURL(news_object.getString("ImageURL"));
+								item.setDivision(news_object.getString("Division"));
 								item.setCategory(news_object.getString("Category"));
 								item.setVideoURL(news_object.getString("TubeURL"));
 								newsObjs.add(item);

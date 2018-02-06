@@ -57,7 +57,7 @@ public class StartUpSplash1 extends Activity {
 
        	}else{
        		
-       		final Button goSett = (Button) findViewById(R.id.gotosettings);
+       		//final Button goSett = (Button) findViewById(R.id.gotosettings);
             final Button done = (Button) findViewById(R.id.donebutton);
             final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox1);
             progress = (ProgressBar) findViewById(R.id.progressBar1);
@@ -88,7 +88,7 @@ public class StartUpSplash1 extends Activity {
      			
      			progress.setVisibility(View.VISIBLE);
      			done.setEnabled(false);
-     			goSett.setEnabled(false);
+//     			goSett.setEnabled(false);
      			checkBox.setEnabled(false);
      			new pushDevID().execute();
 
@@ -96,20 +96,20 @@ public class StartUpSplash1 extends Activity {
          	   
             });
             
-            goSett.setOnClickListener(new OnClickListener(){
-
-        		@Override
-        		public void onClick(View v) {
-        			// TODO Auto-generated method stub
-        			
-        			Intent intent = new Intent(StartUpSplash1.this, MainPreferenceActivity.class);
-                	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                	startActivity(intent);
-                	finish();
-        			
-        		}
-            	   
-               });
+//            goSett.setOnClickListener(new OnClickListener(){
+//
+//        		@Override
+//        		public void onClick(View v) {
+//        			// TODO Auto-generated method stub
+//
+//        			Intent intent = new Intent(StartUpSplash1.this, MainPreferenceActivity.class);
+//                	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                	startActivity(intent);
+//                	finish();
+//
+//        		}
+//
+//               });
              
              
 //             if(isWiFiOn()){

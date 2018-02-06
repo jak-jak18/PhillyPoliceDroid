@@ -187,7 +187,7 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 								info.setDescription(Dobject.getString("Description"));
 								info.setCaptionURL(Dobject.getString("CaptionURL"));
 								info.setVideoURL(Dobject.getString("VideoURL"));
-								//info.setRegion(Dobject.getString("Region"));
+								info.setDivision(Dobject.getString("Division"));
 								info.setCrimeType(Dobject.getString("CrimeType"));
 								info.setVideoDate(Dobject.getString("VideoDate"));
 								UC_Obj.add(info);
@@ -263,7 +263,7 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 								info.setDescription(Dobject.getString("Description"));
 								info.setCaptionURL(Dobject.getString("CaptionURL"));
 								info.setVideoURL(Dobject.getString("VideoURL"));
-								//info.setRegion(Dobject.getString("Region"));
+								info.setDivision(Dobject.getString("Division"));
 								info.setCrimeType(Dobject.getString("CrimeType"));
 								info.setVideoDate(Dobject.getString("VideoDate"));
 								UC_Obj.add(info);
@@ -316,7 +316,7 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 			
 			JSONObject postObj = new JSONObject();
 	 		postObj.put("UCVideos", "true");
-	 		postObj.put("DistrictNumber", DISTRICT_NUM);
+	 		postObj.put("District", DISTRICT_NUM);
 	// 		postObj.put("Division", DISTRICT_DIVISION);
 	// 		postObj.put("DeviceID", HttpClientInfo.DEVICE_ID);
 	 		postObj.put("Start", srt);

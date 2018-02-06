@@ -74,8 +74,9 @@ public class MainNews extends Fragment {
     int End = 3;
 	int TOTAL_COUNT = 0;
 	ListView listView;
-	
-    @Override
+	private boolean isNoMore;
+
+	@Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         Intent service = new Intent(getActivity(),PoliceUpdateService.class);
@@ -110,12 +111,19 @@ public class MainNews extends Fragment {
 				
 					if(view.findViewById(R.id.MainNewsListTextView) != null){
 						//Toast.makeText(getActivity(), "the Bottom", Toast.LENGTH_LONG).show();
-						progress1 = (ProgressBar) view.findViewById(R.id.progressBar1);
-						footText = (TextView) view.findViewById(R.id.MainNewsListTextView);
-						progress1.setVisibility(View.VISIBLE);
-						footText.setVisibility(View.INVISIBLE);
-						
-						new getMoreNews().execute();
+
+						if(isNoMore){
+							Toast.makeText(getActivity(), "No more news", Toast.LENGTH_SHORT).show();
+						}else{
+
+							progress1 = (ProgressBar) view.findViewById(R.id.progressBar1);
+							footText = (TextView) view.findViewById(R.id.MainNewsListTextView);
+							progress1.setVisibility(View.VISIBLE);
+							footText.setVisibility(View.INVISIBLE);
+
+							new getMoreNews().execute();
+						}
+
 						
 					}else{
 						
@@ -223,14 +231,24 @@ public class MainNews extends Fragment {
 		}
 		
 		protected void onPostExecute(final ArrayList<NewsObject> news_short_Objs) {
-			
-//			newsAdapter = new NewsAdapter(getActivity(), news_short_Objs);
+
 			newsAdapter.updateList(news_short_Objs);
-			//headerTxt.setText("More News "+"("+listofMainNews.size()+" of "+TOTAL_COUNT+")");
-			Ftitle.setText("More News "+"( "+listofMainNews.size()+" of "+TOTAL_COUNT+" )");
-			//listView.setAdapter(newsAdapter);
-			progress1.setVisibility(View.INVISIBLE);
-			footText.setVisibility(View.VISIBLE);
+
+			if(TOTAL_COUNT == news_short_Objs.size()){
+
+				Ftitle.setText("No More News");
+				progress1.setVisibility(View.INVISIBLE);
+				footText.setVisibility(View.VISIBLE);
+				isNoMore = true;
+
+			}else{
+
+				Ftitle.setText("More News "+"( "+listofMainNews.size()+" of "+TOTAL_COUNT+" )");
+				progress1.setVisibility(View.INVISIBLE);
+				footText.setVisibility(View.VISIBLE);
+				isNoMore = false;
+			}
+
 			
 
 					
@@ -311,12 +329,14 @@ public class MainNews extends Fragment {
 //						footer.setVisibility(View.VISIBLE);
 						progress.setVisibility(View.GONE);
 						waitText.setVisibility(View.INVISIBLE);
+						isNoMore = true;
 					}else{
 						listView.addFooterView(addTheFooter("More News "+"( "+news_short_Objs.size()+" of "+TOTAL_COUNT+" )"));
 						listView.setAdapter(newsAdapter);
 //						footer.setVisibility(View.VISIBLE);
 						progress.setVisibility(View.GONE);
 						waitText.setVisibility(View.INVISIBLE);
+						isNoMore = false;
 					}
 					
 					

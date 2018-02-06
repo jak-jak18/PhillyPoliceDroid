@@ -20,8 +20,10 @@ import android.widget.Toast;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainPreferenceFragment extends PreferenceFragment {
 
+	CheckBoxPreference EN_ableSound;
 	CheckBoxPreference checkBox;
 	CheckBoxPreference checkBox1;
+	Preference devID_key;
 	MultiSelectListPreference district_list;
 	
 	 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -36,18 +38,45 @@ public class MainPreferenceFragment extends PreferenceFragment {
 	        checkBox = (CheckBoxPreference) findPreference("checkbox_preference");
 	        checkBox1 = (CheckBoxPreference) findPreference("UCV_checkbox_preference");
 	        district_list = (MultiSelectListPreference) findPreference("district_preference");
-	        
-	        if(checkBox.isChecked()){
+		 	EN_ableSound = (CheckBoxPreference) findPreference("EN_ableSound");
+		 	devID_key = (Preference) findPreference("devID_key");
+
+		 	String macADD = HttpClientInfo.getMacAddress(getActivity());
+		 	String finADD = HttpClientInfo.getMD5(macADD);
+
+
+		 	if(checkBox.isChecked()){
 	        	district_list.setEnabled(true);
 				district_list.setSelectable(true);
+				EN_ableSound.setSelectable(true);
+				EN_ableSound.setEnabled(true);
 				checkBox1.setEnabled(true);
 				checkBox1.setSelectable(true);
 	        }else if(!checkBox.isChecked()){
 	        	district_list.setEnabled(false);
 				checkBox1.setEnabled(false);
+				EN_ableSound.setEnabled(false);
 				district_list.setSelectable(false);
 				checkBox1.setSelectable(false);
+				EN_ableSound.setSelectable(false);
 	        }
+
+
+		 devID_key.setTitle("System Device ID");
+		 devID_key.setSummary(finADD+"\n"+isActiveDevice());
+		 devID_key.setSelectable(false);
+
+
+
+		 EN_ableSound.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			 @Override
+			 public boolean onPreferenceClick(Preference preference) {
+
+
+
+				 return false;
+			 }
+		 });
 
 	        checkBox.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
@@ -60,13 +89,17 @@ public class MainPreferenceFragment extends PreferenceFragment {
 						district_list.setSelectable(true);
 						checkBox1.setEnabled(true);
 						checkBox1.setSelectable(true);
-						
+						EN_ableSound.setEnabled(true);
+						EN_ableSound.setSelectable(true);
+
 					}else{
 						// IS UNCHECKED
 						district_list.setEnabled(false);
 						checkBox1.setEnabled(false);
 						district_list.setSelectable(false);
 						checkBox1.setSelectable(false);
+						EN_ableSound.setEnabled(false);
+						EN_ableSound.setSelectable(false);
 					}
 					
 					return true;
@@ -78,8 +111,9 @@ public class MainPreferenceFragment extends PreferenceFragment {
 	        
 	        
 	 }
-	 
-	 
-	 
-	 
+
+
+	public String isActiveDevice() {
+		return "Active";
 	}
+}

@@ -250,8 +250,7 @@ public class PoliceUpdateService extends Service{
 						}else{
 							
 							// NOT CONNECTED TO THE INTERNET
-							Toast.makeText(getApplicationContext(), "NO Connection to Server", Toast.LENGTH_LONG).show();
-							
+
 						}
 						
 					} catch (IOException e) {
