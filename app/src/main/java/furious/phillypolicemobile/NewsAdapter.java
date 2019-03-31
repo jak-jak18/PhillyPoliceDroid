@@ -30,7 +30,7 @@ public class NewsAdapter extends BaseAdapter{
 	private final static String READ_MORE = "[Click to Read More]";
 	Context context;
 	ImageLoader imageLoader;
-	ArrayList<NewsObject> newsList;
+	ArrayList<NewStoryObject> newsList;
 	LayoutInflater inflater;
 //	TextView storyExcert;
 //	TextView storyTitle;
@@ -87,7 +87,7 @@ public class NewsAdapter extends BaseAdapter{
 	
 	
 	
-	public NewsAdapter(Context context, ArrayList<NewsObject> list){
+	public NewsAdapter(Context context, ArrayList<NewStoryObject> list){
 		this.context = context;
 		this.newsList = list;
 		this.inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -145,16 +145,16 @@ public class NewsAdapter extends BaseAdapter{
 			viewHolder = (NEWS_ViewHolder) convertView.getTag();
 		}
 			
-		NewsObject newsObj = (NewsObject) newsList.get(arg0);	
-		String stitle = ellipsize(newsObj.getStoryExcert(), 400);
-		viewHolder.author.setText("By: "+newsObj.getAuthor());
+		NewStoryObject newsObj = (NewStoryObject) newsList.get(arg0);
+		String stitle = ellipsize(newsObj.getDescription(), 400);
+		viewHolder.author.setText("By: "+newsObj.getStoryAuthor());
 		viewHolder.storyExcert.setText(stitle+READ_MORE);
 		//viewHolder.storyExcert.setText(newsObj.getStoryExcert());
-		viewHolder.storyTitle.setText(newsObj.getStoryTitle());
-		viewHolder.alertType.setText(newsObj.getAlertType());
-		viewHolder.storyDate.setText(newsObj.getStoryDate());
+		viewHolder.storyTitle.setText(newsObj.getTitle());
+		viewHolder.alertType.setText(newsObj.getCategory());
+		viewHolder.storyDate.setText(newsObj.getPubDate());
 			
-			if(newsObj.getVideoURL().equals("No Video")){
+			if(newsObj.getTubeURL().equals("No Video")){
 				
 				viewHolder.layout.setVisibility(View.GONE);
 			
@@ -163,7 +163,7 @@ public class NewsAdapter extends BaseAdapter{
 				viewHolder.titleView.setText("Unsolved Crime Video");
 				viewHolder.layout.setVisibility(View.VISIBLE);
 			
-			}else if(!newsObj.getVideoURL().isEmpty()){
+			}else if(!newsObj.getTubeURL().isEmpty()){
 				
 				viewHolder.layout.setVisibility(View.VISIBLE);
 				
@@ -174,7 +174,7 @@ public class NewsAdapter extends BaseAdapter{
 			
 
 		//new LoadImage(viewHolder.caption).execute(newsObj.getCaptionURL());
-		imageLoader.DisplayImage(newsObj.getCaptionURL(), viewHolder.caption);
+		imageLoader.DisplayImage(newsObj.getImageURL(), viewHolder.caption);
 		//notifyDataSetChanged();
 
 		
@@ -198,7 +198,7 @@ public class NewsAdapter extends BaseAdapter{
 	    }
 	}
 	
-	public void updateList(ArrayList<NewsObject> list) {
+	public void updateList(ArrayList<NewStoryObject> list) {
         this.newsList = list;
         notifyDataSetChanged();
     }

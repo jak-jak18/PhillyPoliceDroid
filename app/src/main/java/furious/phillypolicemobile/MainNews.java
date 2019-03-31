@@ -52,7 +52,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainNews extends Fragment {
-	ArrayList<NewsObject> listofMainNews;
+	ArrayList<NewStoryObject> listofMainNews;
 	//NewsShortMainAdapter mainNewsAdapter;
 	NewsAdapter newsAdapter;
 	DistrictListAdapter adapter;
@@ -127,13 +127,13 @@ public class MainNews extends Fragment {
 						
 					}else{
 						
-						NewsObject lObj = (NewsObject) parent.getItemAtPosition(position);	
+						NewStoryObject lObj = (NewStoryObject) parent.getItemAtPosition(position);
 						
-						String vidURL = lObj.getVideoURL();
-						String desc = lObj.getStoryExcert();
-						String storyTil = lObj.getStoryTitle();
-						String imgURL = lObj.getCaptionURL();
-						String imgID = lObj.getID();
+						String vidURL = lObj.getTubeURL();
+						String desc = lObj.getDescription();
+						String storyTil = lObj.getTitle();
+						String imgURL = lObj.getImageURL();
+						String imgID = lObj.getNewsStoryID();
 						
 						Intent policeNews = new Intent(getActivity(), PoliceNews.class);
 						policeNews.putExtra("URL", vidURL);
@@ -163,10 +163,10 @@ public class MainNews extends Fragment {
  	   
     }
     
-    class getMoreNews extends AsyncTask<String, Void, ArrayList<NewsObject>>{
+    class getMoreNews extends AsyncTask<String, Void, ArrayList<NewStoryObject>>{
 
 		@Override
-		protected ArrayList<NewsObject> doInBackground(String... arg0) {
+		protected ArrayList<NewStoryObject> doInBackground(String... arg0) {
 			// TODO Auto-generated method stub
 			
 			try {
@@ -191,20 +191,20 @@ public class MainNews extends Fragment {
 						JSONArray jArray = jObj.getJSONArray("News");
 						TOTAL_COUNT = jObj.getInt("TotalCount");
 						int count = jArray.length();
-						//listofMainNews = new ArrayList<NewsObject>();
+						//listofMainNews = new ArrayList<NewStoryObject>();
 							
 						for(int i=0;i<count;i++){
 							
 							JSONObject daObj = jArray.getJSONObject(i);
-							NewsObject nObj = new NewsObject();
-							nObj.setAlertType(daObj.getString("AlertType"));
-							nObj.setStoryDate(daObj.getString("StoryDate"));
-							nObj.setAuthor(daObj.getString("StoryAuthor"));
-							nObj.setStoryTitle(daObj.getString("StoryTitle"));
-							nObj.setStoryExcert(daObj.getString("StoryExcert"));
-							nObj.setCaptionURL(daObj.getString("ImageURL"));
-							nObj.setVideoURL(daObj.getString("TubeURL"));
-							nObj.setID(daObj.getString("StoryID"));
+							NewStoryObject nObj = new NewStoryObject();
+							nObj.setCategory(daObj.getString("Category"));
+							nObj.setPubDate(daObj.getString("PubDate"));
+							nObj.setStoryAuthor(daObj.getString("StoryAuthor"));
+							nObj.setTitle(daObj.getString("Title"));
+							nObj.setDescription(daObj.getString("Description"));
+							nObj.setImageURL(daObj.getString("ImageURL"));
+							nObj.setTubeURL(daObj.getString("TubeURL"));
+							nObj.setNewsStoryID(daObj.getString("NewsStoryID"));
 							listofMainNews.add(nObj);
 						}
 						
@@ -230,7 +230,7 @@ public class MainNews extends Fragment {
 			return listofMainNews;
 		}
 		
-		protected void onPostExecute(final ArrayList<NewsObject> news_short_Objs) {
+		protected void onPostExecute(final ArrayList<NewStoryObject> news_short_Objs) {
 
 			newsAdapter.updateList(news_short_Objs);
 
@@ -260,11 +260,11 @@ public class MainNews extends Fragment {
     
 
     
-    class getZeroNews extends AsyncTask<String, Void, ArrayList<NewsObject>>{
+    class getZeroNews extends AsyncTask<String, Void, ArrayList<NewStoryObject>>{
 
 		@SuppressLint("NewApi")
 		@Override
-		protected ArrayList<NewsObject> doInBackground(String... arg0) {
+		protected ArrayList<NewStoryObject> doInBackground(String... arg0) {
 			// TODO Auto-generated method stub
 			
 			try {
@@ -278,20 +278,20 @@ public class MainNews extends Fragment {
 						JSONArray jArray = jObj.getJSONArray("News");
 						TOTAL_COUNT = jObj.getInt("TotalCount");
 						int count = jArray.length();
-						listofMainNews = new ArrayList<NewsObject>();
+						listofMainNews = new ArrayList<NewStoryObject>();
 							
 						for(int i=0;i<count;i++){
 								
 							JSONObject daObj = jArray.getJSONObject(i);
-							NewsObject nObj = new NewsObject();
-							nObj.setAlertType(daObj.getString("AlertType"));
-							nObj.setStoryDate(daObj.getString("StoryDate"));
-							nObj.setAuthor(daObj.getString("StoryAuthor"));
-							nObj.setStoryTitle(daObj.getString("StoryTitle"));
-							nObj.setStoryExcert(daObj.getString("StoryExcert"));
-							nObj.setCaptionURL(daObj.getString("ImageURL"));
-							nObj.setVideoURL(daObj.getString("TubeURL"));
-							nObj.setID(daObj.getString("StoryID"));
+							NewStoryObject nObj = new NewStoryObject();
+							nObj.setCategory(daObj.getString("Category"));
+							nObj.setPubDate(daObj.getString("PubDate"));
+							nObj.setStoryAuthor(daObj.getString("StoryAuthor"));
+							nObj.setTitle(daObj.getString("Title"));
+							nObj.setDescription(daObj.getString("Description"));
+							nObj.setImageURL(daObj.getString("ImageURL"));
+							nObj.setTubeURL(daObj.getString("TubeURL"));
+							nObj.setNewsStoryID(daObj.getString("NewsStoryID"));
 							listofMainNews.add(nObj);
 						}
 					
@@ -317,7 +317,7 @@ public class MainNews extends Fragment {
 			return listofMainNews;
 		}
 		
-		protected void onPostExecute(final ArrayList<NewsObject> news_short_Objs) {
+		protected void onPostExecute(final ArrayList<NewStoryObject> news_short_Objs) {
 			
 			
 				newsAdapter = new NewsAdapter(getActivity(), news_short_Objs);

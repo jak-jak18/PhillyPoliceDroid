@@ -210,7 +210,7 @@ public class PoliceNewsAll extends Activity{
 			return finalArray;
 		}
 		
-		protected void onPostExecute(ArrayList<NewsObject> newsSty){
+		protected void onPostExecute(ArrayList<NewStoryObject> newsSty){
 			
 			dateView.setText(timeStamp);
 			newsAdapter = new NewsAdapter(getApplicationContext(), newsSty);

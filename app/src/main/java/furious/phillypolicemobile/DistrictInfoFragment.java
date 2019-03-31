@@ -111,13 +111,13 @@ public class DistrictInfoFragment extends Fragment{
 						//JSONArray objectArray = object.getJSONArray("Info");
 						//Log.i("Number Of itmes", Integer.toString(objectArray.length()));
 						//int ct = objectArray.length();
-						JSONObject Dobject = object.getJSONObject("District");
+						JSONObject Dobject = object.getJSONObject("DistrictInfo");
 						policeObj = new PoliceDistricts();
 							if(!Dobject.getString("DistrictNumber").equals("None")){
 								policeObj.setDistrictNumber(Dobject.getString("DistrictNumber"));
-								policeObj.setDistrictAddress(Dobject.getString("DistrictAddress"));
-								policeObj.setDistrictEmail(Dobject.getString("DistrictEmail"));
-								policeObj.setDistrictPhone(Dobject.getString("DistrictPhone"));
+								policeObj.setDistrictAddress(Dobject.getString("LocationAddress"));
+								policeObj.setDistrictEmail(Dobject.getString("EmailAddress"));
+								policeObj.setDistrictPhone(Dobject.getString("PhoneNumber"));
 								policeObj.setCaptainName(Dobject.getString("CaptainName"));
 								policeObj.setCaptainImageURL(Dobject.getString("CaptainImageURL"));
 								image = getBitmapFromURL(Dobject.getString("CaptainImageURL"));
@@ -128,9 +128,9 @@ public class DistrictInfoFragment extends Fragment{
 									for(int i=0;i<count;i++){
 										PoliceDistricts dis2 = new PoliceDistricts();
 										JSONObject obj2 = objectArray2.getJSONObject(i);
-										dis2.setPSAArea(obj2.getString("PSAAreaNum"));
-										dis2.setLTName(obj2.getString("LTName"));
-										dis2.setEmail(obj2.getString("LTEmail"));
+										dis2.setPSAArea(obj2.getString("PSAAreaNumber"));
+										dis2.setLTName(obj2.getString("LieutenantName"));
+										dis2.setEmail(obj2.getString("EmailAddress"));
 										PSAList.add(dis2);
 									}
 									
@@ -140,9 +140,9 @@ public class DistrictInfoFragment extends Fragment{
 										for(int i=0;i<count1;i++){
 											PoliceDistricts dis3 = new PoliceDistricts();
 											JSONObject obj3 = objectArray3.getJSONObject(i);
-											dis3.setMeetingDate(obj3.getString("MeetingDate"));
-											dis3.setMeetName(obj3.getString("MeetingName"));
-											dis3.setMeetingPlace(obj3.getString("MeetingLocation"));
+											dis3.setMeetingDate(obj3.getString("MeetDate"));
+											dis3.setMeetName(obj3.getString("Title"));
+											dis3.setMeetingPlace(obj3.getString("MeetLocation"));
 											CalList.add(dis3);
 										}
 		//
@@ -169,17 +169,16 @@ public class DistrictInfoFragment extends Fragment{
 								for(int i=0; i<PSAList.size();i++){
 									PoliceDistricts hon = new PoliceDistricts();
 							 		hon = PSAList.get(i);
-							 		
+
 									View v = getActivity().getLayoutInflater().inflate(R.layout.district_info_row, null);
 									TextView area = (TextView) v.findViewById(R.id.PSAArea);
 									TextView LTName = (TextView) v.findViewById(R.id.PSALieutenantTextView);
 									TextView email = (TextView) v.findViewById(R.id.PSAEmail);
-									
+
 									area.setText("PSA Area "+hon.getPSAArea());
 									LTName.setText(hon.getLTName());
 									email.setText(hon.getEmail());
 									table.addView(v);
-							 		
 							 	}
 								
 								int count1 = CalList.size();

@@ -48,7 +48,7 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 
 	String DISTRICT;
 	ListView listview;
-	ArrayList<NewsObject> newsObjs;
+	ArrayList<NewStoryObject> newsObjs;
 	ArrayList<String> items;
 	ProgressBar progressM;
 	ProgressDialog pDialog;
@@ -103,18 +103,18 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 					Toast.makeText(getActivity(), "No more news at this time", Toast.LENGTH_LONG).show();
 				}
 			}else{
-				NewsObject lObj = (NewsObject) arg0.getItemAtPosition(arg2);
+				NewStoryObject lObj = (NewStoryObject) arg0.getItemAtPosition(arg2);
 				boolean isVid = false;
-					if(!lObj.getVideoURL().equals(0) || !lObj.getVideoURL().equals(null)){
+					if(!lObj.getTubeURL().equals(0) || !lObj.getTubeURL().equals(null)){
 						isVid = true;
 					}
 				Intent policeNews = new Intent(getActivity(),PoliceNews.class);
 				Bundle bundle = new Bundle();
-				bundle.putString("Description", lObj.getStoryExcert());
-				bundle.putString("StoryTitle", lObj.getStoryTitle());
-				bundle.putString("URL", lObj.getVideoURL());
-				bundle.putString("StoryID", lObj.getID());
-				bundle.putString("ImageURL", lObj.getCaptionURL());
+				bundle.putString("Description", lObj.getDescription());
+				bundle.putString("StoryTitle", lObj.getTitle());
+				bundle.putString("URL", lObj.getTubeURL());
+				bundle.putString("StoryID", lObj.getNewsStoryID());
+				bundle.putString("ImageURL", lObj.getImageURL());
 				bundle.putBoolean("isVideo", isVid);
 				bundle.putBoolean("isUCVid", false);
 				bundle.putBoolean("isAlrBk", false);
@@ -169,7 +169,7 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 		 
 	 }
 	 
-	 public class getDistrictNews extends AsyncTask<String, Void, ArrayList<NewsObject>>{
+	 public class getDistrictNews extends AsyncTask<String, Void, ArrayList<NewStoryObject>>{
 		 
 		 @Override
 		    protected void onPreExecute() {
@@ -179,8 +179,8 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 		 }
 		 
 			@Override
-			protected ArrayList<NewsObject> doInBackground(String... params) {
-				newsObjs = new ArrayList<NewsObject>();
+			protected ArrayList<NewStoryObject> doInBackground(String... params) {
+				newsObjs = new ArrayList<NewStoryObject>();
 				
 					try{
 						String Data = getListData(params[0],0,5);
@@ -189,20 +189,20 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 							int count = objectArray.length();
 								
 							for(int i=0;i<count;i++){
-									NewsObject item = new NewsObject();
+									NewStoryObject item = new NewStoryObject();
 									JSONObject newobject = objectArray.getJSONObject(i);
-									item.setID(newobject.getString("StoryID"));
+									item.setNewsStoryID(newobject.getString("StoryID"));
 									item.setDistrictNumber(newobject.getString("District"));
-									item.setStoryExcert(newobject.getString("Excert"));
-									item.setStoryDate(newobject.getString("StoryDate"));
-									item.setCaptionURL(newobject.getString("CaptionURL"));
-									item.setStoryURL(newobject.getString("StoryURL"));
-									item.setStoryTitle(newobject.getString("Title"));
-									item.setID(newobject.getString("StoryID"));
-									item.setVideoURL(newobject.getString("VideoURL"));
+									item.setDescription(newobject.getString("Excert"));
+									item.setPubDate(newobject.getString("StoryDate"));
+									item.setImageURL(newobject.getString("CaptionURL"));
+									item.setURL(newobject.getString("StoryURL"));
+									item.setTitle(newobject.getString("Title"));
+									item.setNewsStoryID(newobject.getString("StoryID"));
+									item.setTubeURL(newobject.getString("VideoURL"));
 									//item.setDescription(newobject.getString("Description"));
-									item.setAlertType(newobject.getString("AlertType"));
-									item.setAuthor(newobject.getString("Author"));
+									item.setCategory(newobject.getString("AlertType"));
+									item.setStoryAuthor(newobject.getString("Author"));
 									newsObjs.add(item);
 								}
 								TOTAL_COUNT = object.getInt("TotalCount");
@@ -217,7 +217,7 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 				return newsObjs;
 			}
 			
-				protected void onPostExecute(ArrayList<NewsObject> lockers) {
+				protected void onPostExecute(ArrayList<NewStoryObject> lockers) {
 					
 					adapter = new NewsAdapter(getActivity(),lockers);
 					//Madapter = new MergeAdapter();
@@ -252,10 +252,10 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 	}
 	 
 	 
-	 public class fetchMoreNews extends AsyncTask<String, Void, ArrayList<NewsObject>>{
+	 public class fetchMoreNews extends AsyncTask<String, Void, ArrayList<NewStoryObject>>{
 
 		@Override
-		protected ArrayList<NewsObject> doInBackground(String... params) {
+		protected ArrayList<NewStoryObject> doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			try {
 				String rdata = null;
@@ -271,20 +271,20 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 				int count = objectArray.length();
 					
 				for(int i=0;i<count;i++){
-						NewsObject item = new NewsObject();
+						NewStoryObject item = new NewStoryObject();
 						JSONObject newobject = objectArray.getJSONObject(i);
-						item.setID(newobject.getString("StoryID"));
+						item.setNewsStoryID(newobject.getString("StoryID"));
 						item.setDistrictNumber(newobject.getString("District"));
-						item.setStoryExcert(newobject.getString("Excert"));
-						item.setStoryDate(newobject.getString("StoryDate"));
-						item.setCaptionURL(newobject.getString("CaptionURL"));
-						item.setStoryURL(newobject.getString("StoryURL"));
-						item.setID(newobject.getString("StoryID"));
-						item.setStoryTitle(newobject.getString("Title"));
-						item.setVideoURL(newobject.getString("VideoURL"));
+						item.setDescription(newobject.getString("Excert"));
+						item.setPubDate(newobject.getString("StoryDate"));
+						item.setImageURL(newobject.getString("CaptionURL"));
+						item.setURL(newobject.getString("StoryURL"));
+						item.setNewsStoryID(newobject.getString("StoryID"));
+						item.setTitle(newobject.getString("Title"));
+						item.setTubeURL(newobject.getString("VideoURL"));
 						//item.setDescription(newobject.getString("Description"));
-						item.setAlertType(newobject.getString("AlertType"));
-						item.setAuthor(newobject.getString("Author"));
+						item.setCategory(newobject.getString("AlertType"));
+						item.setStoryAuthor(newobject.getString("Author"));
 						newsObjs.add(item);
 					}
 					TOTAL_COUNT = jObj.getInt("TotalCount");
@@ -303,7 +303,7 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 			return newsObjs;
 		}
 		
-		protected void onPostExecute(ArrayList<NewsObject> newsSty){
+		protected void onPostExecute(ArrayList<NewStoryObject> newsSty){
 			
 			adapter.updateList(newsSty);
 			adapter.notifyDataSetChanged();
