@@ -52,13 +52,23 @@ public class MainStart extends FragmentActivity{
                 case 0:
                 	findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
                     findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
+					findViewById(R.id.thirdd_tab).setVisibility(View.INVISIBLE);
                     break;
 
                 case 1:
-                	
+
                     findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
                     findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
+					findViewById(R.id.thirdd_tab).setVisibility(View.INVISIBLE);
                     break;
+
+
+                    case 2:
+
+						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
+						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
+						findViewById(R.id.thirdd_tab).setVisibility(View.VISIBLE);
+						break;
                 }
 			}
         	
@@ -99,7 +109,7 @@ public class MainStart extends FragmentActivity{
 	}
 	
 	public class NewsPagerAdapter extends FragmentPagerAdapter{
-    	private String[] Positions = {"District News","Main News"};
+    	private String[] Positions = {"District News","Main News","Shootings"};
 
         public NewsPagerAdapter(FragmentManager fm) {
             super(fm);

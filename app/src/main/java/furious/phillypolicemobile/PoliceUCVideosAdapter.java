@@ -139,13 +139,13 @@ public class PoliceUCVideosAdapter extends BaseAdapter{
 		String stitle = ellipsize(UC_Obj.getDescription(), 300);
 //		viewHolder.author.setText("Published By: "+UC_Obj.getAuthor());
 		viewHolder.videoDescription.setText(replaceHTMLStuff(stitle+READ_MORE));
-		viewHolder.videoTitle.setText(UC_Obj.getTitle());
+		viewHolder.videoTitle.setText(UC_Obj.getVideoTitle());
 		viewHolder.videoCrimeType.setText(UC_Obj.getCrimeType());
 		viewHolder.videoDate.setText(UC_Obj.getVideoDate());
-		viewHolder.videoRegion.setText(UC_Obj.getDivision()+" Detective Division");
+		viewHolder.videoRegion.setText(UC_Obj.getDistrictDivision()+" Detective Division");
 		
 		//new LoadImage(viewHolder.captionURL).execute(UC_Obj.getCaptionURL());
-		imageLoader.DisplayImage(UC_Obj.getCaptionURL(), viewHolder.captionURL);
+		imageLoader.DisplayImage(UC_Obj.getVideoImageURL(), viewHolder.captionURL);
 		return convertView;
 	}
 	

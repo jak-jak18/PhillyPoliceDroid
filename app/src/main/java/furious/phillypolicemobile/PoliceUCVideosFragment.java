@@ -109,17 +109,17 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 					boolean isVid = false;
 					PoliceUCVideoObject lObj = (PoliceUCVideoObject) arg0.getItemAtPosition(arg2);
 					
-					if(!lObj.getVideoURL().equals(0) || !lObj.getVideoURL().equals(null)){
+					if(!lObj.getTubeURL().equals(0) || !lObj.getTubeURL().equals(null)){
 						isVid = true;
 					}
 					
 					Intent policeNews = new Intent(getActivity(),PoliceNews.class);
 					Bundle bundle = new Bundle();
 					bundle.putString("Description", lObj.getDescription());
-					bundle.putString("StoryTitle", lObj.getTitle());
-					bundle.putString("StoryID", lObj.getID());
-					bundle.putString("ImageURL", lObj.getCaptionURL());
-					bundle.putString("URL", lObj.getVideoURL());
+					bundle.putString("StoryTitle", lObj.getVideoTitle());
+					bundle.putString("StoryID", lObj.getNewsStoryID());
+					bundle.putString("ImageURL", lObj.getVideoImageURL());
+					bundle.putString("URL", lObj.getTubeURL());
 					bundle.putBoolean("isAlrBk", false);
 					bundle.putBoolean("isUCVid", true);
 					bundle.putBoolean("isVideo", isVid);
@@ -182,12 +182,12 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 							//	Log.i("THIS_MANY_STING", ct+" "+objectArray.getString(ct));
 								PoliceUCVideoObject info = new PoliceUCVideoObject();
 								JSONObject Dobject = objectArray.getJSONObject(i);
-								info.setTitle(Dobject.getString("Title"));
-								info.setID(Dobject.getString("ID"));
+								info.setVideoTitle(Dobject.getString("VideoTitle"));
+								info.setUCVideoID(Dobject.getString("UCVideoID"));
 								info.setDescription(Dobject.getString("Description"));
-								info.setCaptionURL(Dobject.getString("CaptionURL"));
-								info.setVideoURL(Dobject.getString("VideoURL"));
-								info.setDivision(Dobject.getString("Division"));
+								info.setVideoImageURL(Dobject.getString("VideoImageURL"));
+								info.setTubeURL(Dobject.getString("TubeURL"));
+								info.setDistrictDivision(Dobject.getString("DistrictDivision"));
 								info.setCrimeType(Dobject.getString("CrimeType"));
 								info.setVideoDate(Dobject.getString("VideoDate"));
 								UC_Obj.add(info);
@@ -258,12 +258,12 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 							for(int i=0;i<ct;i++){
 								PoliceUCVideoObject info = new PoliceUCVideoObject();
 								JSONObject Dobject = objectArray.getJSONObject(i);
-								info.setTitle(Dobject.getString("Title"));
-								info.setID(Dobject.getString("ID"));
+								info.setVideoTitle(Dobject.getString("VideoTitle"));
+								info.setNewsStoryID(Dobject.getString("NewsStoryID"));
 								info.setDescription(Dobject.getString("Description"));
-								info.setCaptionURL(Dobject.getString("CaptionURL"));
-								info.setVideoURL(Dobject.getString("VideoURL"));
-								info.setDivision(Dobject.getString("Division"));
+								info.setVideoImageURL(Dobject.getString("VideoImageURL"));
+								info.setTubeURL(Dobject.getString("TubeURL"));
+								info.setDistrictDivision(Dobject.getString("DistrictDivision"));
 								info.setCrimeType(Dobject.getString("CrimeType"));
 								info.setVideoDate(Dobject.getString("VideoDate"));
 								UC_Obj.add(info);

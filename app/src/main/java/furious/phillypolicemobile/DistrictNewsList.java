@@ -191,18 +191,17 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 							for(int i=0;i<count;i++){
 									NewStoryObject item = new NewStoryObject();
 									JSONObject newobject = objectArray.getJSONObject(i);
-									item.setNewsStoryID(newobject.getString("StoryID"));
-									item.setDistrictNumber(newobject.getString("District"));
-									item.setDescription(newobject.getString("Excert"));
-									item.setPubDate(newobject.getString("StoryDate"));
-									item.setImageURL(newobject.getString("CaptionURL"));
-									item.setURL(newobject.getString("StoryURL"));
+									item.setNewsStoryID(newobject.getString("NewsStoryID"));
+									item.setDistrictNumber(newobject.getString("DistrictNumber"));
+									item.setDescription(newobject.getString("Description"));
+									item.setPubDate(newobject.getString("PubDate"));
+									item.setImageURL(newobject.getString("ImageURL"));
+									item.setURL(newobject.getString("URL"));
 									item.setTitle(newobject.getString("Title"));
-									item.setNewsStoryID(newobject.getString("StoryID"));
-									item.setTubeURL(newobject.getString("VideoURL"));
+									item.setTubeURL(newobject.getString("TubeURL"));
 									//item.setDescription(newobject.getString("Description"));
-									item.setCategory(newobject.getString("AlertType"));
-									item.setStoryAuthor(newobject.getString("Author"));
+									item.setCategory(newobject.getString("Category"));
+									item.setStoryAuthor(newobject.getString("StoryAuthor"));
 									newsObjs.add(item);
 								}
 								TOTAL_COUNT = object.getInt("TotalCount");
@@ -273,18 +272,17 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 				for(int i=0;i<count;i++){
 						NewStoryObject item = new NewStoryObject();
 						JSONObject newobject = objectArray.getJSONObject(i);
-						item.setNewsStoryID(newobject.getString("StoryID"));
-						item.setDistrictNumber(newobject.getString("District"));
-						item.setDescription(newobject.getString("Excert"));
-						item.setPubDate(newobject.getString("StoryDate"));
-						item.setImageURL(newobject.getString("CaptionURL"));
-						item.setURL(newobject.getString("StoryURL"));
-						item.setNewsStoryID(newobject.getString("StoryID"));
+						item.setNewsStoryID(newobject.getString("NewsStoryID"));
+						item.setDistrictNumber(newobject.getString("DistrictNumber"));
+						item.setDescription(newobject.getString("Description"));
+						item.setPubDate(newobject.getString("PubDate"));
+						item.setImageURL(newobject.getString("ImageURL"));
+						item.setURL(newobject.getString("URL"));
 						item.setTitle(newobject.getString("Title"));
-						item.setTubeURL(newobject.getString("VideoURL"));
+						item.setTubeURL(newobject.getString("TubeURL"));
 						//item.setDescription(newobject.getString("Description"));
-						item.setCategory(newobject.getString("AlertType"));
-						item.setStoryAuthor(newobject.getString("Author"));
+						item.setCategory(newobject.getString("Category"));
+						item.setStoryAuthor(newobject.getString("StoryAuthor"));
 						newsObjs.add(item);
 					}
 					TOTAL_COUNT = jObj.getInt("TotalCount");
