@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:stretchColumns="*"
+        android:shrinkColumns="*"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/dcNumTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="DC# 2017-26-05-7880" />
+
+        </TableRow>
+
+        <TableRow
+            android:gravity="center"
+            android:weightSum="2"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/shootDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:text="Dec 12, 2019 9:22 PM" />
+
+            <TextView
+                android:id="@+id/distNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="right"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:text="12th District" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp"
+            android:weightSum="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:text="Address" />
+
+            <TextView
+                android:id="@+id/shootAddress"
+                android:layout_width="0dp"
+                android:layout_weight="1.4"
+                android:gravity="right"
+                android:layout_height="wrap_content"
+                android:text="600 BLOCK E WESTMORELAND ST" />
+
+
+        </TableRow>
+
+        <TextView
+            android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+        android:text="Shooting Description" />
+
+        <TextView
+            android:id="@+id/shootDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="28 Y/O Black male shot in the stomach" />
+
+        <TableRow
+            android:layout_margin="5dp"
+            android:weightSum="2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:text="Status:" />
+
+            <TextView
+                android:id="@+id/isFatalText"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="left"
+                android:layout_height="wrap_content"
+                android:text="Non-Fatal" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Officer Involved:" />
+
+            <TextView
+                android:id="@+id/isOffInv"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="left"
+                android:layout_height="wrap_content"
+                android:text="No" />
+
+        </TableRow>
+
+
+
+
+
+
+    </TableLayout>
+
+</LinearLayout>

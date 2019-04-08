@@ -126,7 +126,9 @@ public class MainStart extends FragmentActivity{
         		return new MainNews();
         	}else if(position == 1){
         		return new MainDistrictNews();
-        	}else{
+        	}else if(position == 2){
+				return new ShootingFragment();
+			}else{
         		return new MainDistrictNews();
         	}
         }
