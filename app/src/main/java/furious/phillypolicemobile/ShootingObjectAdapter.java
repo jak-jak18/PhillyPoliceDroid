@@ -97,16 +97,24 @@ public class ShootingObjectAdapter  extends BaseAdapter {
          gender = "female";
         }
 
-        String desc = "A "+age+"y/o "+race+" "+gender+" was wounded in the "+wound;
+        String desc = "A "+age+" y/o "+race+" "+gender+" was wounded in the "+wound;
 
         viewHolder.DCNumber.setText("DC# "+newsObj.getDCNumber());
         viewHolder.CrimeDate.setText(newsObj.getCrimeDate());
         viewHolder.DistNumber.setText(newsObj.getDistrictNumber()+" District");
         viewHolder.Address.setText(newsObj.getLocationAddress());
         viewHolder.Description.setText(desc);
-        viewHolder.isOffInvolved.setText("NO");
-        viewHolder.isFatal.setText("YES");
 
+        if(newsObj.isFatal){
+            viewHolder.isFatal.setText("Fatal");
+        }else{
+            viewHolder.isFatal.setText("Non-Fatal");
+        }
+        if(newsObj.isOfficerInvolved){
+            viewHolder.isOffInvolved.setText("Yes");
+        }else{
+            viewHolder.isOffInvolved.setText("No");
+        }
         return convertView;
     }
 

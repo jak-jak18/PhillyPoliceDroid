@@ -194,6 +194,18 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
                     item.setGender(newobject.getString("Gender"));
                     item.setWound(newobject.getString("Wound"));
                     item.setAge(newobject.getString("Age"));
+
+                    if(newobject.getString("isOfficerInvolved").equalsIgnoreCase("false")){
+                        item.setOfficerInvolved(false);
+                    }else if(newobject.getString("isOfficerInvolved").equalsIgnoreCase("true")){
+                        item.setOfficerInvolved(true);
+                    }
+
+                    if(newobject.getString("isFatal").equalsIgnoreCase("true")){
+                        item.setFatal(true);
+                    }else if(newobject.getString("isFatal").equalsIgnoreCase("false")){
+                        item.setFatal(false);
+                    }
                     newsObjs.add(item);
                 }
               //  TOTAL_COUNT = object.getInt("TotalCount");
