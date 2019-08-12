@@ -1,10 +1,9 @@
-#Philly Police Droid
+# Philly Police Droid
 
 Philly Police Droid (PPD) is a Android mobile app that updates users on local crime activity in the city of Philadelphia. PPD displays data of the city's crime activity, traffic advisories and unsolved crime video by police district. Also, users are able to set news alerts based on districts in which they're concerned about.
 
 
-
-##Data Sources
+## Data Sources
 
 
 * [PPD XML Blog Feed](https://pr.phillypolice.com/feed/) - The most current crime news and videos in Philadelphia
@@ -12,7 +11,7 @@ Philly Police Droid (PPD) is a Android mobile app that updates users on local cr
 * [PPD District Info](http://www.phillypolice.com/districts/) - Information about each district and calendar events
 * [PhilaPolice-Info-API](https://github.com/csskfulton/PhilaPolice-Info-API) - API of the aggregate news data parsed in JSON
  
-##App Features
+## App Features
 
 
 - District Community Meetings Info
@@ -22,7 +21,5 @@ Philly Police Droid (PPD) is a Android mobile app that updates users on local cr
 - News/ Crime Alerts Notification
 
 
-##Screen Shoot
-
-
+## Screen Shoot
 [![Watch the video](https://i.imgur.com/eSQe3Rh.jpg)](https://i.imgur.com/eSQe3Rh.mp4)
