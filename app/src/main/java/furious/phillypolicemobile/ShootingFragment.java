@@ -67,7 +67,7 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
 
 //        DISTRICT = Uri.encode(this.getArguments().getString("DistrictNumber"));
-        new getDistrictNews().execute();
+//        new getDistrictNews().execute();
 
     }
 
@@ -75,6 +75,7 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
     public void onActivityCreated(Bundle savedState){
         super.onActivityCreated(savedState);
 
+        new getDistrictNews().execute();
         this.getListView().setOnItemLongClickListener(this);
         this.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener(){
 

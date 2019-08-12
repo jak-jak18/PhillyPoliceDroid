@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:background="@drawable/card_back">
+
+    <TextView
+        android:id="@+id/crimeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="3dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:textSize="17dp"
+        android:padding="3dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/crimeAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="3dp"
+        android:textSize="15dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/crimeName"
+        android:padding="3dp"
+        android:text="TextView" />
+
+
+    <TextView
+        android:id="@+id/crimeDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/crimeAddress"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="3dp"
+        android:padding="3dp"
+        android:text="2013-2039-129" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:layout_alignTop="@+id/crimeDate"
+        android:layout_below="@+id/crimeAddress"
+        android:layout_toLeftOf="@+id/crimePSA"
+        android:layout_toStartOf="@+id/crimePSA"
+        android:layout_alignBottom="@+id/crimePSA"
+        android:text="PSA Area: " />
+
+    <TextView
+        android:id="@+id/crimePSA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/crimeAddress"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="3dp"
+        android:padding="3dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="4" />
+
+
+
+
+</RelativeLayout>
+
+</FrameLayout>

@@ -161,7 +161,7 @@ public class DistrictFragmentActivity extends FragmentActivity{
         	}else if(position == 1){
         		return DistrictInfoFragment.newInstance(district);
         	}else if(position == 2){
-        		return PoliceUCVideosFragment.newInstance(district);
+        		return CrimeFragment.newInstance(district);
         	}else{
         		return DistrictNewsList.newInstance(district);
         	}

@@ -49,7 +49,7 @@
                     <TextView
                         android:id="@+id/textView1"
                         style="@style/text_title1"
-                        android:text="Unsolved Crimes" />
+                        android:text="Crime Incidents" />
              
                </LinearLayout>
           

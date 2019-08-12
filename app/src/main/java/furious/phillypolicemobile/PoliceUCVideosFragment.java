@@ -77,13 +77,15 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
         super.onCreate(savedInstanceState);
       
         DISTRICT_NUM = Uri.encode(this.getArguments().getString("DistrictNumber"));
-        new getUCVideoList().execute(HttpClientInfo.URL);
+
     }
 	
 	@Override
  	public void onActivityCreated(Bundle savedState) {
  	    super.onActivityCreated(savedState);
- 	    
+
+		new getUCVideoList().execute(HttpClientInfo.URL);
+
  	    this.getListView().setOnItemClickListener(new OnItemClickListener(){
 
 			@Override

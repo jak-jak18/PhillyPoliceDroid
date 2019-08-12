@@ -63,7 +63,7 @@ public class DistrictInfoFragment extends Fragment{
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new getDistrictInfo().execute(HttpClientInfo.URL);
+
         
         
     }
@@ -98,6 +98,7 @@ public class DistrictInfoFragment extends Fragment{
 	 @Override
 	 	public void onActivityCreated(Bundle savedState) {
 	 	    super.onActivityCreated(savedState);
+		 new getDistrictInfo().execute(HttpClientInfo.URL);
 
 	 	}
 	 
