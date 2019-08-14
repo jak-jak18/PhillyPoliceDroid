@@ -23,3 +23,9 @@ Philly Police Droid (PPD) is a Android mobile app that updates users on local cr
 
 ## Screen Shoot
 [![Watch the video](https://i.imgur.com/eSQe3Rh.jpg)](https://i.imgur.com/eSQe3Rh.mp4)
+
+### APK Download File
+[PhillyPoliceDroid Demo](http://sensationalsettings.info/api/philly_police_droid_demo.apk)
+SHA1 Hash (d4c34eca6c2a74e488a7ff42ed5760d49ff6f143)
+
+
