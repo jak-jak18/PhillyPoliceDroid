@@ -14,6 +14,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import furious.utils.HttpClientInfo;
+
 public class StartUpSplash extends Activity {
 
 

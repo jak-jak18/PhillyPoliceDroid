@@ -39,6 +39,9 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import furious.utils.HttpClientInfo;
+import furious.viewfragments.PoliceNewsAll;
+
 
 public class PoliceUpdateService extends Service{
 	

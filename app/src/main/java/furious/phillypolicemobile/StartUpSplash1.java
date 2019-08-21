@@ -34,6 +34,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import furious.utils.HttpClientInfo;
+import furious.viewfragments.MainStart;
+
 public class StartUpSplash1 extends Activity {
 
 	ProgressBar progress;
