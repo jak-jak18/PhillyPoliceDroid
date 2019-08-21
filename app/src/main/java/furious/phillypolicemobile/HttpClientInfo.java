@@ -18,7 +18,8 @@ public class HttpClientInfo{
 
 	
 //	public static final String URL = "http://api.phillypd.info/v1/phila_pd_api.php";
-	public static final String URL = "http://10.20.30.10/phillyPD/v1/phila_pd_api.php";
+	public static final String URL = "http://10.20.30.11/PhilaPolice-Info-API/phila_pd_api.php";
+//	public static final String URL = "http://sensationalsettings.info/api/api.php";
 	//public static final String DEVICE_ID = "cfcd208495d565ef66e7dff9f98764da";
 	
 	public static String getMacAddress(Context context) {

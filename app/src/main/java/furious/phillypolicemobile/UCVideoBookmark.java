@@ -1,14 +1,16 @@
 package furious.phillypolicemobile;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,11 +46,8 @@ import android.content.Intent;
 
 public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemLongClickListener {
 
-	//ListView list;
-//	ProgressDialog pDialog;
-	HttpClient client;
-	
-	//ArrayList<NewsStoryBookmarkObject> newsObjs;
+
+
 	ArrayList<NewsStoryBookmarkObject> vidObjs;
 	NewsStoryBookmarkAdapter adapter;
 	TextView noBookmark;
@@ -57,6 +56,7 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 	String CLICKED;
 	int CLICKED_VID;
 	ProgressBar progress;
+	HttpURLConnection httpcon;
 	
 	
 	static UCVideoBookmark newInstance(String jsonData){
@@ -74,10 +74,7 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 	@Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        //JSON_DATA = this.getArguments().getString("JSON_DATA");
-        
-//        noBookmark = (TextView) findViewById(R.id.BookmarkNoView1);
-//        list = (ListView) findViewById(R.id.bookmarkListView);
+
         new fetchBokmarks().execute();
         
     }
@@ -96,19 +93,7 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			// TODO Auto-generated method stub
-			
-//			if(arg1.findViewById(R.id.MoreListTextView) != null){
-//			if(TOTAL_COUNT != newsObjs.size()){
-//				footerTxt = (TextView) getActivity().findViewById(R.id.MoreListTextView);
-//				progressM = (ProgressBar) getActivity().findViewById(R.id.HeaderLoadMore);
-//				progressM.setVisibility(View.VISIBLE);
-//				footerTxt.setVisibility(View.INVISIBLE);
-//				
-//				new fetchMoreNews().execute(HttpClientInfo.URL);
-//			}else{
-//				Toast.makeText(getActivity(), "No more news at this time", Toast.LENGTH_LONG).show();
-//			}
-//		}
+
 			
 			NewsStoryBookmarkObject lObj = (NewsStoryBookmarkObject) arg0.getItemAtPosition(arg2);
 			boolean isVid = false;
@@ -146,10 +131,7 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 	 View layout = inflater.inflate(R.layout.bookmark_ucvids, container, false);	
 	 noBookmark = (TextView) layout.findViewById(R.id.BookmarkNoView1);
 	 progress = (ProgressBar) layout.findViewById(R.id.progressBar1UCVideos);
-//	 noNewsTxt = (TextView) layout.findViewById(R.id.NoNewsTxtView);
-//	 headerTxt = (TextView) layout.findViewById(R.id.NewsListHeaderTextView);
-//	 headerTxt.setText(CVDistrict(DISTRICT)+" District News");
-//	 headerTxt.setVisibility(View.VISIBLE);
+
 
      return layout;	        
 	
@@ -161,14 +143,14 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 		 @Override
 		    protected void onPreExecute() {
 			 super.onPreExecute();	
-//			 pDialog  = ProgressDialog.show(getApplicationContext(), "Loading Bookmarks...", "Please wait...", false);
-//			 pDialog.setCancelable(true);
+
+
 		 }
 		 
 			@Override
 			protected ArrayList<NewsStoryBookmarkObject> doInBackground(String... params) {
-				//newsObjs = new ArrayList<NewsStoryBookmarkObject>();
-				vidObjs = new ArrayList<NewsStoryBookmarkObject>();
+
+		 	vidObjs = new ArrayList<NewsStoryBookmarkObject>();
 				
 					try{
 						
@@ -177,11 +159,9 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 						JSONObject object = new JSONObject(Data);
 						JSONObject bookMarks = object.getJSONObject("Bookmarks");
 						JSONArray uc_vid_Array = bookMarks.getJSONArray("UCVideos");
-						//JSONArray news_story_Array = bookMarks.getJSONArray("NewsStory");
-						
+
 						int uc_vid_count = uc_vid_Array.length();
-						//int news_story_count = news_story_Array.length();
-								
+
 							for(int i=0;i<uc_vid_count;i++){
 									
 								NewsStoryBookmarkObject item = new NewsStoryBookmarkObject();
@@ -202,12 +182,9 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 							
 								TOTAL_COUNT = object.getInt("TotalCount");
 					}	
-									catch (ClientProtocolException e) {e.printStackTrace();}
-									catch (IOException e) {e.printStackTrace();} 
+									catch (IOException e) {e.printStackTrace();}
 									catch (JSONException e) {e.printStackTrace();}
-					finally {
-	 					client.getConnectionManager().shutdown();
-	 				}
+
 				
 				return vidObjs;
 			}
@@ -215,28 +192,22 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 				protected void onPostExecute(ArrayList<NewsStoryBookmarkObject> lockers) {
 					
 					adapter = new NewsStoryBookmarkAdapter(getActivity(),lockers);
-					//Madapter = new MergeAdapter();
-					//Madapter.addAdapter(adapter);
-					//items = new ArrayList<String>();
-					//items.add("More News");
-					//Madapter.addAdapter(new OptionAdapter(getActivity(), R.layout.morenewsheading, items));
-						if(lockers.size() <= 0){
-							//pDialog.dismiss();
-							//Toast.makeText(getActivity(), "No news at this time", Toast.LENGTH_LONG).show();
+
+					if(lockers.size() <= 0){
 							noBookmark.setVisibility(View.VISIBLE);
 						}else{
 							String ct = Integer.toString(TOTAL_COUNT);
-							//String dc = Integer.toString(DISPLAY_COUNT);
+
 							if(TOTAL_COUNT == lockers.size()){
 								View title = Header("No More News "+"( "+lockers.size()+" of "+TOTAL_COUNT+" )");
 								getListView().addFooterView(title);
 								getListView().setAdapter(adapter);
-								//pDialog.dismiss();
+
 							}else{
 								View title = Header("More News "+"( "+lockers.size()+" of "+ct+" )");
 								getListView().addFooterView(title);
 								getListView().setAdapter(adapter);
-								//pDialog.dismiss();
+
 							}
 							
 						}
@@ -270,9 +241,8 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 		 @Override
 		    protected void onPreExecute() {
 			 super.onPreExecute();	
-//			 pDialog  = ProgressDialog.show(getApplicationContext(), "Loading Bookmarks...", "Please wait...", false);
-//			 pDialog.setCancelable(true);
-		 }
+
+		}
 		 
 			@Override
 			protected String doInBackground(String... params) {
@@ -281,9 +251,6 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 				try {
 					
 					data = deleteListData();
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -329,43 +296,7 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 	
 	
 	
-	
-	
-//	 @Override
-//		public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-//		      super.onCreateContextMenu(menu, v, menuInfo);
-//		      
-//		          MenuInflater inflater = getActivity().getMenuInflater();
-//		          inflater.inflate(R.menu.bookmark, menu);
-//		      
-//		}
-//		
-//		@Override
-//		public boolean onContextItemSelected(MenuItem item) {
-//
-//		    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//		    switch (item.getItemId()) {
-//
-//		        case R.id.add: // <-- your custom menu item id here
-//		            // do something here
-//		            return true;
-//		            
-//		        case R.id.delete: // <-- your custom menu item id here
-//		            // do something here
-//		        	
-//		            //Toast.makeText(getActivity(), CLICKED, Toast.LENGTH_LONG).show();
-//		            Log.e("THIS_ITEM HERE","HAS BEEN CLICKEED");
-//		            return true;
-//		            
-//		        case R.id.edit: // <-- your custom menu item id here
-//		            // do something here
-//		            return true;
-//
-//		        default:
-//		            return super.onContextItemSelected(item);
-//		    }
-//		}
-	
+
 	
 	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
 	  //  menu.add(5, 1, 0, "Add");
@@ -377,16 +308,13 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 		
 	    if (item.getGroupId() == 5) {
 	        switch(item.getItemId()) {
-	        	case 1: 
-	        	//doSomething(); 
+	        	case 1:
 	        		
 	       
 	        	break;
 	        
 	        	case 2: 
-	        	//doSomethingElse(); 
-	        		//Log.i("CLICKED_HERE","YOUCLICKED 2");
-	        		//Toast.makeText(getActivity(), CLICKED, Toast.LENGTH_LONG).show();
+
 	        		new deleteBookmark().execute();
 	        	
 	        	break;
@@ -403,19 +331,19 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 		private View Header(String string) {
 			LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View k = inflater.inflate(R.layout.news_more_header, null);
-		//	View k = getActivity().getLayoutInflater().inflate(R.layout.news_more_header, null);
 			TextView title = (TextView) k.findViewById(R.id.MoreListTextView);
 			title.setText(string);
 			return k;
 		}
 		  
-		  private String deleteListData() throws ClientProtocolException, IOException, JSONException{
+		  private String deleteListData() throws IOException, JSONException{
 				 
-			 	//client = AndroidHttpClient.newInstance("ComboNation");
-				String macAddss = HttpClientInfo.getMacAddress(getActivity());
+			 	String macAddss = HttpClientInfo.getMacAddress(getActivity());
 			 	String deviceID = HttpClientInfo.getMD5(macAddss);
-			 	client = new DefaultHttpClient();
-		 		HttpPost post = new HttpPost(HttpClientInfo.URL);
+
+			  String result = null;
+
+			  try {
 		 		
 			 	JSONObject postObj = new JSONObject();
 		 		postObj.put("Bookmark", "true");
@@ -424,68 +352,103 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 		 		postObj.put("News", "false");
 		 		postObj.put("Video", "true");
 		 		postObj.put("VideoID", CLICKED);
-		 				
-		 		
-		 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-		 		post.setHeader("Content-Type","application/json");
-		 		post.setHeader("Accept-Encoding","application/json");
-		 		post.setHeader("Accept-Language","en-US");
-		 		
-		 		HttpResponse res = client.execute(post);
-		 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-				res.getEntity().writeTo(os); 
+		 		String data = postObj.toString();
+
+				  //Connect
+				  httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+				  httpcon.setDoOutput(true);
+				  httpcon.setRequestProperty("Content-Type", "application/json");
+				  httpcon.setRequestProperty("Accept", "application/json");
+				  httpcon.setRequestProperty("Accept-Language","en-US");
+				  httpcon.setRequestMethod("POST");
+				  httpcon.connect();
+
+				  //Write
+				  OutputStream os = httpcon.getOutputStream();
+				  BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+				  writer.write(data);
+				  writer.close();
+				  os.close();
+
+				  //Read
+				  BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+				  String line = null;
+				  StringBuilder sb = new StringBuilder();
+
+				  while ((line = br.readLine()) != null) {
+					  sb.append(line);
+				  }
+
+				  br.close();
+				  result = sb.toString();
+
+			  } catch (UnsupportedEncodingException e) {
+				  e.printStackTrace();
+			  } catch (IOException e) {
+				  e.printStackTrace();
+			  }
+
 				
-//				HttpClient android = new DefaultHttpClient();
-//				HttpGet clientRequest = new HttpGet(uRL);
-//				HttpResponse response = android.execute(clientRequest);
-		//
-//				ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-//				response.getEntity().writeTo(os); 
-//				String responseString = os.toString();
-//				
-//				return responseString;
-				
-				return os.toString();
+				return result;
 				
 				
 			}
 		  
 
-		private String getBookmarkListData() throws ClientProtocolException, IOException, JSONException{
-				 
-			 	//client = AndroidHttpClient.newInstance("ComboNation");
+		private String getBookmarkListData() throws IOException, JSONException{
+
 				String macAddss = HttpClientInfo.getMacAddress(getActivity());
 			 	String deviceID = HttpClientInfo.getMD5(macAddss);
-			 	client = new DefaultHttpClient();
-		 		HttpPost post = new HttpPost(HttpClientInfo.URL);
+
+				String result = null;
+
+			 	try{
 		 		
 			 	JSONObject postObj = new JSONObject();
 		 		postObj.put("Bookmark", "true");
 		 		postObj.put("DeviceID", deviceID);
 		 		postObj.put("Bookmark_UCVideos", "true");
 		 		postObj.put("Bookmark_NewsStory", "false");
-		 				
-		 		
-		 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-		 		post.setHeader("Content-Type","application/json");
-		 		post.setHeader("Accept-Encoding","application/json");
-		 		post.setHeader("Accept-Language","en-US");
-		 		
-		 		HttpResponse res = client.execute(post);
-		 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-				res.getEntity().writeTo(os); 
+		 		String data = postObj.toString();
+
+
+			//Connect
+			httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			httpcon.setDoOutput(true);
+			httpcon.setRequestProperty("Content-Type", "application/json");
+			httpcon.setRequestProperty("Accept", "application/json");
+			httpcon.setRequestProperty("Accept-Language","en-US");
+			httpcon.setRequestMethod("POST");
+			httpcon.connect();
+
+			//Write
+			OutputStream os = httpcon.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			writer.write(data);
+			writer.close();
+			os.close();
+
+			//Read
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			br.close();
+			result = sb.toString();
+
+		} catch (UnsupportedEncodingException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
 				
-//				HttpClient android = new DefaultHttpClient();
-//				HttpGet clientRequest = new HttpGet(uRL);
-//				HttpResponse response = android.execute(clientRequest);
-		//
-//				ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-//				response.getEntity().writeTo(os); 
-//				String responseString = os.toString();
-//				
-//				return responseString;
-				
-				return os.toString();
+				return result;
 				
 				
 			}
@@ -493,23 +456,6 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 
 
 
-
-
-//	@Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-    
-    
-//    @Override
-//    protected void onDestroy() {
-//
-//          super.onDestroy();
-//    }
-    
-    
     
     
 }

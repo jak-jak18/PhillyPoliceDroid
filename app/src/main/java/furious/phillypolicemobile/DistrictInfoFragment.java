@@ -1,18 +1,18 @@
 package furious.phillypolicemobile;
 
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +41,7 @@ public class DistrictInfoFragment extends Fragment{
 	TextView districtEmail;
 	TextView districtCity;
 	TextView captainName;
+	HttpURLConnection httpcon;
 	RelativeLayout nothingSch;
 	LinearLayout table;
 	LinearLayout table1;
@@ -153,7 +154,7 @@ public class DistrictInfoFragment extends Fragment{
 								policeObj.setDistrictNumber("None");
 							}
 					}	
-						catch (ClientProtocolException e) {e.printStackTrace();}
+
 						catch (IOException e) {e.printStackTrace();} 
 						catch (JSONException e) {e.printStackTrace();}
 				
@@ -239,28 +240,52 @@ public class DistrictInfoFragment extends Fragment{
 		
 	}
 	 
-	 private String getData(String uRL) throws ClientProtocolException, IOException, JSONException{
+	 private String getData(String uRL) throws IOException, JSONException{
 
-		 	HttpClient android = new DefaultHttpClient();
-			HttpPost clientRequest = new HttpPost(uRL);
-			
+		 String result = null;
+
+
+		try{
+
 			JSONObject postObj = new JSONObject();
-	 		postObj.put("DistrictInfo", "true");
-	 		postObj.put("DistrictNumber", DISTRICT_NUM);
-//	 		postObj.put("DeviceID", HttpClientInfo.DEVICE_ID);
-	 		
-	 		clientRequest.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-	 		clientRequest.setHeader("Content-Type","application/json");
-	 		clientRequest.setHeader("Accept-Encoding","application/json");
-	 		clientRequest.setHeader("Accept-Language","en-US");
-	 		
-	 		HttpResponse response = android.execute(clientRequest);
+			postObj.put("DistrictInfo", "true");
+			postObj.put("DistrictNumber", DISTRICT_NUM);
+			String data = postObj.toString();
 
-			ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-			response.getEntity().writeTo(os); 
-			String responseString = os.toString();
-			
-			return responseString;
+			 //Connect
+			 httpcon = (HttpURLConnection) ((new URL(uRL).openConnection()));
+			 httpcon.setDoOutput(true);
+			 httpcon.setRequestProperty("Content-Type", "application/json");
+			 httpcon.setRequestProperty("Accept", "application/json");
+			 httpcon.setRequestProperty("Accept-Language","en-US");
+			 httpcon.setRequestMethod("POST");
+			 httpcon.connect();
+
+			 //Write
+			 OutputStream os = httpcon.getOutputStream();
+			 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			 writer.write(data);
+			 writer.close();
+			 os.close();
+
+			 //Read
+			 BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			 String line = null;
+			 StringBuilder sb = new StringBuilder();
+
+			 while ((line = br.readLine()) != null) {
+				 sb.append(line);
+			 }
+
+			 br.close();
+			 result = sb.toString();
+
+		 }catch (IOException e) {
+			e.printStackTrace();
+		}
+
+        return result;
 			
 		}
 	 

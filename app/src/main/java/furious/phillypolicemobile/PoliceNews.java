@@ -1,21 +1,10 @@
 package furious.phillypolicemobile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnErrorListener;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,19 +16,25 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 
 public class PoliceNews extends Activity {
 
@@ -55,13 +50,13 @@ public class PoliceNews extends Activity {
 	String storyID;
 	String BOOKMARK_NEWS = "false";
 	String BOOKMARK_VIDEOS = "false";
+	HttpURLConnection httpcon;
 	boolean isAlrBk = false;
 	boolean isUCVid = false;
 	ArrayList<String> headers;
 	ImageLoader imgLoader;
 	Button bookMarkButton;
 	ProgressBar diaLog;
-	HttpClient client;
 	
 	
 	
@@ -124,7 +119,6 @@ public class PoliceNews extends Activity {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					//Toast.makeText(getApplicationContext(), storyID, Toast.LENGTH_LONG).show();
 					bookMarkButton.setEnabled(false);
 					new fetchBokmarks().execute();
 					
@@ -193,12 +187,9 @@ public class PoliceNews extends Activity {
 
 								
 					}	
-									catch (ClientProtocolException e) {e.printStackTrace();}
-									catch (IOException e) {e.printStackTrace();} 
+									catch (IOException e) {e.printStackTrace();}
 									catch (JSONException e) {e.printStackTrace();}
-					finally {
-	 					client.getConnectionManager().shutdown();
-	 				}
+
 				
 				return finalData;
 			}
@@ -253,11 +244,8 @@ public class PoliceNews extends Activity {
                 view = convertView;
             }
 
-            //ImageView imageView = (ImageView) view.findViewById(R.id.PoliceNewsImageListView);
             TextView textView = (TextView) view.findViewById(R.id.PoliceNewsListViewRowHeading);
 
-            //imageView.setTag(mList.get(position));//tag of imageView == path to image
-            //new LoadImage().execute(imageView);
             textView.setText(strings.get(position).toString());
 
             return view;
@@ -267,47 +255,63 @@ public class PoliceNews extends Activity {
     }
     
     
-    private String saveBookmark() throws ClientProtocolException, IOException, JSONException{
-		 
-	 	//client = AndroidHttpClient.newInstance("ComboNation");
+    private String saveBookmark() throws IOException, JSONException{
+
 		String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
 	 	String deviceID = HttpClientInfo.getMD5(macAddss);
-	 	client = new DefaultHttpClient();
- 		HttpPost post = new HttpPost(HttpClientInfo.URL);
- 		
-	 	JSONObject postObj = new JSONObject();
- 		postObj.put("Bookmark", "true");
- 		postObj.put("DeviceID", deviceID);
- 		postObj.put("Bookmark_UCVideos", "false");
- 		postObj.put("Bookmark_NewsStory", "false");
- 		postObj.put("Bookmark_Submit", "true");
- 		postObj.put("BookmarkID", storyID);
- 		postObj.put("BookmarkNews", BOOKMARK_NEWS);
- 		postObj.put("BookmarkVideos", BOOKMARK_VIDEOS);
- 		
- 				
- 		
- 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
- 		post.setHeader("Content-Type","application/json");
- 		post.setHeader("Accept-Encoding","application/json");
- 		post.setHeader("Accept-Language","en-US");
- 		
- 		HttpResponse res = client.execute(post);
- 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-		res.getEntity().writeTo(os); 
-		
-//		HttpClient android = new DefaultHttpClient();
-//		HttpGet clientRequest = new HttpGet(uRL);
-//		HttpResponse response = android.execute(clientRequest);
-//
-//		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-//		response.getEntity().writeTo(os); 
-//		String responseString = os.toString();
-//		
-//		return responseString;
-		
-		return os.toString();
-		
+
+
+		String result = null;
+
+		try {
+
+			JSONObject postObj = new JSONObject();
+			postObj.put("Bookmark", "true");
+			postObj.put("DeviceID", deviceID);
+			postObj.put("Bookmark_UCVideos", "false");
+			postObj.put("Bookmark_NewsStory", "false");
+			postObj.put("Bookmark_Submit", "true");
+			postObj.put("BookmarkID", storyID);
+			postObj.put("BookmarkNews", BOOKMARK_NEWS);
+			postObj.put("BookmarkVideos", BOOKMARK_VIDEOS);
+			String data = postObj.toString();
+
+			//Connect
+			httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			httpcon.setDoOutput(true);
+			httpcon.setRequestProperty("Content-Type", "application/json");
+			httpcon.setRequestProperty("Accept", "application/json");
+			httpcon.setRequestProperty("Accept-Language","en-US");
+			httpcon.setRequestMethod("POST");
+			httpcon.connect();
+
+			//Write
+			OutputStream os = httpcon.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			writer.write(data);
+			writer.close();
+			os.close();
+
+			//Read
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			br.close();
+			result = sb.toString();
+
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 		
 	}
     
@@ -316,10 +320,6 @@ public class PoliceNews extends Activity {
 	    public void onConfigurationChanged(Configuration newConfig) {
 	    	super.onConfigurationChanged(newConfig);
 	    		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//	    			getWindow().clearFlags(
-//	                        WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-//	                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//	                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	                 
 	    		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
 	    			Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();

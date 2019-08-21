@@ -1,26 +1,6 @@
 package furious.phillypolicemobile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -28,15 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.CheckBoxPreference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -44,12 +20,31 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class PoliceUpdateService extends Service{
 	
 	String URL = HttpClientInfo.URL;
-	HttpClient client;
 	NotificationManager notificationManager;
+	HttpURLConnection httpcon;
 	Uri police;
 	String TITLE;
 	String CType;
@@ -60,7 +55,8 @@ public class PoliceUpdateService extends Service{
 	
 	boolean IMDIFF_NEWS = false;
 	boolean IMDIFF_VIDEO = false;
-	
+
+	int ok = 000;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -158,170 +154,177 @@ public class PoliceUpdateService extends Service{
 		}
 	}
 	
-	 @SuppressLint("NewApi")
+
 	public class chkforNewHashes extends AsyncTask<String, Void, String>{
 			String svrRes;
 			
 			@Override
 			protected String doInBackground(String... params) {
 				
-					try {
-						
-						if(isConnected()){
-							
-							try {
-								
-								boolean isUpdate = false;
-								boolean isfalseReturn = true;
-								
-								String jsonData = exchangeHashKey();
-								
-								Log.i("POLICE_SERVICE ::::: ", jsonData);
-								JSONObject jObj = new JSONObject(jsonData);
-								isfalseReturn = jObj.getBoolean("error");
-								
-								
-									if(!isfalseReturn){
-										// API RETURNED DATA WITHOUT ERROR
-										JSONArray h_keys = jObj.getJSONArray("HashKeys");
-										int count = h_keys.length();
-											//LOOP THROUGH THE KEYs AND STORE THEm IN THE HASHKEY CLASS
-										
-											for(int i=0;i<count;i++){
-												
-												JSONObject itemObj = h_keys.getJSONObject(i);
-													
-												if(itemObj.getString("HashName").equals("Calendar")){
-													//Log.i("SERVER RESPONSE :: ", "Calendar HASH: "+itemObj.getString("Hash"));
-													//isNEW_STORY = isDiffHash("CalendarHash",itemObj.getString("Hash"));
-												}
-													
-												if(itemObj.getString("HashName").equals("NewsStory")){
-													
-													Log.i("SERVER RESPONSE :: ", "NewsStory Hash: "+itemObj.getString("Hash"));
-													isNEW_STORY = isDiffHash("NewsStoryHash",itemObj.getString("Hash"));
-
-														if(isNEW_STORY){
-															Log.e("PHILLY_POLICE","NEWS STORY HASH HAS CHANGED");
-															IMDIFF_NEWS = true;
-															
-														}else if(!isNEW_STORY){
-															Log.e("PHILLY_POLICE","NEWS STORY HASH HAS NOT CHANGED");
-														}
-												}
-													
-												if(itemObj.getString("HashName").equals("UCVideos")){
-													
-													Log.i("POLICE_N", "UCVideos Hash: "+itemObj.getString("Hash"));
-													isNEW_VIDEOS = isDiffHash("UCVideosHash",itemObj.getString("Hash"));
-													
-														if(isNEW_VIDEOS){
-															Log.e("PHILLY_POLICE","UC_VIDEOS HASH HAS CHANGED");
-															IMDIFF_VIDEO = true;
-															
-														}else if(!isNEW_VIDEOS){
-															Log.e("PHILLY_POLICE","UC_VIDEOS HASH HAS NOT CHANGED");
-														}
-												}
-												
-												
-											}
-										
-												getMyUpdates();
-										
-									}
-
-																	
-								
-							} catch (ClientProtocolException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} finally {
-			 					client.getConnectionManager().shutdown();
-			 				}
-							
-							
-						}else{
-							
-							// NOT CONNECTED TO THE INTERNET
-
-						}
-						
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+//					try {
+//
+//						if(isConnected()){
+//
+//							try {
+//
+//								boolean isUpdate = false;
+//								boolean isfalseReturn = true;
+//
+//								String jsonData = exchangeHashKey();
+//
+//								Log.i("POLICE_SERVICE ::::: ", jsonData);
+//								JSONObject jObj = new JSONObject(jsonData);
+//								isfalseReturn = jObj.getBoolean("error");
+//
+//
+//									if(!isfalseReturn){
+//										// API RETURNED DATA WITHOUT ERROR
+//										JSONArray h_keys = jObj.getJSONArray("HashKeys");
+//										int count = h_keys.length();
+//											//LOOP THROUGH THE KEYs AND STORE THEm IN THE HASHKEY CLASS
+//
+//											for(int i=0;i<count;i++){
+//
+//												JSONObject itemObj = h_keys.getJSONObject(i);
+//
+//												if(itemObj.getString("HashName").equals("Calendar")){
+//													//Log.i("SERVER RESPONSE :: ", "Calendar HASH: "+itemObj.getString("Hash"));
+//													//isNEW_STORY = isDiffHash("CalendarHash",itemObj.getString("Hash"));
+//												}
+//
+//												if(itemObj.getString("HashName").equals("NewsStory")){
+//
+//													Log.i("SERVER RESPONSE :: ", "NewsStory Hash: "+itemObj.getString("Hash"));
+//													isNEW_STORY = isDiffHash("NewsStoryHash",itemObj.getString("Hash"));
+//
+//														if(isNEW_STORY){
+//															Log.e("PHILLY_POLICE","NEWS STORY HASH HAS CHANGED");
+//															IMDIFF_NEWS = true;
+//
+//														}else if(!isNEW_STORY){
+//															Log.e("PHILLY_POLICE","NEWS STORY HASH HAS NOT CHANGED");
+//														}
+//												}
+//
+//												if(itemObj.getString("HashName").equals("UCVideos")){
+//
+//													Log.i("POLICE_N", "UCVideos Hash: "+itemObj.getString("Hash"));
+//													isNEW_VIDEOS = isDiffHash("UCVideosHash",itemObj.getString("Hash"));
+//
+//														if(isNEW_VIDEOS){
+//															Log.e("PHILLY_POLICE","UC_VIDEOS HASH HAS CHANGED");
+//															IMDIFF_VIDEO = true;
+//
+//														}else if(!isNEW_VIDEOS){
+//															Log.e("PHILLY_POLICE","UC_VIDEOS HASH HAS NOT CHANGED");
+//														}
+//												}
+//
+//
+//											}
+//
+//												getMyUpdates();
+//
+//									}
+//
+//
+//
+//							} catch (JSONException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							} catch (IOException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+//
+//
+//						}else{
+//
+//							// NOT CONNECTED TO THE INTERNET
+//
+//						}
+//
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
 				
 				
 				
 				return svrRes;
 			}
-			
-//			protected void onPostExecute(String lockers) {
-//			
-//			NewsAdapter adapter = new NewsAdapter(getActivity(),lockers);
-//			Madapter = new MergeAdapter();
-//			Madapter.addAdapter(adapter);
-//			items = new ArrayList<String>();
-//			items.add("More News");
-//			//Madapter.addAdapter(new OptionAdapter(getActivity(), R.layout.morenewsheading, items));
-//			
-//			
-//			getListView().setAdapter(Madapter);
-//
-//}
 
 
-	
-			
-			
 		
 	}
 	
 	 
-	 public String exchangeHashKey() throws JSONException, ClientProtocolException, IOException{
-		 	//client = AndroidHttpClient.newInstance("PoliceNewsApp");
-		 	String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
+	 public String exchangeHashKey() throws JSONException, IOException{
+
+			String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
 		 	String deviceID = HttpClientInfo.getMD5(macAddss);
 
-		 	client = new DefaultHttpClient();
-	 		HttpPost post = new HttpPost(HttpClientInfo.URL);
-		 	JSONObject postObj = new JSONObject();
-//	 		postObj.put("HashTag",HASH_TAG);
-	 		postObj.put("Update", "true");
-	 		postObj.put("DeviceID", deviceID);
-	 		Log.i("DEVICE_ID ::: ",deviceID);
-//	 		postObj.put("NewsStory", getNewsHash("NewsStoryHash"));
-//	 		postObj.put("UCVideos", getNewsHash("UCVideosHash"));
-//	 		postObj.put("Calendar", getNewsHash("CalendarHash"));
-//	 		Log.i("PPMobile", "Sending NEWS_STORY_HASH: "+getNewsHash("NewsStoryHash"));
-//	 		Log.i("PPMobile", "Sending UC_VIDEOS_HASH: "+getNewsHash("UCVideosHash"));
-//	 		Log.i("PPMobile", "Sending CALENDAR_HASH: "+getNewsHash("CalendarHash"));
-	 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-	 		post.setHeader("Content-Type","application/json");
-	 		post.setHeader("Accept-Encoding","application/json");
-	 		post.setHeader("Accept-Language","en-US");
-	 		Log.i("PPMobile", "Attempting to connecto to host "+URL);
-	 		HttpResponse res = client.execute(post);
-	 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-			res.getEntity().writeTo(os);
-			return os.toString();
+		 String result = null;
+
+		 try {
+
+			 JSONObject postObj = new JSONObject();
+			 postObj.put("Update", "true");
+			 postObj.put("DeviceID", deviceID);
+			 Log.i("DEVICE_ID ::: ",deviceID);
+			 String data = postObj.toString();
+
+			 //Connect
+			 httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			 httpcon.setDoOutput(true);
+			 httpcon.setRequestProperty("Content-Type", "application/json");
+			 httpcon.setRequestProperty("Accept", "application/json");
+			 httpcon.setRequestProperty("Accept-Language","en-US");
+			 httpcon.setRequestMethod("POST");
+			 httpcon.connect();
+
+			 //Write
+			 OutputStream os = httpcon.getOutputStream();
+			 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			 writer.write(data);
+			 writer.close();
+			 os.close();
+
+			 //Read
+			 BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			 String line = null;
+			 StringBuilder sb = new StringBuilder();
+
+			 while ((line = br.readLine()) != null) {
+				 sb.append(line);
+			 }
+
+			 br.close();
+			 result = sb.toString();
+
+		 } catch (UnsupportedEncodingException e) {
+			 e.printStackTrace();
+		 } catch (IOException e) {
+			 e.printStackTrace();
+		 }
+
+
+			return result;
 	 }
 	 
 	 
-	 public String getJSONData() throws JSONException, ClientProtocolException, IOException{
+	 public String getJSONData() throws JSONException, IOException{
+
 		 	String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
 		 	String deviceID = HttpClientInfo.getMD5(macAddss);
 
-		 	client = new DefaultHttpClient();
-	 		HttpPost post = new HttpPost(HttpClientInfo.URL);
-		 	JSONObject postObj = new JSONObject();
+		 String result = null;
+
+		 try {
+
+
+			 JSONObject postObj = new JSONObject();
 		 	JSONArray jArray = new JSONArray();
 		 		
 		 	if(!prefs.isEmpty()){
@@ -339,24 +342,52 @@ public class PoliceUpdateService extends Service{
 	 		postObj.put("DeviceID", deviceID);
 	 		postObj.put("Districts", jArray);
 	 		postObj.put("UC_Videos", cst(IMDIFF_VIDEO));
-	 		//postObj.put("UC_Video_Hash", value);
+	 		String data = postObj.toString();
 	 		Log.e("POSTING_THIS", jArray.toString());
 	 		Log.e("PUSHING_THIS",postObj.toString());
-	 		
 
-	 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-	 		post.setHeader("Content-Type","application/json");
-	 		post.setHeader("Accept-Encoding","application/json");
-	 		post.setHeader("Accept-Language","en-US");
-	 		Log.i("PHILLY_POLICE_SERVICE", "Attempting to connecto to host "+URL);
-	 		HttpResponse res = client.execute(post);
-	 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-			res.getEntity().writeTo(os);
-			return os.toString();
+
+			 //Connect
+			 httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			 httpcon.setDoOutput(true);
+			 httpcon.setRequestProperty("Content-Type", "application/json");
+			 httpcon.setRequestProperty("Accept", "application/json");
+			 httpcon.setRequestProperty("Accept-Language","en-US");
+			 httpcon.setRequestMethod("POST");
+			 httpcon.connect();
+
+			 //Write
+			 OutputStream os = httpcon.getOutputStream();
+			 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			 writer.write(data);
+			 writer.close();
+			 os.close();
+
+			 //Read
+			 BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			 String line = null;
+			 StringBuilder sb = new StringBuilder();
+
+			 while ((line = br.readLine()) != null) {
+				 sb.append(line);
+			 }
+
+			 br.close();
+			 result = sb.toString();
+
+		 } catch (UnsupportedEncodingException e) {
+			 e.printStackTrace();
+		 } catch (IOException e) {
+			 e.printStackTrace();
+		 }
+
+
+			return result;
 	 }
 	 
 	 @SuppressLint("NewApi") 
-	 private void getMyUpdates() throws ClientProtocolException, JSONException, IOException {
+	 private void getMyUpdates() throws JSONException, IOException {
 		 
 			///PREFERENCE CHECK///
 			SharedPreferences chkbx = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -410,8 +441,7 @@ public class PoliceUpdateService extends Service{
 									stackBuilder.addParentStack(PoliceNewsAll.class);
 									stackBuilder.addNextIntent(intent);
 									PendingIntent pIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-									//PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
-									
+
 									
 									if(Integer.valueOf(Ncount) >=1 && Integer.valueOf(Vcount) == 0){ // News but no videos
 										
@@ -530,8 +560,22 @@ public class PoliceUpdateService extends Service{
 		        	java.net.URL Srvurl = new java.net.URL(URL);
 		    		HttpURLConnection conn = (HttpURLConnection) Srvurl.openConnection();
 		    		conn.setConnectTimeout(20000);
-		    		conn.connect();
-		    		int ok = conn.getResponseCode();
+
+		    		try{
+						conn.connect();
+					}
+
+					catch (IOException e) {
+						// HttpUrlConnection will throw an IOException if any 4XX
+						// response is sent. If we request the status again, this
+						// time the internal status will be properly set, and we'll be
+						// able to retrieve it.
+						Log.i("ERROR","Connection failed");
+					 ok = conn.getResponseCode();
+					 e.printStackTrace();
+					 Toast.makeText(this, " No Connection at this time",Toast.LENGTH_LONG).show();
+					}
+		    	//	int ok = conn.getResponseCode();
 		    			if(ok == HttpURLConnection.HTTP_OK){
 		    				isGood = true;
 		    				Log.i("POLICE_N", "Connection to server is OK");

@@ -1,62 +1,36 @@
 package furious.phillypolicemobile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Set;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class BookmarkFragmentActivity extends FragmentActivity{
-	
-	HttpClient client;
+
 	String JSON_DATA;
-	
+	HttpURLConnection httpcon;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bookmark_mainstart);
-        
-//        try {
-//        	
-//			JSON_DATA = getBookmarkListData();
-//		
-//        } catch (ClientProtocolException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-        
 
         ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
         pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
@@ -96,37 +70,7 @@ public class BookmarkFragmentActivity extends FragmentActivity{
         
 	
 	}
-	
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		super.onCreateOptionsMenu(menu);
-//		getMenuInflater().inflate(R.menu.main, menu);
-//		return true;
-//	}
-//	
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//	    switch (item.getItemId()) {
-//		    case R.id.action_settings:
-//		    	 Intent intent = new Intent();
-//		         intent.setClass(BookmarkFragmentActivity.this, MainPreferenceActivity.class);
-//		         startActivity(intent); 
-//		   
-//		        return true;
-//		        
-//		    case R.id.action_bookmark:
-//		    	 Intent bookIntent = new Intent();
-//		    	 bookIntent.setClass(BookmarkFragmentActivity.this, NewsStoryBookmark.class);
-//		         startActivity(bookIntent); 
-//		   
-//		        return true;
-//	        
-//		    default:
-//		        break;
-//	    }
-//
-//	    return false;
-//	}
+
 	
 	public class NewsPagerAdapter extends FragmentPagerAdapter{
     	private String[] Positions = {"News Stories","UC Videos"};
@@ -145,7 +89,6 @@ public class BookmarkFragmentActivity extends FragmentActivity{
         	if(position == 0){
         		Fragment nwsStryBkm = new NewsStoryBookmark();
         		Bundle args1 = new Bundle();
-//        		args1.putInt("param", R.drawable.image1);
                 args1.putString("JSON_DATA", JSON_DATA);
                 nwsStryBkm.setArguments(args1);
 
@@ -153,7 +96,6 @@ public class BookmarkFragmentActivity extends FragmentActivity{
         	}else if(position == 1){
         		Fragment nwsStryBkm = new UCVideoBookmark();
         		Bundle args1 = new Bundle();
-//        		args1.putInt("param", R.drawable.image1);
                 args1.putString("JSON_DATA", JSON_DATA);
                 nwsStryBkm.setArguments(args1);
 
@@ -161,7 +103,6 @@ public class BookmarkFragmentActivity extends FragmentActivity{
         	}else{
         		Fragment nwsStryBkm = new NewsStoryBookmark();
         		Bundle args1 = new Bundle();
-//        		args1.putInt("param", R.drawable.image1);
                 args1.putString("JSON_DATA", JSON_DATA);
                 nwsStryBkm.setArguments(args1);
 
@@ -186,39 +127,62 @@ public class BookmarkFragmentActivity extends FragmentActivity{
 	
 		
 	
-	private String getBookmarkListData() throws ClientProtocolException, IOException, JSONException{
-		 
-	 	//client = AndroidHttpClient.newInstance("ComboNation");
+	private String getBookmarkListData() throws IOException, JSONException{
+
 		String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
 	 	String deviceID = HttpClientInfo.getMD5(macAddss);
-	 	client = new DefaultHttpClient();
- 		HttpPost post = new HttpPost(HttpClientInfo.URL);
- 		
-	 	JSONObject postObj = new JSONObject();
- 		postObj.put("Bookmark", "true");
- 		postObj.put("DeviceID", deviceID);
+		String result = null;
+
+
+	 	try{
+
+			JSONObject postObj = new JSONObject();
+			postObj.put("Bookmark", "true");
+			postObj.put("DeviceID", deviceID);
+			String data = postObj.toString();
+
+			//Connect
+			httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			httpcon.setDoOutput(true);
+			httpcon.setRequestProperty("Content-Type", "application/json");
+			httpcon.setRequestProperty("Accept", "application/json");
+			httpcon.setRequestProperty("Accept-Language","en-US");
+			httpcon.setRequestMethod("POST");
+			httpcon.connect();
+
+			//Write
+			OutputStream os = httpcon.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			writer.write(data);
+			writer.close();
+			os.close();
+
+			//Read
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			br.close();
+			result = sb.toString();
+
+
+		}
+
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
  				
  		
- 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
- 		post.setHeader("Content-Type","application/json");
- 		post.setHeader("Accept-Encoding","application/json");
- 		post.setHeader("Accept-Language","en-US");
- 		
- 		HttpResponse res = client.execute(post);
- 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-		res.getEntity().writeTo(os); 
+
+
 		
-//		HttpClient android = new DefaultHttpClient();
-//		HttpGet clientRequest = new HttpGet(uRL);
-//		HttpResponse response = android.execute(clientRequest);
-//
-//		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-//		response.getEntity().writeTo(os); 
-//		String responseString = os.toString();
-//		
-//		return responseString;
-		
-		return os.toString();
+		return result;
 		
 		
 	}

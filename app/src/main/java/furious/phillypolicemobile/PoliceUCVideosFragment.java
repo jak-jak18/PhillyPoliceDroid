@@ -1,18 +1,19 @@
 package furious.phillypolicemobile;
 
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +54,7 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 	TextView headerTxt;
 	TextView noVideoTextView;
 	ProgressBar progressM;
+	HttpURLConnection httpcon;
 	LinearLayout table;
 	LinearLayout table1;
 	Bitmap image;
@@ -139,29 +141,19 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 	@Override
     public void onStart(){
     	super.onStart();
-    	
-    	
-//    	DISTRICT_DIVISION = this.getArguments().getString("Division");
-    	
-//		//String newURL = URL.concat("?ismobile=true&main=true&district="+district);
-//		Log.i("PHILLYPOLICE", "Going to: "+newURL);
-//		//String newURL = URL.concat("?district="+12+"&ismobile=true");
+
     	
     }
 	
 	 @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                             Bundle savedInstanceState) {
-//		 	DISTRICT_DIVISION = this.getArguments().getString("Division");
 	        View layout = inflater.inflate(R.layout.uc_videos, container, false);
 	        TextView header = (TextView) layout.findViewById(R.id.UCVideoHeader);
 	        header.setText("Division Unsolved Crime Videos");
-	        
 
-	        
 	        return layout;
-	        
-		// return super.onCreateView(inflater, container, savedInstanceState);
+
 	    }
 	 
 	 
@@ -196,10 +188,8 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 							}
 						Log.i("THE ARRAY COUNT", Integer.toString(UC_Obj.size()));
 						
-					//	image = getBitmapFromURL(Dobject.getString("CaptainURL"));
-					}	
-						catch (ClientProtocolException e) {e.printStackTrace();}
-						catch (IOException e) {e.printStackTrace();} 
+					}
+						catch (IOException e) {e.printStackTrace();}
 						catch (JSONException e) {e.printStackTrace();}
 				
 				return UC_Obj;
@@ -207,16 +197,13 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 			
 				protected void onPostExecute(ArrayList<PoliceUCVideoObject> uc_vid_objs) {
 					adapter = new PoliceUCVideosAdapter(getActivity(), uc_vid_objs);
-					//setListAdapter(adapter);
-					
+
 					if(uc_vid_objs.size() <= 0){
-						//pDialog.dismiss();
-			//			Toast.makeText(getActivity(), "No videos at this time", Toast.LENGTH_LONG).show();
 						noVideoTextView = (TextView) getActivity().findViewById(R.id.UCVideos_NoVid);
 						noVideoTextView.setVisibility(View.VISIBLE);
 					}else{
 						String ct = Integer.toString(TOTAL_COUNT);
-						//String dc = Integer.toString(DISPLAY_COUNT);
+
 						if(TOTAL_COUNT == uc_vid_objs.size()){
 							View title = Header("No More Videos "+"( "+uc_vid_objs.size()+" of "+TOTAL_COUNT+" )");
 							getListView().addFooterView(title);
@@ -276,9 +263,6 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 				
 				
 				
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -310,32 +294,56 @@ public class PoliceUCVideosFragment extends ListFragment implements AdapterView.
 		 
 	 }
 	 
-	 private String getListData(String uRL, int srt, int end) throws ClientProtocolException, IOException, JSONException{
+	 private String getListData(String uRL, int srt, int end) throws IOException, JSONException{
 
-			HttpClient android = new DefaultHttpClient();
-			HttpPost clientRequest = new HttpPost(uRL);
-			
-			
+		 String result = null;
+
+    	try{
 			JSONObject postObj = new JSONObject();
-	 		postObj.put("UCVideos", "true");
-	 		postObj.put("District", DISTRICT_NUM);
-	// 		postObj.put("Division", DISTRICT_DIVISION);
-	// 		postObj.put("DeviceID", HttpClientInfo.DEVICE_ID);
-	 		postObj.put("Start", srt);
-	 		postObj.put("End", end);
-	 		
-	 		clientRequest.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-	 		clientRequest.setHeader("Content-Type","application/json");
-	 		clientRequest.setHeader("Accept-Encoding","application/json");
-	 		clientRequest.setHeader("Accept-Language","en-US");
-	 		
-	 		HttpResponse response = android.execute(clientRequest);
+			postObj.put("UCVideos", "true");
+			postObj.put("District", DISTRICT_NUM);
+			postObj.put("Start", srt);
+			postObj.put("End", end);
+			String data = postObj.toString();
 
-			ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-			response.getEntity().writeTo(os); 
-			String responseString = os.toString();
+			//Connect
+			httpcon = (HttpURLConnection) ((new URL(uRL).openConnection()));
+			httpcon.setDoOutput(true);
+			httpcon.setRequestProperty("Content-Type", "application/json");
+			httpcon.setRequestProperty("Accept", "application/json");
+			httpcon.setRequestProperty("Accept-Language","en-US");
+			httpcon.setRequestMethod("POST");
+			httpcon.connect();
+
+			//Write
+			OutputStream os = httpcon.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			writer.write(data);
+			writer.close();
+			os.close();
+
+			//Read
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			br.close();
+			result = sb.toString();
+		}
+
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 			
-			return responseString;
+			return result;
 
 		}
 	 

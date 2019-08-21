@@ -1,7 +1,5 @@
 package furious.phillypolicemobile;
 
-
-
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,18 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class CrimeFragment extends ListFragment {
@@ -31,6 +31,7 @@ public class CrimeFragment extends ListFragment {
     ArrayList<CrimeObject> CR_Obj;
     int TOTAL_COUNT;
     CrimesAdapter adapter;
+    HttpURLConnection httpcon;
 
     private String addTH(String dNum){
 
@@ -87,7 +88,7 @@ public class CrimeFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//		 	DISTRICT_DIVISION = this.getArguments().getString("Division");
+
         View layout = inflater.inflate(R.layout.crimelayout, container, false);
         TextView header = (TextView) layout.findViewById(R.id.CrimeHeader);
         String dis = addTH(DISTRICT_NUM);
@@ -97,7 +98,6 @@ public class CrimeFragment extends ListFragment {
 
         return layout;
 
-        // return super.onCreateView(inflater, container, savedInstanceState);
     }
 
 
@@ -128,11 +128,9 @@ public class CrimeFragment extends ListFragment {
                     
                     CR_Obj.add(info);
                 }
-             //   Log.i("THE ARRAY COUNT", Integer.toString(UC_Obj.size()));
 
-                //	image = getBitmapFromURL(Dobject.getString("CaptainURL"));
             }
-            catch (ClientProtocolException e) {e.printStackTrace();}
+
             catch (IOException e) {e.printStackTrace();}
             catch (JSONException e) {e.printStackTrace();}
 
@@ -141,13 +139,10 @@ public class CrimeFragment extends ListFragment {
 
         protected void onPostExecute(ArrayList<CrimeObject> uc_vid_objs) {
             adapter = new CrimesAdapter(getActivity(), uc_vid_objs);
-            //setListAdapter(adapter);
 
             if(uc_vid_objs.size() <= 0){
-                //pDialog.dismiss();
-                //			Toast.makeText(getActivity(), "No videos at this time", Toast.LENGTH_LONG).show();
-//                noVideoTextView = (TextView) getActivity().findViewById(R.id.UCVideos_NoVid);
-//                noVideoTextView.setVisibility(View.VISIBLE);
+
+
             }else{
                 String ct = Integer.toString(TOTAL_COUNT);
                 //String dc = Integer.toString(DISPLAY_COUNT);
@@ -176,37 +171,56 @@ public class CrimeFragment extends ListFragment {
     }
 
 
-    private String getListData(String uRL, int srt, int end) throws ClientProtocolException, IOException, JSONException{
+    private String getListData(String uRL, int srt, int end) throws IOException, JSONException {
 
-        HttpClient android = new DefaultHttpClient();
-        HttpPost clientRequest = new HttpPost(uRL);
+        String result = null;
 
+        try {
 
-        JSONObject postObj = new JSONObject();
-        postObj.put("Latest", "true");
-        postObj.put("DistrictNumber", DISTRICT_NUM);
-        postObj.put("CrimeIncidents", "true");
-        postObj.put("Start", srt);
-        postObj.put("End", end);
+            JSONObject postObj = new JSONObject();
+            postObj.put("Latest", "true");
+            postObj.put("DistrictNumber", DISTRICT_NUM);
+            postObj.put("CrimeIncidents", "true");
+            postObj.put("Start", srt);
+            postObj.put("End", end);
+            String data = postObj.toString();
 
-        clientRequest.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-        clientRequest.setHeader("Content-Type","application/json");
-        clientRequest.setHeader("Accept-Encoding","application/json");
-        clientRequest.setHeader("Accept-Language","en-US");
+            httpcon = (HttpURLConnection) ((new URL(uRL).openConnection()));
+            httpcon.setDoOutput(true);
+            httpcon.setRequestProperty("Content-Type", "application/json");
+            httpcon.setRequestProperty("Accept", "application/json");
+            httpcon.setRequestMethod("POST");
+            httpcon.connect();
 
-        HttpResponse response = android.execute(clientRequest);
+            //Write
+            OutputStream os = httpcon.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(data);
+            writer.close();
+            os.close();
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        response.getEntity().writeTo(os);
-        String responseString = os.toString();
+            //Read
+            BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(), "UTF-8"));
 
-        return responseString;
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            br.close();
+            result = sb.toString();
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
 
     }
-
-
-
-
 
 
 

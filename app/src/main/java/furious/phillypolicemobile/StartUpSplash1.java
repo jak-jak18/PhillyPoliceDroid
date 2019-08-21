@@ -1,18 +1,17 @@
 package furious.phillypolicemobile;
 
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +38,7 @@ public class StartUpSplash1 extends Activity {
 
 	ProgressBar progress;
 	String URL = HttpClientInfo.URL;
-	HttpClient client;
+	HttpURLConnection httpcon;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState){
@@ -95,31 +94,6 @@ public class StartUpSplash1 extends Activity {
      		}
          	   
             });
-            
-//            goSett.setOnClickListener(new OnClickListener(){
-//
-//        		@Override
-//        		public void onClick(View v) {
-//        			// TODO Auto-generated method stub
-//
-//        			Intent intent = new Intent(StartUpSplash1.this, MainPreferenceActivity.class);
-//                	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                	startActivity(intent);
-//                	finish();
-//
-//        		}
-//
-//               });
-             
-             
-//             if(isWiFiOn()){
-//             	
-//             	Intent intent = new Intent(StartUpSplash1.this, MainStart.class);
-//             	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//             	startActivity(intent);
-//             	finish();
-//             }
-       		
        		
        		
        	}
@@ -128,74 +102,7 @@ public class StartUpSplash1 extends Activity {
        
 
     }
-	
-	
 
-//	private boolean isWiFiOn(){
-//    	
-//		Log.i("POLICE_APP","Checking WiFi......");
-//		ConnectivityManager connManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-//		NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-//		NetworkInfo mMobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-//		
-//			if(mWifi.isConnected()){
-//				
-//				Log.i("POLICE_APP","WiFi is UP");
-//				Log.i("POLICE_APP","Checking Hosting Server Connection....");
-//				
-//					if(isServerUp()){
-//						Log.i("POLICE_APP","Hosting Server is UP");
-//						
-//					}else{
-//						Log.i("POLICENEWS","Server is Down");
-//						
-//						
-//
-//					}
-//			}else if(!mWifi.isConnected()){
-//				
-//				Log.i("POLICE_APP", "Wifi is DOWN");
-//				
-//					if(mMobile.isConnected()){
-//						
-//						Log.i("POLICE_APP","Mobile Network is UP");
-//							if(isServerUp()){
-//								Log.i("POLICE_APP","Hosting Server is UP");
-//								
-//								
-//							}else{
-//								Log.i("POLICE_APP","Server is Down");
-//
-//						}
-//					}else if(!mMobile.isConnected()){
-//						
-//						Log.i("POLICE_APP", "NO Network Acces on this device");
-//						
-//						new AlertDialog.Builder(this)
-//				        .setIcon(R.drawable.ic_launcher)
-//				        .setTitle("No Internet Connection")
-//				        .setMessage("Please Turn on Mobile Data")
-//				        .setPositiveButton("OK", new DialogInterface.OnClickListener(){
-//				            @Override
-//				            
-//				            public void onClick(DialogInterface dialog, int which) {
-//				                //code for exit
-////				                Intent intent = new Intent(Intent.ACTION_MAIN);
-////				                intent.addCategory(Intent.CATEGORY_HOME);            
-////				                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//////				                startActivity(intent);
-//				            	finish();
-//				            }
-//
-//				        })
-//				        .show();
-//						
-//					}
-//				
-//					
-//			}
-//		return mWifi.isConnected();
-//	}
 	
 	
 	
@@ -278,20 +185,7 @@ public class StartUpSplash1 extends Activity {
 			}
 			
 		}
-		
-//			protected void onPostExecute(ArrayList<NewsObject> lockers) {
-//				
-//				NewsAdapter adapter = new NewsAdapter(getActivity(),lockers);
-//				Madapter = new MergeAdapter();
-//				Madapter.addAdapter(adapter);
-//				items = new ArrayList<String>();
-//				items.add("More News");
-//				//Madapter.addAdapter(new OptionAdapter(getActivity(), R.layout.morenewsheading, items));
-//				
-//				
-//				getListView().setAdapter(Madapter);
-//
-//	}
+
 		
 		
 		
@@ -323,29 +217,58 @@ public class StartUpSplash1 extends Activity {
 		};
 		
 		
-		 public String getJSONData() throws JSONException, ClientProtocolException, IOException{
+		 public String getJSONData() throws JSONException, IOException{
 			 	
 			 	String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
 			 	String deviceID = HttpClientInfo.getMD5(macAddss);
 
-			 	client = new DefaultHttpClient();
-		 		HttpPost post = new HttpPost(HttpClientInfo.URL);
+			 String result = null;
+
+			 try {
+
 			 	JSONObject postObj = new JSONObject();
-			 				 	
 		 		postObj.put("isAgreement", "true");
 		 		postObj.put("DeviceID", deviceID);
+				String data = postObj.toString();
 		 		Log.e("PUSHING_THIS",postObj.toString());
-		 		
 
-		 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-		 		post.setHeader("Content-Type","application/json");
-		 		post.setHeader("Accept-Encoding","application/json");
-		 		post.setHeader("Accept-Language","en-US");
-		 		Log.i("PHILLY_POLICE", "Attempting to connecto to host "+URL);
-		 		HttpResponse res = client.execute(post);
-		 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-				res.getEntity().writeTo(os);
-				return os.toString();
+
+				 //Connect
+				 httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+				 httpcon.setDoOutput(true);
+				 httpcon.setRequestProperty("Content-Type", "application/json");
+				 httpcon.setRequestProperty("Accept", "application/json");
+				 httpcon.setRequestProperty("Accept-Language","en-US");
+				 httpcon.setRequestMethod("POST");
+				 httpcon.connect();
+
+				 //Write
+				 OutputStream os = httpcon.getOutputStream();
+				 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+				 writer.write(data);
+				 writer.close();
+				 os.close();
+
+				 //Read
+				 BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+				 String line = null;
+				 StringBuilder sb = new StringBuilder();
+
+				 while ((line = br.readLine()) != null) {
+					 sb.append(line);
+				 }
+
+				 br.close();
+				 result = sb.toString();
+
+			 } catch (IOException e) {
+				 e.printStackTrace();
+			 }
+
+			 return result;
+
+
 		 }
 	
 }

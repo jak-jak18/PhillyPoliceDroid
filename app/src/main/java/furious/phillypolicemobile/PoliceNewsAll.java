@@ -1,16 +1,20 @@
 package furious.phillypolicemobile;
 
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,19 +35,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static furious.phillypolicemobile.HttpClientInfo.getMD5;
+
 public class PoliceNewsAll extends Activity{
 	ListView listview;
 	TextView dateView;
 	TextView loading;
+	private String macAddress;
+	private String deviceID;
 	String timeStamp;
 	String HASH_TAG;
 	ArrayList<NewsObject> newsObjs;
 	ArrayList<NewsObject> videoObjs;
+	HttpURLConnection httpcon;
 	int TOTAL_COUNT;
 	NewsAdapter newsAdapter;
- 	DefaultHttpClient client = new DefaultHttpClient();
  	ProgressBar progress;
-	
+
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,32 +60,26 @@ public class PoliceNewsAll extends Activity{
         
         Bundle extras = getIntent().getExtras();
         HASH_TAG = extras.getString("HashTag");
+		macAddress = HttpClientInfo.getMacAddress(getApplicationContext());
+		deviceID = getMD5(macAddress);
         
         listview = (ListView) findViewById(R.id.PoliceNewsAllListView);
         progress = (ProgressBar) findViewById(R.id.PoliceNewsAllProgress);
         loading = (TextView) findViewById(R.id.textViewLoading);
         new fetchMoreNews().execute(HttpClientInfo.URL);
         dateView = (TextView) findViewById(R.id.textViewDate);
-//        Toast.makeText(getApplicationContext(), HASH_TAG, Toast.LENGTH_LONG).show();
-        
-        
+
         listview.setOnItemClickListener(new OnItemClickListener(){
 
 			@SuppressLint("NewApi") @Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
-//				Toast.makeText(getApplicationContext(), "Hello you Clicked", Toast.LENGTH_LONG).show();
+
 				if(arg1.findViewById(R.id.MoreListTextViewAll) != null){
-//						headerTxt = (TextView) getActivity().findViewById(R.id.MoreListTextView);
-//						progressM = (ProgressBar) getActivity().findViewById(R.id.HeaderLoadMore);
-//						progressM.setVisibility(View.VISIBLE);
-//						headerTxt.setVisibility(View.INVISIBLE);
-//						
+
 					Toast.makeText(getApplicationContext(), "Making something", Toast.LENGTH_LONG).show();
-					
-						//new fetchMoreNews().execute(HttpClientInfo.URL);
-					
+
 				}else{
 					
 					NewsObject lObj = (NewsObject) arg0.getItemAtPosition(arg2);
@@ -196,9 +198,6 @@ public class PoliceNewsAll extends Activity{
 						}
 						
 				
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -245,35 +244,65 @@ public class PoliceNewsAll extends Activity{
     	return jArray;	
     }
 	 
-	
-	private String getListData(String Dist_Num) throws ClientProtocolException, IOException, JSONException{
-		 
-	 	
-		String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
-	 	String deviceID = HttpClientInfo.getMD5(macAddss);
-	 	//client = AndroidHttpClient.newInstance("ComboNation");
-	 	client = new DefaultHttpClient();
- 		HttpPost post = new HttpPost(HttpClientInfo.URL);
- 		
- 		
-	 	JSONObject postObj = new JSONObject();
-	 	postObj.put("District_Update","true");
- 		postObj.put("HashTag", HASH_TAG);
- 		postObj.put("DeviceID", deviceID);
- 		postObj.put("Districts", getDistricts());
- 		Log.i("SENDING TO SERVER", postObj.toString());
- 		
- 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
- 		post.setHeader("Content-Type","application/json");
- 		post.setHeader("Accept-Encoding","application/json");
- 		post.setHeader("Accept-Language","en-US");
- 		
- 		HttpResponse res = client.execute(post);
- 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-		res.getEntity().writeTo(os);
-		return os.toString();
-			
+
+	private String getListData(String Dist_Num) throws JSONException, UnsupportedEncodingException {
+
+		String result = null;
+
+		try {
+
+
+			JSONObject postObj = new JSONObject();
+			postObj.put("District_Update","true");
+			postObj.put("HashTag", HASH_TAG);
+			postObj.put("DeviceID", deviceID);
+			postObj.put("Districts", getDistricts());
+			String data = postObj.toString();
+			Log.i("SENDING TO SERVER", postObj.toString());
+
+
+			//Connect
+			httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			httpcon.setDoOutput(true);
+			httpcon.setRequestProperty("Content-Type", "application/json");
+			httpcon.setRequestProperty("Accept", "application/json");
+			httpcon.setRequestProperty("Accept-Language","en-US");
+			httpcon.setRequestMethod("POST");
+			httpcon.connect();
+
+			//Write
+			OutputStream os = httpcon.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			writer.write(data);
+			writer.close();
+			os.close();
+
+			//Read
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			br.close();
+			result = sb.toString();
+
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+
+
+
 	}
+
+
 	 
 //	private View Header(String string) {
 //    	

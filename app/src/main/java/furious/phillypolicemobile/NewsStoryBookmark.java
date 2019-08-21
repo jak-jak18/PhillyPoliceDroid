@@ -1,14 +1,16 @@
 package furious.phillypolicemobile;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,13 +46,11 @@ import android.content.Intent;
 
 public class NewsStoryBookmark extends ListFragment implements AdapterView.OnItemLongClickListener {
 
-	//ListView list;
-//	ProgressDialog pDialog;
-	HttpClient client;
+
 	
 	ArrayList<NewsStoryBookmarkObject> newsObjs;
-//	ArrayList<NewsStoryBookmarkObject> vidObjs;
 	NewsStoryBookmarkAdapter adapter;
+	HttpURLConnection httpcon;
 	TextView noBookmark;
 	String CLICKED;
 	int CLICKED_NEWS;
@@ -74,11 +74,7 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 	@Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        //JSON_DATA = this.getArguments().getString("JSON_DATA");
-        
-//        noBookmark = (TextView) findViewById(R.id.BookmarkNoView);
-//        list = (ListView) findViewById(R.id.bookmarkListView);
-       
+
         new fetchBokmarks().execute();
         
     }
@@ -91,10 +87,6 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 	 View layout = inflater.inflate(R.layout.bookmark, container, false);	 
 	 noBookmark = (TextView) layout.findViewById(R.id.BookmarkNoView);
 	 progress = (ProgressBar) layout.findViewById(R.id.progressBar1Bookmark);
-//	 noNewsTxt = (TextView) layout.findViewById(R.id.NoNewsTxtView);
-//	 headerTxt = (TextView) layout.findViewById(R.id.NewsListHeaderTextView);
-//	 headerTxt.setText(CVDistrict(DISTRICT)+" District News");
-//	 headerTxt.setVisibility(View.VISIBLE);
 
      return layout;	        
 	
@@ -115,20 +107,7 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 				long arg3) {
 			
 			// TODO Auto-generated method stub
-			
-//			if(arg1.findViewById(R.id.MoreListTextView) != null){
-//				if(TOTAL_COUNT != newsObjs.size()){
-//					footerTxt = (TextView) getActivity().findViewById(R.id.MoreListTextView);
-//					progressM = (ProgressBar) getActivity().findViewById(R.id.HeaderLoadMore);
-//					progressM.setVisibility(View.VISIBLE);
-//					footerTxt.setVisibility(View.INVISIBLE);
-//					
-//					new fetchMoreNews().execute(HttpClientInfo.URL);
-//				}else{
-//					Toast.makeText(getActivity(), "No more news at this time", Toast.LENGTH_LONG).show();
-//				}
-//			}
-			
+
 			
 			NewsStoryBookmarkObject lObj = (NewsStoryBookmarkObject) arg0.getItemAtPosition(arg2);
 				boolean isVid = false;
@@ -172,7 +151,6 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 			@Override
 			protected ArrayList<NewsStoryBookmarkObject> doInBackground(String... params) {
 				newsObjs = new ArrayList<NewsStoryBookmarkObject>();
-//				vidObjs = new ArrayList<NewsStoryBookmarkObject>();
 				
 					try{
 						
@@ -180,25 +158,10 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 						
 						JSONObject object = new JSONObject(Data);
 						JSONObject bookMarks = object.getJSONObject("Bookmarks");
-//						JSONArray uc_vid_Array = bookMarks.getJSONArray("UCVideos");
 						JSONArray news_story_Array = bookMarks.getJSONArray("NewsStory");
-						
-						//int uc_vid_count = uc_vid_Array.length();
+
 						int news_story_count = news_story_Array.length();
-								
-//							for(int i=0;i<uc_vid_count;i++){
-//									
-//								NewsStoryBookmarkObject item = new NewsStoryBookmarkObject();
-//								JSONObject vid_object = uc_vid_Array.getJSONObject(i);
-//								item.setDivision(vid_object.getString("Division"));
-//								item.setTitle(vid_object.getString("Title"));
-//								item.setDescription(vid_object.getString("Description"));
-//								item.setStoryDate(vid_object.getString("PubDate"));
-//								item.setImageURL(vid_object.getString("ImageURL"));
-//								item.setCategory(vid_object.getString("Category"));
-//								item.setVideoURL(vid_object.getString("TubeURL"));
-//								vidObjs.add(item);
-//							}
+
 							
 							for(int i=0;i<news_story_count;i++){
 									
@@ -221,12 +184,10 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 							
 								TOTAL_COUNT = object.getInt("TotalCount");
 					}	
-									catch (ClientProtocolException e) {e.printStackTrace();}
+
 									catch (IOException e) {e.printStackTrace();} 
 									catch (JSONException e) {e.printStackTrace();}
-					finally {
-	 					client.getConnectionManager().shutdown();
-	 				}
+
 				
 				return newsObjs;
 			}
@@ -234,28 +195,22 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 				protected void onPostExecute(ArrayList<NewsStoryBookmarkObject> lockers) {
 					
 					adapter = new NewsStoryBookmarkAdapter(getActivity(),lockers);
-					//Madapter = new MergeAdapter();
-					//Madapter.addAdapter(adapter);
-					//items = new ArrayList<String>();
-					//items.add("More News");
-					//Madapter.addAdapter(new OptionAdapter(getActivity(), R.layout.morenewsheading, items));
-						if(lockers.size() <= 0){
-							//pDialog.dismiss();
-							//Toast.makeText(getActivity(), "No news at this time", Toast.LENGTH_LONG).show();
+
+					if(lockers.size() <= 0){
 							noBookmark.setVisibility(View.VISIBLE);
 						}else{
 							String ct = Integer.toString(TOTAL_COUNT);
-							//String dc = Integer.toString(DISPLAY_COUNT);
+
 							if(TOTAL_COUNT == lockers.size()){
 								View title = Header("No More News "+"( "+lockers.size()+" of "+TOTAL_COUNT+" )");
 								getListView().addFooterView(title);
 								getListView().setAdapter(adapter);
-								//pDialog.dismiss();
+
 							}else{
 								View title = Header("More News "+"( "+lockers.size()+" of "+ct+" )");
 								getListView().addFooterView(title);
 								getListView().setAdapter(adapter);
-								//pDialog.dismiss();
+
 							}
 							
 						}
@@ -319,48 +274,63 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 			
 			LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View k = inflater.inflate(R.layout.news_more_header, null);
-		//	View k = getActivity().getLayoutInflater().inflate(R.layout.news_more_header, null);
 			TextView title = (TextView) k.findViewById(R.id.MoreListTextView);
 			title.setText(string);
 			return k;
 		}
 		  
 
-		private String getBookmarkListData() throws ClientProtocolException, IOException, JSONException{
-				 
-			 	//client = AndroidHttpClient.newInstance("ComboNation");
-				String macAddss = HttpClientInfo.getMacAddress(getActivity());
-			 	String deviceID = HttpClientInfo.getMD5(macAddss);
-			 	client = new DefaultHttpClient();
-		 		HttpPost post = new HttpPost(HttpClientInfo.URL);
-		 		
-			 	JSONObject postObj = new JSONObject();
-		 		postObj.put("Bookmark", "true");
-		 		postObj.put("DeviceID", deviceID);
-		 		postObj.put("Bookmark_UCVideos", "false");
-		 		postObj.put("Bookmark_NewsStory", "true");
-		 				
-		 		
-		 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-		 		post.setHeader("Content-Type","application/json");
-		 		post.setHeader("Accept-Encoding","application/json");
-		 		post.setHeader("Accept-Language","en-US");
-		 		
-		 		HttpResponse res = client.execute(post);
-		 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-				res.getEntity().writeTo(os); 
-				
-//				HttpClient android = new DefaultHttpClient();
-//				HttpGet clientRequest = new HttpGet(uRL);
-//				HttpResponse response = android.execute(clientRequest);
-		//
-//				ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-//				response.getEntity().writeTo(os); 
-//				String responseString = os.toString();
-//				
-//				return responseString;
-				
-				return os.toString();
+		private String getBookmarkListData() throws IOException, JSONException{
+
+ 				String result = null;
+ 		try{
+
+			String macAddss = HttpClientInfo.getMacAddress(getActivity());
+			String deviceID = HttpClientInfo.getMD5(macAddss);
+
+
+			JSONObject postObj = new JSONObject();
+			postObj.put("Bookmark", "true");
+			postObj.put("DeviceID", deviceID);
+			postObj.put("Bookmark_UCVideos", "false");
+			postObj.put("Bookmark_NewsStory", "true");
+			String data = postObj.toString();
+
+			httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			httpcon.setDoOutput(true);
+			httpcon.setRequestProperty("Content-Type", "application/json");
+			httpcon.setRequestProperty("Accept", "application/json");
+			httpcon.setRequestMethod("POST");
+			httpcon.connect();
+
+			//Write
+			OutputStream os = httpcon.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			writer.write(data);
+			writer.close();
+			os.close();
+
+			//Read
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			br.close();
+			result = sb.toString();
+		}
+
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+				return result;
 				
 				
 			}
@@ -382,9 +352,6 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 					try {
 						
 						data = deleteListData();
-					} catch (ClientProtocolException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -428,45 +395,61 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 		
 		
 		
-		private String deleteListData() throws ClientProtocolException, IOException, JSONException{
-			 
+		private String deleteListData() throws IOException, JSONException{
+
+			String result = null;
 		 	//client = AndroidHttpClient.newInstance("ComboNation");
 			String macAddss = HttpClientInfo.getMacAddress(getActivity());
 		 	String deviceID = HttpClientInfo.getMD5(macAddss);
-		 	client = new DefaultHttpClient();
-	 		HttpPost post = new HttpPost(HttpClientInfo.URL);
-	 		
-		 	JSONObject postObj = new JSONObject();
-		 	postObj.put("NewsID", CLICKED);
-	 		postObj.put("Bookmark", "true");
-	 		postObj.put("DeviceID", deviceID);
-	 		postObj.put("BookmarkRemove", "true");
-	 		postObj.put("News", "true");
-	 		postObj.put("Video", "false");
 
-	 		Log.e("THIS IS SENDING",postObj.toString());
-	 				
-	 		
-	 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-	 		post.setHeader("Content-Type","application/json");
-	 		post.setHeader("Accept-Encoding","application/json");
-	 		post.setHeader("Accept-Language","en-US");
-	 		
-	 		HttpResponse res = client.execute(post);
-	 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-			res.getEntity().writeTo(os); 
+	 	try {
+			JSONObject postObj = new JSONObject();
+			postObj.put("NewsID", CLICKED);
+			postObj.put("Bookmark", "true");
+			postObj.put("DeviceID", deviceID);
+			postObj.put("BookmarkRemove", "true");
+			postObj.put("News", "true");
+			postObj.put("Video", "false");
+			String data = postObj.toString();
+			Log.e("THIS IS SENDING", postObj.toString());
+
+
+			//Connect
+			httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			httpcon.setDoOutput(true);
+			httpcon.setRequestProperty("Content-Type", "application/json");
+			httpcon.setRequestProperty("Accept", "application/json");
+			httpcon.setRequestMethod("POST");
+			httpcon.connect();
+
+			//Write
+			OutputStream os = httpcon.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			writer.write(data);
+			writer.close();
+			os.close();
+
+			//Read
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(), "UTF-8"));
+
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			br.close();
+			result = sb.toString();
+		}
+
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 			
-//			HttpClient android = new DefaultHttpClient();
-//			HttpGet clientRequest = new HttpGet(uRL);
-//			HttpResponse response = android.execute(clientRequest);
-	//
-//			ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-//			response.getEntity().writeTo(os); 
-//			String responseString = os.toString();
-//			
-//			return responseString;
-			
-			return os.toString();
+			return result;
 			
 			
 		}

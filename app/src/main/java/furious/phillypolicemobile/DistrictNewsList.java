@@ -1,17 +1,19 @@
 package furious.phillypolicemobile;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +23,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -52,7 +53,7 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 	ArrayList<String> items;
 	ProgressBar progressM;
 	ProgressDialog pDialog;
-	HttpClient client;
+	HttpURLConnection httpcon;
 	TextView footerTxt;
 	TextView headerTxt;
 	TextView noNewsTxt;
@@ -206,12 +207,9 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 								}
 								TOTAL_COUNT = object.getInt("TotalCount");
 					}	
-									catch (ClientProtocolException e) {e.printStackTrace();}
-									catch (IOException e) {e.printStackTrace();} 
+									catch (IOException e) {e.printStackTrace();}
 									catch (JSONException e) {e.printStackTrace();}
-					finally {
-	 					client.getConnectionManager().shutdown();
-	 				}
+
 				
 				return newsObjs;
 			}
@@ -219,18 +217,13 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 				protected void onPostExecute(ArrayList<NewStoryObject> lockers) {
 					
 					adapter = new NewsAdapter(getActivity(),lockers);
-					//Madapter = new MergeAdapter();
-					//Madapter.addAdapter(adapter);
-					//items = new ArrayList<String>();
-					//items.add("More News");
-					//Madapter.addAdapter(new OptionAdapter(getActivity(), R.layout.morenewsheading, items));
-						if(lockers.size() <= 0){
+
+					if(lockers.size() <= 0){
 							pDialog.dismiss();
-							//Toast.makeText(getActivity(), "No news at this time", Toast.LENGTH_LONG).show();
 							noNewsTxt.setVisibility(View.VISIBLE);
 						}else{
 							String ct = Integer.toString(TOTAL_COUNT);
-							//String dc = Integer.toString(DISPLAY_COUNT);
+
 							if(TOTAL_COUNT == lockers.size()){
 								View title = Header("No More News");
 								getListView().addFooterView(title);
@@ -263,7 +256,7 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 					}else if((TOTAL_COUNT - newsObjs.size())>5){
 						rdata = getListData(DISTRICT,newsObjs.size(),5);
 					}
-				//String rdata = getListData(DISTRICT,newsObjs.size(),TOTAL_COUNT);
+
 				JSONObject jObj = new JSONObject(rdata);
 				Log.i("Counts", DISTRICT);
 				JSONArray objectArray = jObj.getJSONArray("Articles");
@@ -287,9 +280,6 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 					}
 					TOTAL_COUNT = jObj.getInt("TotalCount");
 				
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -334,41 +324,59 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 		    }
 		}
 	 
-	 private String getListData(String Dist_Num,int srt, int end) throws ClientProtocolException, IOException, JSONException{
-		 
-		 	//client = AndroidHttpClient.newInstance("ComboNation");
-		 	client = new DefaultHttpClient();
-	 		HttpPost post = new HttpPost(HttpClientInfo.URL);
-	 		
-		 	JSONObject postObj = new JSONObject();
-	 		postObj.put("DistrictNumber", Dist_Num);
-		 	postObj.put("DistrictNews", "true");
-	 		postObj.put("News", "ALL");
-	 		postObj.put("Start", srt);
-	 		postObj.put("End", end);			
-	 		
-	 		post.setEntity(new StringEntity(postObj.toString(), "UTF-8"));
-	 		post.setHeader("Content-Type","application/json");
-	 		post.setHeader("Accept-Encoding","application/json");
-	 		post.setHeader("Accept-Language","en-US");
-	 		
-	 		HttpResponse res = client.execute(post);
-	 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-			res.getEntity().writeTo(os); 
-			
-//			HttpClient android = new DefaultHttpClient();
-//			HttpGet clientRequest = new HttpGet(uRL);
-//			HttpResponse response = android.execute(clientRequest);
-//
-//			ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-//			response.getEntity().writeTo(os); 
-//			String responseString = os.toString();
-//			
-//			return responseString;
-			
-			return os.toString();
-			
-			
+	 private String getListData(String Dist_Num,int srt, int end) throws  IOException, JSONException{
+
+		 String result = null;
+
+		 try {
+
+			 JSONObject postObj = new JSONObject();
+			 postObj.put("DistrictNumber", Dist_Num);
+			 postObj.put("DistrictNews", "true");
+			 postObj.put("News", "ALL");
+			 postObj.put("Start", srt);
+			 postObj.put("End", end);
+			 String data = postObj.toString();
+
+			 //Connect
+			 httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			 httpcon.setDoOutput(true);
+			 httpcon.setRequestProperty("Content-Type", "application/json");
+			 httpcon.setRequestProperty("Accept", "application/json");
+			 httpcon.setRequestProperty("Accept-Language","en-US");
+			 httpcon.setRequestMethod("POST");
+			 httpcon.connect();
+
+			 //Write
+			 OutputStream os = httpcon.getOutputStream();
+			 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			 writer.write(data);
+			 writer.close();
+			 os.close();
+
+			 //Read
+			 BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+			 String line = null;
+			 StringBuilder sb = new StringBuilder();
+
+			 while ((line = br.readLine()) != null) {
+				 sb.append(line);
+			 }
+
+			 br.close();
+			 result = sb.toString();
+		 }
+
+		 catch (UnsupportedEncodingException e) {
+			 e.printStackTrace();
+		 } catch (IOException e) {
+			 e.printStackTrace();
+		 }
+
+			 return result;
+
+
 	 		
 			
 		}
