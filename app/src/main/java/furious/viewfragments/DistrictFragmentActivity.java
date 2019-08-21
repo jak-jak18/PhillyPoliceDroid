@@ -1,18 +1,4 @@
-package furious.phillypolicemobile;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+package furious.viewfragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,9 +8,23 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import furious.phillypolicemobile.R;
+import furious.utils.HttpClientInfo;
 
 public class DistrictFragmentActivity extends FragmentActivity{
 	private String district;
@@ -226,15 +226,6 @@ public class DistrictFragmentActivity extends FragmentActivity{
 		
 		
 	}
-	
-	
-	
-//	  @Override
-//	   protected void  onResume(){
-//	      super.onResume();
-//	      int page = getIntent().getIntExtra("page", 0);
-//	      ViewPager  pager = (ViewPager) findViewById(R.id.viewPager);
-//	      pager.setCurrentItem(page, false);
-//	   }
+
 	
 }
