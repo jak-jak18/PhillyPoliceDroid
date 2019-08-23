@@ -1,15 +1,14 @@
-package furious.viewfragments;
+package furious.viewfragments.preferences;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+import furious.viewfragments.main.MainStart;
+
+
 public class MainPreferenceActivity extends Activity {
 
- @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @Override
  protected void onCreate(Bundle savedInstanceState) {
   // TODO Auto-generated method stub

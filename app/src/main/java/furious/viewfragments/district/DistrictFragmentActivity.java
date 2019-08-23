@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.district;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +25,7 @@ import java.net.URL;
 
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
+
 
 public class DistrictFragmentActivity extends FragmentActivity{
 	private String district;

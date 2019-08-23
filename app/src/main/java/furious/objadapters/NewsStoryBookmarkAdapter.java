@@ -136,7 +136,6 @@ public class NewsStoryBookmarkAdapter extends BaseAdapter{
 			viewHolder.videoDate.setText(News_Obj.getStoryDate());
 			viewHolder.videoRegion.setText(News_Obj.getDivision()+" Division");
 			
-			//new LoadImage(viewHolder.captionURL).execute(News_Obj.getImageURL());
 			imageLoader.DisplayImage(News_Obj.getImageURL(), viewHolder.captionURL);
 			return convertView;
 	}

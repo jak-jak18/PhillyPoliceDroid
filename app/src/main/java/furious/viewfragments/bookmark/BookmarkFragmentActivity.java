@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.bookmark;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,7 +23,6 @@ import java.net.URL;
 
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
-
 
 public class BookmarkFragmentActivity extends FragmentActivity{
 

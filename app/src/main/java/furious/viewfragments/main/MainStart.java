@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import furious.phillypolicemobile.R;
+import furious.viewfragments.bookmark.BookmarkFragmentActivity;
+import furious.viewfragments.preferences.MainPreferenceActivity;
 
 
 public class MainStart extends FragmentActivity{
@@ -141,15 +143,7 @@ public class MainStart extends FragmentActivity{
 		}
   }
 	
-	
-	
-		
-	
-	
-		
-	
-	
-	
+
 	
 	
 }

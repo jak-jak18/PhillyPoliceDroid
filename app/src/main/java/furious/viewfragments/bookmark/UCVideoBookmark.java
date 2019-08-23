@@ -1,4 +1,5 @@
-package furious.viewfragments;
+package furious.viewfragments.bookmark;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -448,8 +449,5 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 			}
 
 
-
-
-    
     
 }

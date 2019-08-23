@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.preferences;
 
 
 import android.annotation.TargetApi;

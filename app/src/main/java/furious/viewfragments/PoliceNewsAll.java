@@ -39,6 +39,7 @@ import furious.dataobjs.NewsObject;
 import furious.objadapters.NewsAdapter;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
+import furious.viewfragments.bookmark.PoliceNews;
 
 import static furious.utils.HttpClientInfo.getMD5;
 
@@ -309,13 +310,6 @@ public class PoliceNewsAll extends Activity{
 	}
 
 
-	 
-//	private View Header(String string) {
-//    	
-//		View k = this.getLayoutInflater().inflate(R.layout.news_more_header_all, null);
-//    	TextView title = (TextView) k.findViewById(R.id.MoreListTextViewAll);
-//    	title.setText(string);
-//    	return k;
-//	}
+
 	
 }

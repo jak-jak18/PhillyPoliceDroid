@@ -1,12 +1,9 @@
-	package furious.viewfragments;
+package furious.viewfragments.main;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,11 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,29 +33,22 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import furious.dataobjs.NewStoryObject;
-import furious.objadapters.DistrictListAdapter;
 import furious.objadapters.NewsAdapter;
 import furious.phillypolicemobile.PoliceUpdateService;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
+import furious.viewfragments.bookmark.PoliceNews;
 
 	public class MainNews extends Fragment {
 	ArrayList<NewStoryObject> listofMainNews;
-	//NewsShortMainAdapter mainNewsAdapter;
 	NewsAdapter newsAdapter;
-	DistrictListAdapter adapter;
-	ArrayList<String> arrayofNews;
 	TextView footText;
 	HttpURLConnection httpcon;
-	ArrayAdapter<String> newsArrayAdapter;
 	ProgressBar progress;
 	ProgressBar progress1;
 	TextView Ftitle;
 	TextView waitText;
-	ScrollView scroll;
-	View moreNewsBtt;
 	TextView errorText;
-	RelativeLayout footer;
 	
     TextView headerTxt;
     int Srt = 0;
@@ -76,9 +63,6 @@ import furious.utils.HttpClientInfo;
         Intent service = new Intent(getActivity(),PoliceUpdateService.class);
         service.putExtra("PoliceServiceCode", 200);
         getActivity().startService(service);
-
-     //   isWiFiOn();
-        
 
     }
     
@@ -99,12 +83,8 @@ import furious.utils.HttpClientInfo;
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
-		
-				
-				
+
 					if(view.findViewById(R.id.MainNewsListTextView) != null){
-						//Toast.makeText(getActivity(), "the Bottom", Toast.LENGTH_LONG).show();
 
 						if(isNoMore){
 							Toast.makeText(getActivity(), "No more news", Toast.LENGTH_SHORT).show();
@@ -138,7 +118,8 @@ import furious.utils.HttpClientInfo;
 						policeNews.putExtra("isUCVid", false);
 						policeNews.putExtra("isAlrBk", false);
 		            	startActivity(policeNews);
-		            	
+
+
 					}
 
 				
@@ -148,7 +129,7 @@ import furious.utils.HttpClientInfo;
         
         
         return layout;
- }
+    }
     
     @Override
  	public void onActivityCreated(Bundle savedState) {
@@ -157,16 +138,12 @@ import furious.utils.HttpClientInfo;
  	   
     }
     
-    class getMoreNews extends AsyncTask<String, Void, ArrayList<NewStoryObject>>{
+     class getMoreNews extends AsyncTask<String, Void, ArrayList<NewStoryObject>>{
 
 		@Override
 		protected ArrayList<NewStoryObject> doInBackground(String... arg0) {
-			// TODO Auto-generated method stub
 			
 			try {
-				
-//				Srt = Srt+3;
-//				End = End+3;
 				
 				String data = null;
 				if((TOTAL_COUNT - listofMainNews.size()) <=3){
@@ -175,8 +152,7 @@ import furious.utils.HttpClientInfo;
 					data = getListData(HttpClientInfo.URL,listofMainNews.size(),3);
 				}
 				
-				
-				//Log.i("DATa returned", data);
+
 					if(data.equals("No Data Connection") || data.equals(null)){
 						Toast.makeText(getActivity(), "No Data", Toast.LENGTH_LONG).show();
 					}else{
@@ -185,7 +161,6 @@ import furious.utils.HttpClientInfo;
 						JSONArray jArray = jObj.getJSONArray("News");
 						TOTAL_COUNT = jObj.getInt("TotalCount");
 						int count = jArray.length();
-						//listofMainNews = new ArrayList<NewStoryObject>();
 							
 						for(int i=0;i<count;i++){
 							
@@ -205,12 +180,12 @@ import furious.utils.HttpClientInfo;
 					}
 	
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+
 				Log.e("LOG_TAG", "Connection Error", e);
 				e.printStackTrace();
 				
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
 
@@ -248,7 +223,7 @@ import furious.utils.HttpClientInfo;
 					
 		}
     	
-		
+
 		
     }
     
@@ -256,14 +231,12 @@ import furious.utils.HttpClientInfo;
     
     class getZeroNews extends AsyncTask<String, Void, ArrayList<NewStoryObject>>{
 
-		@SuppressLint("NewApi")
 		@Override
 		protected ArrayList<NewStoryObject> doInBackground(String... arg0) {
-			// TODO Auto-generated method stub
 			
 			try {
 				String data = getListData(HttpClientInfo.URL,Srt,End);
-				//Log.i("DATa returned", data);
+
 					if(data.equals("No Data Connection") || data.isEmpty() || data.length() == 0){
 						Toast.makeText(getActivity(), "No Data", Toast.LENGTH_LONG).show();
 					}else{
@@ -292,12 +265,12 @@ import furious.utils.HttpClientInfo;
 					}
 	
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+
 				Log.e("LOG_TAG", "Connection Error", e);
 				e.printStackTrace();
 				
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
+
 				Log.e("LOG_TAG", "Connection Error 111", e);
 				e.printStackTrace();
 			}
@@ -311,19 +284,16 @@ import furious.utils.HttpClientInfo;
 			
 			
 				newsAdapter = new NewsAdapter(getActivity(), news_short_Objs);
-//				headerTxt.setText("More News "+"( "+End+" of "+TOTAL_COUNT+" )");
-				
+
 					if(TOTAL_COUNT == news_short_Objs.size()){
 						listView.addFooterView(addTheFooter("No More News"));
 						listView.setAdapter(newsAdapter);
-//						footer.setVisibility(View.VISIBLE);
 						progress.setVisibility(View.GONE);
 						waitText.setVisibility(View.INVISIBLE);
 						isNoMore = true;
 					}else{
 						listView.addFooterView(addTheFooter("More News "+"( "+news_short_Objs.size()+" of "+TOTAL_COUNT+" )"));
 						listView.setAdapter(newsAdapter);
-//						footer.setVisibility(View.VISIBLE);
 						progress.setVisibility(View.GONE);
 						waitText.setVisibility(View.INVISIBLE);
 						isNoMore = false;
@@ -338,29 +308,15 @@ import furious.utils.HttpClientInfo;
     
 
 
-    
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//	@Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_settings:
-//                // do whatever
-//            	Intent intent = new Intent(MainActivity.this, PreferenceFragment.class);
-//            	startActivity(intent);
-//                return true;
-//               
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-    
+
     private String getListData(String uRL, int srt, int end) throws JSONException, UnsupportedEncodingException{
 
 		String result = null;
 
 		String macAddress = HttpClientInfo.getMacAddress(getActivity());
 		String deviceID = HttpClientInfo.getMD5(macAddress);
-	try {
+
+		try {
 
 		JSONObject postObj = new JSONObject();
 		postObj.put("LatestNews", "true");
@@ -415,21 +371,12 @@ import furious.utils.HttpClientInfo;
 
 
 	}
-    
-//    private View Header(String string) {
-//    	LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//    	View k = inflater.inflate(R.layout.news_more_header, null);
-//    //	View k = getActivity().getLayoutInflater().inflate(R.layout.news_more_header, null);
-//    	TextView title = (TextView) k.findViewById(R.id.MoreListTextView);
-//    	title.setText(string);
-//    	return k;
-//	}
+
     
     private View addTheFooter(String string){
     	LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     	View k = inflater.inflate(R.layout.main_news_more, null);
-    //	View k = getActivity().getLayoutInflater().inflate(R.layout.news_more_header, null);
-    	Ftitle = (TextView) k.findViewById(R.id.MainNewsListTextView);
+		Ftitle = (TextView) k.findViewById(R.id.MainNewsListTextView);
     	Ftitle.setText(string);
     	return k;	
     }
@@ -441,7 +388,6 @@ import furious.utils.HttpClientInfo;
     public void onResume() {
        Log.i("PPD_MAIN_NEWS_FRAGMENT", "onResume()");
        super.onResume();
-     //  new getZeroNews().execute();
     }
 
     @Override

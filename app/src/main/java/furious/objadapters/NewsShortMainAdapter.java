@@ -76,8 +76,7 @@ public class NewsShortMainAdapter extends BaseAdapter{
 		}
 			
 		NewsObject newsObj = (NewsObject) newsList.get(arg0);
-		
-		//String stitle = ellipsize(newsObj.getStoryExcert(), 400);
+
 		viewHolder.MainNewsAlert.setText(newsObj.getAlertType());
 		viewHolder.MainNewsAuthor.setText("By: "+newsObj.getAuthor());
 		viewHolder.MainNewsExcert.setText(newsObj.getStoryExcert());

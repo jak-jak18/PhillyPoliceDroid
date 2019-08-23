@@ -7,7 +7,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import furious.dataobjs.PoliceUCVideoObject;

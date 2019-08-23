@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 
 import furious.objadapters.DistrictListAdapter;
 import furious.phillypolicemobile.R;
+import furious.viewfragments.district.DistrictFragmentActivity;
 
 public class MainDistrictNews extends Fragment{
 	

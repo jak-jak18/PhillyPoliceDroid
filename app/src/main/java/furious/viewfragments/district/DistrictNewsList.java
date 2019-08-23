@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.district;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -41,6 +41,7 @@ import furious.dataobjs.NewStoryObject;
 import furious.objadapters.NewsAdapter;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
+import furious.viewfragments.bookmark.PoliceNews;
 
 
 public class DistrictNewsList extends ListFragment implements AdapterView.OnItemLongClickListener{
@@ -265,7 +266,6 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 						item.setURL(newobject.getString("URL"));
 						item.setTitle(newobject.getString("Title"));
 						item.setTubeURL(newobject.getString("TubeURL"));
-						//item.setDescription(newobject.getString("Description"));
 						item.setCategory(newobject.getString("Category"));
 						item.setStoryAuthor(newobject.getString("StoryAuthor"));
 						newsObjs.add(item);

@@ -3,7 +3,6 @@ package furious.phillypolicemobile;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -35,7 +34,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import furious.utils.HttpClientInfo;
-import furious.viewfragments.MainStart;
+import furious.viewfragments.main.MainStart;
 
 public class StartUpSplash1 extends Activity {
 
@@ -58,8 +57,7 @@ public class StartUpSplash1 extends Activity {
          	finish();
 
        	}else{
-       		
-       		//final Button goSett = (Button) findViewById(R.id.gotosettings);
+
             final Button done = (Button) findViewById(R.id.donebutton);
             final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox1);
             progress = (ProgressBar) findViewById(R.id.progressBar1);
@@ -90,7 +88,6 @@ public class StartUpSplash1 extends Activity {
      			
      			progress.setVisibility(View.VISIBLE);
      			done.setEnabled(false);
-//     			goSett.setEnabled(false);
      			checkBox.setEnabled(false);
      			new pushDevID().execute();
 
@@ -197,7 +194,7 @@ public class StartUpSplash1 extends Activity {
 			 ConnectivityManager connMgr = (ConnectivityManager)  getSystemService(Context.CONNECTIVITY_SERVICE);
 			 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 			 	if (networkInfo != null && networkInfo.isConnected()) {
-			 		//Log.i("POLICE_N", "URL Connection is Good");
+
 		        	java.net.URL Srvurl = new java.net.URL(URL);
 		    		HttpURLConnection conn = (HttpURLConnection) Srvurl.openConnection();
 		    		conn.setConnectTimeout(20000);

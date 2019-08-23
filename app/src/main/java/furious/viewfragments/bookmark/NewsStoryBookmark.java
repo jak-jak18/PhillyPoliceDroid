@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.bookmark;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -145,13 +145,7 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 
 	
 	public class fetchBokmarks extends AsyncTask<String, Void, ArrayList<NewsStoryBookmarkObject>>{
-		 
-//		 @Override
-//		    protected void onPreExecute() {
-//			 super.onPreExecute();	
-////			 pDialog  = ProgressDialog.show(getApplicationContext(), "Loading Bookmarks...", "Please wait...", false);
-////			 pDialog.setCancelable(true);
-//		 }
+
 		 
 			@Override
 			protected ArrayList<NewsStoryBookmarkObject> doInBackground(String... params) {
@@ -259,7 +253,6 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 	            // do something here
 	        	new deleteBookmark().execute();
 	            break;
-	        	//return true;
 	            
 
 
@@ -346,8 +339,7 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 			 @Override
 			    protected void onPreExecute() {
 				 super.onPreExecute();	
-//				 pDialog  = ProgressDialog.show(getApplicationContext(), "Loading Bookmarks...", "Please wait...", false);
-//				 pDialog.setCancelable(true);
+
 			 }
 			 
 				@Override
@@ -460,25 +452,6 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 		}
 
 
-
-
-
-
-//	@Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-    
-    
-//    @Override
-//    protected void onDestroy() {
-//
-//          super.onDestroy();
-//    }
-    
-    
     
     
 }

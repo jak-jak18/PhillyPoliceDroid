@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.main;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -159,7 +159,7 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
                     }
                     newsObjs.add(item);
                 }
-              //  TOTAL_COUNT = object.getInt("TotalCount");
+
             }
 
             catch (IOException e) {e.printStackTrace();}

@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.district;
 
 
 import android.graphics.Bitmap;
@@ -112,9 +112,6 @@ public class DistrictInfoFragment extends Fragment{
 					try{
 						String Data = getData(params[0]);
 						JSONObject object = new JSONObject(Data);
-						//JSONArray objectArray = object.getJSONArray("Info");
-						//Log.i("Number Of itmes", Integer.toString(objectArray.length()));
-						//int ct = objectArray.length();
 						JSONObject Dobject = object.getJSONObject("DistrictInfo");
 						policeObj = new PoliceDistricts();
 							if(!Dobject.getString("DistrictNumber").equals("None")){
@@ -149,9 +146,8 @@ public class DistrictInfoFragment extends Fragment{
 											dis3.setMeetingPlace(obj3.getString("MeetLocation"));
 											CalList.add(dis3);
 										}
-		//
-//									image = getBitmapFromURL(Dobject.getString("CaptainImageURL"));
 
+//
 							}else{
 								policeObj.setDistrictNumber("None");
 							}

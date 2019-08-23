@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.bookmark;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -62,9 +62,7 @@ public class PoliceNews extends Activity {
 	Button bookMarkButton;
 	ProgressBar diaLog;
 	
-	
-	
-    @SuppressLint("NewApi")
+
 	@Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

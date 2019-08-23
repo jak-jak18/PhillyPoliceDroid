@@ -1,4 +1,4 @@
-package furious.viewfragments;
+package furious.viewfragments.district;
 
 import android.net.Uri;
 import android.os.AsyncTask;
