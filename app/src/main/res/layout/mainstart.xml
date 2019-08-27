@@ -4,8 +4,11 @@
     android:layout_height="fill_parent"
     android:background="#eeeeee"
     android:orientation="vertical" >
- 
-     
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mr_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
  
     <TableLayout
         style="@style/layout_f_w"

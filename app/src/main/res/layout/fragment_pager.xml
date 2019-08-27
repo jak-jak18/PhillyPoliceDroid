@@ -4,8 +4,7 @@
     android:layout_height="fill_parent"
     android:background="#eeeeee"
     android:orientation="vertical" >
- 
-     
+
  
     <TableLayout
         style="@style/layout_f_w"

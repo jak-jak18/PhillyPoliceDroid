@@ -1,35 +1,27 @@
 package furious.viewfragments.district;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import furious.phillypolicemobile.R;
-import furious.utils.HttpClientInfo;
+import furious.viewfragments.bookmark.BookmarkFragmentActivity;
+import furious.viewfragments.preferences.MainPreferenceActivity;
 
 
-public class DistrictFragmentActivity extends FragmentActivity{
+	public class DistrictFragmentActivity extends AppCompatActivity {
+
 	private String district;
-	HttpURLConnection httpcon;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,51 +33,79 @@ public class DistrictFragmentActivity extends FragmentActivity{
         
         setContentView(R.layout.fragment_pager);
         Log.i("PHILLYPOLICE","PASSData "+district);
-        
+
+
         ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
         pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
         pager.setOffscreenPageLimit(2);
-        pager.setOnPageChangeListener(new OnPageChangeListener(){
-
+        pager.addOnPageChangeListener(new OnPageChangeListener() {
 			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void onPageSelected(int position) {
-				// TODO Auto-generated method stub
-				switch(position){
-                case 0:
-                    findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
-                    findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.third_tab).setVisibility(View.INVISIBLE);
-                    break;
 
-                case 1:
-                    findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
-                    findViewById(R.id.third_tab).setVisibility(View.INVISIBLE);
-                    break;
-                    
-                case 2:
-                    findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.third_tab).setVisibility(View.VISIBLE);
-                    break;
-                }
+				switch(position){
+					case 0:
+						findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
+						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
+						findViewById(R.id.third_tab).setVisibility(View.INVISIBLE);
+						break;
+
+					case 1:
+						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
+						findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
+						findViewById(R.id.third_tab).setVisibility(View.INVISIBLE);
+						break;
+
+					case 2:
+						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
+						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
+						findViewById(R.id.third_tab).setVisibility(View.VISIBLE);
+						break;
+				}
 			}
-        	
-        });
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+
+			}
+		});
     
     }
+
+		@Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			super.onCreateOptionsMenu(menu);
+			getMenuInflater().inflate(R.menu.main, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+				case R.id.action_settings:
+					Intent intent = new Intent();
+					intent.setClass(DistrictFragmentActivity.this, MainPreferenceActivity.class);
+					startActivity(intent);
+
+					return true;
+
+				case R.id.action_bookmark:
+					Intent bookIntent = new Intent();
+					bookIntent.setClass(DistrictFragmentActivity.this, BookmarkFragmentActivity.class);
+					startActivity(bookIntent);
+
+					return true;
+
+				default:
+					break;
+			}
+
+			return false;
+		}
 	
 	public String CVTdistrict(String string) {
 
@@ -174,59 +194,7 @@ public class DistrictFragmentActivity extends FragmentActivity{
 		}
   }
 	
-	private String getBookmarkListData() throws IOException, JSONException{
 
-		String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
-		String deviceID = HttpClientInfo.getMD5(macAddss);
-		String result = null;
-
-		try {
-
-	 	JSONObject postObj = new JSONObject();
- 		postObj.put("Bookmark", "true");
- 		postObj.put("DeviceID", deviceID);
- 		String data = postObj.toString();
-
-
-			//Connect
-			httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
-			httpcon.setDoOutput(true);
-			httpcon.setRequestProperty("Content-Type", "application/json");
-			httpcon.setRequestProperty("Accept", "application/json");
-			httpcon.setRequestProperty("Accept-Language","en-US");
-			httpcon.setRequestMethod("POST");
-			httpcon.connect();
-
-			//Write
-			OutputStream os = httpcon.getOutputStream();
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-			writer.write(data);
-			writer.close();
-			os.close();
-
-			//Read
-			BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
-
-			String line = null;
-			StringBuilder sb = new StringBuilder();
-
-			while ((line = br.readLine()) != null) {
-				sb.append(line);
-			}
-
-			br.close();
-			result = sb.toString();
-
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-		
-		
-	}
 
 	
 }

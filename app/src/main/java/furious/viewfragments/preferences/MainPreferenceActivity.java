@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import furious.viewfragments.main.MainStart;
+import furious.viewfragments.main.MainStartFragmentActivity;
 
 
 public class MainPreferenceActivity extends Activity {
@@ -27,7 +27,7 @@ public class MainPreferenceActivity extends Activity {
  @Override
  public void onBackPressed(){
    super.onBackPressed();
-   	Intent intent = new Intent(MainPreferenceActivity.this, MainStart.class);
+   	Intent intent = new Intent(MainPreferenceActivity.this, MainStartFragmentActivity.class);
 	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 	startActivity(intent);
 	finish();

@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import furious.dataobjs.ShootingObject;
-import furious.dataobjs.ShootingObjectAdapter;
+import furious.objadapters.ShootingObjectAdapter;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
 

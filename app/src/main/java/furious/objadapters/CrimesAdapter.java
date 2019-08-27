@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import furious.dataobjs.CrimeObject;
+import furious.dataobjs.NewStoryObject;
 import furious.phillypolicemobile.R;
 
 public class CrimesAdapter extends BaseAdapter {
@@ -77,5 +78,10 @@ public class CrimesAdapter extends BaseAdapter {
 
 
         return convertView;
+    }
+
+    public void updateList(ArrayList<CrimeObject> list) {
+        this.crimeList = list;
+        notifyDataSetChanged();
     }
 }

@@ -334,6 +334,7 @@ import furious.viewfragments.bookmark.PoliceNews;
 		httpcon.setRequestMethod("POST");
 		httpcon.connect();
 
+
 		//Write
 		OutputStream os = httpcon.getOutputStream();
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
@@ -360,6 +361,11 @@ import furious.viewfragments.bookmark.PoliceNews;
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
+
+		finally{
+
+			httpcon.disconnect();
+		}
 
 		if(result == null){
 			result = "000";

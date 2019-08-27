@@ -3,11 +3,12 @@ package furious.viewfragments.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,7 @@ import furious.viewfragments.bookmark.BookmarkFragmentActivity;
 import furious.viewfragments.preferences.MainPreferenceActivity;
 
 
-public class MainStart extends FragmentActivity{
+public class MainStartFragmentActivity extends AppCompatActivity{
 	
 
 	@Override
@@ -25,51 +26,51 @@ public class MainStart extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainstart);
 
+		Toolbar mractionbar = (Toolbar) findViewById(R.id.mr_toolbar);
+		setSupportActionBar(mractionbar);
+
         ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
         pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
         
-        pager.setOnPageChangeListener(new OnPageChangeListener(){
-
+        pager.addOnPageChangeListener(new OnPageChangeListener() {
 			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void onPageSelected(int position) {
-				// TODO Auto-generated method stub
+
 				switch(position){
-                case 0:
-                	findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
-                    findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
-					findViewById(R.id.thirdd_tab).setVisibility(View.INVISIBLE);
-                    break;
+					case 0:
+						findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
+						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
+						findViewById(R.id.thirdd_tab).setVisibility(View.INVISIBLE);
+						break;
 
-                case 1:
+					case 1:
 
-                    findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
-					findViewById(R.id.thirdd_tab).setVisibility(View.INVISIBLE);
-                    break;
+						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
+						findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
+						findViewById(R.id.thirdd_tab).setVisibility(View.INVISIBLE);
+						break;
 
 
-                    case 2:
+					case 2:
 
 						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
 						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
 						findViewById(R.id.thirdd_tab).setVisibility(View.VISIBLE);
 						break;
-                }
+				}
+
 			}
-        	
-        });
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+
+			}
+		});
         
 	
 	}
@@ -86,14 +87,14 @@ public class MainStart extends FragmentActivity{
 	    switch (item.getItemId()) {
 		    case R.id.action_settings:
 		    	 Intent intent = new Intent();
-		         intent.setClass(MainStart.this, MainPreferenceActivity.class);
+		         intent.setClass(MainStartFragmentActivity.this, MainPreferenceActivity.class);
 		         startActivity(intent); 
 		   
 		        return true;
 		        
 		    case R.id.action_bookmark:
 		    	 Intent bookIntent = new Intent();
-		    	 bookIntent.setClass(MainStart.this, BookmarkFragmentActivity.class);
+		    	 bookIntent.setClass(MainStartFragmentActivity.this, BookmarkFragmentActivity.class);
 		         startActivity(bookIntent); 
 		   
 		        return true;

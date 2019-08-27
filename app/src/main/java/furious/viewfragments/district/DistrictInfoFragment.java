@@ -68,15 +68,21 @@ public class DistrictInfoFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        
+		DISTRICT_NUM = Uri.encode(this.getArguments().getString("DistrictNumber"));
         
     }
+
+	@Override
+	public void onActivityCreated(Bundle savedState) {
+		super.onActivityCreated(savedState);
+		new getDistrictInfo().execute(HttpClientInfo.URL);
+
+	}
 	
 	@Override
     public void onStart(){
     	super.onStart();
-    	
-    	DISTRICT_NUM = Uri.encode(this.getArguments().getString("DistrictNumber"));
+
     }
 	
 	 @Override
@@ -97,14 +103,7 @@ public class DistrictInfoFragment extends Fragment{
 	        return layout;
 
 	    }
-	 
-	 @Override
-	 	public void onActivityCreated(Bundle savedState) {
-	 	    super.onActivityCreated(savedState);
-		 new getDistrictInfo().execute(HttpClientInfo.URL);
 
-	 	}
-	 
 	 public class getDistrictInfo extends AsyncTask<String, Void, PoliceDistricts>{
 			
 			@Override
@@ -161,61 +160,64 @@ public class DistrictInfoFragment extends Fragment{
 			
 				protected void onPostExecute(final PoliceDistricts lockers) {
 
-							if(!lockers.getDistrictNumber().equals("None")){
-								for(int i=0; i<PSAList.size();i++){
-									PoliceDistricts hon = new PoliceDistricts();
-							 		hon = PSAList.get(i);
+				if (lockers != null) {
 
-									View v = getActivity().getLayoutInflater().inflate(R.layout.district_info_row, null);
-									TextView area = (TextView) v.findViewById(R.id.PSAArea);
-									TextView LTName = (TextView) v.findViewById(R.id.PSALieutenantTextView);
-									TextView email = (TextView) v.findViewById(R.id.PSAEmail);
+					if (!lockers.getDistrictNumber().equals("None")) {
+						for (int i = 0; i < PSAList.size(); i++) {
+							PoliceDistricts hon = new PoliceDistricts();
+							hon = PSAList.get(i);
 
-									area.setText("PSA Area "+hon.getPSAArea());
-									LTName.setText(hon.getLTName());
-									email.setText(hon.getEmail());
-									table.addView(v);
-							 	}
-								
-								int count1 = CalList.size();
+							View v = getActivity().getLayoutInflater().inflate(R.layout.district_info_row, null);
+							TextView area = (TextView) v.findViewById(R.id.PSAArea);
+							TextView LTName = (TextView) v.findViewById(R.id.PSALieutenantTextView);
+							TextView email = (TextView) v.findViewById(R.id.PSAEmail);
 
-								if(count1 <=0){
-									nothingSch = (RelativeLayout) getActivity().findViewById(R.id.NothinSch);
-									nothingSch.setVisibility(View.VISIBLE);
-								}else{
+							area.setText("PSA Area " + hon.getPSAArea());
+							LTName.setText(hon.getLTName());
+							email.setText(hon.getEmail());
+							table.addView(v);
+						}
 
-									for(int i=0;i<count1;i++){
-										PoliceDistricts hon1 = new PoliceDistricts();
-										hon1 = CalList.get(i);
-										View v = getActivity().getLayoutInflater().inflate(R.layout.district_cal_row, null);
-										TextView meetName = (TextView) v.findViewById(R.id.MeetIngTextView);
-										TextView meetDate = (TextView) v.findViewById(R.id.MeetingDate);
-										TextView meetplace = (TextView) v.findViewById(R.id.MeetingPlace);
+						int count1 = CalList.size();
 
-										meetName.setText(hon1.getMeetName());
-										meetDate.setText(hon1.getMeetingDate());
-										meetplace.setText(hon1.getMeetingPlace());
-										table1.addView(v);
-									}
+						if (count1 <= 0) {
+							nothingSch = (RelativeLayout) getActivity().findViewById(R.id.NothinSch);
+							nothingSch.setVisibility(View.VISIBLE);
+						} else {
 
-								}
+							for (int i = 0; i < count1; i++) {
+								PoliceDistricts hon1 = new PoliceDistricts();
+								hon1 = CalList.get(i);
+								View v = getActivity().getLayoutInflater().inflate(R.layout.district_cal_row, null);
+								TextView meetName = (TextView) v.findViewById(R.id.MeetIngTextView);
+								TextView meetDate = (TextView) v.findViewById(R.id.MeetingDate);
+								TextView meetplace = (TextView) v.findViewById(R.id.MeetingPlace);
 
-								
-								PoliceDistricts obk = lockers;
-								String[] part = obk.getDistrictAddress().split("(?=Philadelphia)");
-			                	districtAddress.setText(part[0]);
-								districtCity.setText(part[1]);
-						        districtEmail.setText(obk.getDistrictEmail());
-						        districtPhone.setText(obk.getDistrictPhone());
-						        captainName.setText(obk.getCaptainName());
-								captainImage.setImageBitmap(image);
-								districtNum.setText(DistrictNewsList.CVDistrict(obk.getDistrictNumber())+" District");
-								
-								
-							}else if(lockers.getDistrictNumber().equals("None")){
-								Toast.makeText(getActivity(), "District Info Unavailable at this time", Toast.LENGTH_LONG).show();
+								meetName.setText(hon1.getMeetName());
+								meetDate.setText(hon1.getMeetingDate());
+								meetplace.setText(hon1.getMeetingPlace());
+								table1.addView(v);
 							}
-		                	
+
+						}
+
+
+						PoliceDistricts obk = lockers;
+						String[] part = obk.getDistrictAddress().split("(?=Philadelphia)");
+						districtAddress.setText(part[0]);
+						districtCity.setText(part[1]);
+						districtEmail.setText(obk.getDistrictEmail());
+						districtPhone.setText(obk.getDistrictPhone());
+						captainName.setText(obk.getCaptainName());
+						captainImage.setImageBitmap(image);
+						districtNum.setText(DistrictNewsList.CVDistrict(obk.getDistrictNumber()) + " District");
+
+
+					} else if (lockers.getDistrictNumber().equals("None")) {
+						Toast.makeText(getActivity(), "District Info Unavailable at this time", Toast.LENGTH_LONG).show();
+					}
+
+				}
 
 		}
 		
