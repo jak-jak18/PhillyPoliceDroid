@@ -1,7 +1,9 @@
 package furious.viewfragments.district;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,13 +17,17 @@ import android.view.View;
 
 
 import furious.phillypolicemobile.R;
+import furious.utils.Utils;
 import furious.viewfragments.bookmark.BookmarkFragmentActivity;
 import furious.viewfragments.preferences.MainPreferenceActivity;
 
+import static furious.utils.Utils.CVTdistrict;
 
-	public class DistrictFragmentActivity extends AppCompatActivity {
+
+public class DistrictFragmentActivity extends AppCompatActivity {
 
 	private String district;
+	Context mcontext;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,45 +40,72 @@ import furious.viewfragments.preferences.MainPreferenceActivity;
         setContentView(R.layout.fragment_pager);
         Log.i("PHILLYPOLICE","PASSData "+district);
 
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout2);
+		tabLayout.addTab(tabLayout.newTab().setText("News Stories"));
+		tabLayout.addTab(tabLayout.newTab().setText("Information"));
+		tabLayout.addTab(tabLayout.newTab().setText("Crimes"));
+		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
-        pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
-        pager.setOffscreenPageLimit(2);
-        pager.addOnPageChangeListener(new OnPageChangeListener() {
+		final ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
+		pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
+		pager.setOffscreenPageLimit(2);
+		pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+		tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+			public void onTabSelected(TabLayout.Tab tab) {
+
+				pager.setCurrentItem(tab.getPosition());
+			}
+
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
 
 			}
 
 			@Override
-			public void onPageSelected(int position) {
-
-				switch(position){
-					case 0:
-						findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
-						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
-						findViewById(R.id.third_tab).setVisibility(View.INVISIBLE);
-						break;
-
-					case 1:
-						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
-						findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
-						findViewById(R.id.third_tab).setVisibility(View.INVISIBLE);
-						break;
-
-					case 2:
-						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
-						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
-						findViewById(R.id.third_tab).setVisibility(View.VISIBLE);
-						break;
-				}
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
+			public void onTabReselected(TabLayout.Tab tab) {
 
 			}
 		});
+
+
+
+
+//        pager.addOnPageChangeListener(new OnPageChangeListener() {
+//			@Override
+//			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//			}
+//
+//			@Override
+//			public void onPageSelected(int position) {
+//
+//				switch(position){
+//					case 0:
+//						findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
+//						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
+//						findViewById(R.id.third_tab).setVisibility(View.INVISIBLE);
+//						break;
+//
+//					case 1:
+//						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
+//						findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
+//						findViewById(R.id.third_tab).setVisibility(View.INVISIBLE);
+//						break;
+//
+//					case 2:
+//						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
+//						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
+//						findViewById(R.id.third_tab).setVisibility(View.VISIBLE);
+//						break;
+//				}
+//			}
+//
+//			@Override
+//			public void onPageScrollStateChanged(int state) {
+//
+//			}
+//		});
     
     }
 
@@ -107,54 +140,7 @@ import furious.viewfragments.preferences.MainPreferenceActivity;
 			return false;
 		}
 	
-	public String CVTdistrict(String string) {
 
-		if(string.equals("1st")){
-			return "1";
-		}else if(string.equals("3rd")){
-			return "3";
-		}else if(string.equals("17th")){
-			return "17";
-		}else if(string.equals("2nd")){
-			return "2";
-		}else if(string.equals("7th")){
-			return "7";
-		}else if(string.equals("8th")){
-			return "8";
-		}else if(string.equals("15th")){
-			return "15";
-		}else if(string.equals("19th")){
-			return "19";
-		}else if(string.equals("18th")){
-			return "18";
-		}else if(string.equals("16th")){
-			return "16";
-		}else if(string.equals("12th")){
-			return "12";
-		}else if(string.equals("5th")){
-			return "5";
-		}else if(string.equals("39th")){
-			return "39";
-		}else if(string.equals("35th")){
-			return "35";
-		}else if(string.equals("14th")){
-			return "14";
-		}else if(string.equals("6th")){
-			return "6";
-		}else if(string.equals("9th")){
-			return "9";
-		}else if(string.equals("22nd")){
-			return "22";
-		}else if(string.equals("25th")){
-			return "25";
-		}else if(string.equals("24th")){
-			return "24";
-		}else if(string.equals("26th")){
-			return "26";
-		}else
-			
-			return null;
-	}
 
 	public class NewsPagerAdapter extends FragmentPagerAdapter{
     	private String[] Positions = {"District News","Unsolved Crimes","District Info"};

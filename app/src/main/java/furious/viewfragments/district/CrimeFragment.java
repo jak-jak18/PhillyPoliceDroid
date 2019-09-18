@@ -6,7 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -87,6 +91,8 @@ public class CrimeFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedState) {
         super.onActivityCreated(savedState);
+
+       // registerForContextMenu(getListView());
         new getCrimeList().execute(HttpClientInfo.URL);
 
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -99,6 +105,8 @@ public class CrimeFragment extends ListFragment {
 
                     if(no.equals("More Crime Incidents")){
                         Toast.makeText(getActivity(), "TIme to write", Toast.LENGTH_SHORT).show();
+
+
                     }else{
                         new getMoreCrimesData().execute();
                     }
@@ -136,6 +144,21 @@ public class CrimeFragment extends ListFragment {
         return layout;
 
     }
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        menu.setHeaderTitle("Context Menu");
+//        menu.add(0, v.getId(), 0, "Upload");
+//        menu.add(0, v.getId(), 0, "Search");
+//        menu.add(0, v.getId(), 0, "Share");
+//        menu.add(0, v.getId(), 0, "Bookmark");
+//    }
+//
+//    public boolean onContextItemSelected(MenuItem item) {
+//        Toast.makeText(getActivity(), "Selected Item: " +item.getTitle(), Toast.LENGTH_SHORT).show();
+//        return true;
+//    }
 
 
 

@@ -47,6 +47,7 @@ import furious.viewfragments.bookmark.PoliceNews;
 	ProgressBar progress;
 	ProgressBar progress1;
 	TextView Ftitle;
+	TextView Htitle;
 	TextView waitText;
 	TextView errorText;
 	
@@ -87,7 +88,7 @@ import furious.viewfragments.bookmark.PoliceNews;
 					if(view.findViewById(R.id.MainNewsListTextView) != null){
 
 						if(isNoMore){
-							Toast.makeText(getActivity(), "No more news", Toast.LENGTH_SHORT).show();
+							//Toast.makeText(getActivity(), "No more news", Toast.LENGTH_SHORT).show();
 						}else{
 
 							progress1 = (ProgressBar) view.findViewById(R.id.progressBar1);
@@ -286,12 +287,14 @@ import furious.viewfragments.bookmark.PoliceNews;
 				newsAdapter = new NewsAdapter(getActivity(), news_short_Objs);
 
 					if(TOTAL_COUNT == news_short_Objs.size()){
+						listView.addHeaderView(addTheHeader("Latest Police News"));
 						listView.addFooterView(addTheFooter("No More News"));
 						listView.setAdapter(newsAdapter);
 						progress.setVisibility(View.GONE);
 						waitText.setVisibility(View.INVISIBLE);
 						isNoMore = true;
 					}else{
+						listView.addHeaderView(addTheHeader("Latest Police News"));
 						listView.addFooterView(addTheFooter("More News "+"( "+news_short_Objs.size()+" of "+TOTAL_COUNT+" )"));
 						listView.setAdapter(newsAdapter);
 						progress.setVisibility(View.GONE);
@@ -386,6 +389,14 @@ import furious.viewfragments.bookmark.PoliceNews;
     	Ftitle.setText(string);
     	return k;	
     }
+
+		private View addTheHeader(String string){
+			LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View k = inflater.inflate(R.layout.main_news_more_1, null);
+			Htitle = (TextView) k.findViewById(R.id.MainNewsListTextView2);
+			Htitle.setText(string);
+			return k;
+		}
     
     
     

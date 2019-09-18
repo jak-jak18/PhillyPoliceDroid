@@ -1,6 +1,8 @@
 package furious.viewfragments.district;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -10,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -34,6 +37,8 @@ import java.util.ArrayList;
 import furious.dataobjs.PoliceDistricts;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
+import furious.viewfragments.preferences.MainPreferenceFragment;
+import furious.viewfragments.usmurders.MainUSMurderActivity;
 
 public class DistrictInfoFragment extends Fragment{
 	
@@ -44,6 +49,7 @@ public class DistrictInfoFragment extends Fragment{
 	TextView districtEmail;
 	TextView districtCity;
 	TextView captainName;
+	Button usmurders;
 	HttpURLConnection httpcon;
 	RelativeLayout nothingSch;
 	LinearLayout table;
@@ -53,6 +59,7 @@ public class DistrictInfoFragment extends Fragment{
 	ArrayList<PoliceDistricts> PSAList;
 	ArrayList<PoliceDistricts> CalList;
 	PoliceDistricts policeObj;
+	Activity context;
 	
 	
 	static DistrictInfoFragment newInstance(String district) {
@@ -77,23 +84,41 @@ public class DistrictInfoFragment extends Fragment{
 		super.onActivityCreated(savedState);
 		new getDistrictInfo().execute(HttpClientInfo.URL);
 
+
+
 	}
 	
 	@Override
     public void onStart(){
     	super.onStart();
 
+		usmurders.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+
+				Intent intent = new Intent();
+				intent.setClass(context, MainUSMurderActivity.class);
+				intent.putExtra("DistrictNumber", DISTRICT_NUM);
+				startActivity(intent);
+
+
+
+			}
+		});
+
     }
 	
 	 @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                             Bundle savedInstanceState) {
+		 	context = getActivity();
 	        View layout = inflater.inflate(R.layout.districtinfo, container, false);
 	        districtNum = (TextView) layout.findViewById(R.id.DistrictInfoTextView);
 	        districtAddress = (TextView) layout.findViewById(R.id.DistrictInfoAddress);
 		 	districtCity = (TextView) layout.findViewById(R.id.DistrictCity);
 	        districtEmail = (TextView) layout.findViewById(R.id.DistrictInfoEmail);
 	        districtPhone = (TextView) layout.findViewById(R.id.DistictInfoPhone);
+	        usmurders = (Button) layout.findViewById(R.id.usmurders_bt);
 	        captainName = (TextView) layout.findViewById(R.id.DistrictInfoCaptain);
 	        captainImage = (ImageView) layout.findViewById(R.id.DistrictInfoImageView);
 	        table = (LinearLayout) layout.findViewById(R.id.DistrictInfoRowLayout);

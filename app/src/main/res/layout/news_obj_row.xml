@@ -20,7 +20,7 @@
 
     <RelativeLayout
         android:layout_marginBottom="5px"
-        android:background="#00F0FF"
+        android:background="@drawable/header_layout"
         android:id="@+id/NewsObjHeaderLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >

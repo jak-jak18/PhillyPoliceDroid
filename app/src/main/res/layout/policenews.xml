@@ -3,18 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mr_toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <ScrollView
         android:id="@+id/scrollView1"
+        android:layout_below="@+id/mr_toolbar2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        
+
         <RelativeLayout
         android:id="@+id/PoliceNewsVideoView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-            
+
         <RelativeLayout
-        android:id="@+id/ImageHolder"    
+        android:id="@+id/ImageHolder"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -35,10 +41,10 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/playoverlay" />
-            
+
     </RelativeLayout>
 
-    
+
 
     <TextView
         android:id="@+id/PoliceNewsInfoTitle"
@@ -52,7 +58,7 @@
         android:gravity="center"
         android:text="TextView"
         android:textStyle="bold" />
-    
+
     <TextView
         android:id="@+id/PoliceNewsDesc"
         android:layout_width="wrap_content"
@@ -61,34 +67,14 @@
         android:layout_alignParentRight="true"
         android:gravity="left"
         android:textSize="16dp"
-        android:layout_marginRight="10px"
-        android:layout_marginLeft="10px"
+        android:padding="7dp"
         android:layout_below="@+id/PoliceNewsInfoTitle"
-        android:layout_marginTop="5px"
+        android:layout_marginTop="5dp"
         android:text="TextView"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        
-        android:layout_below="@+id/PoliceNewsDesc"
-        android:padding="10sp"
-        android:layout_marginTop="5sp">
 
-        <Button
-            android:id="@+id/bookmarkButton1"
-            android:layout_centerHorizontal="true"
-            android:layout_width="310dp"
-            android:textStyle="bold"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_layout"
-            android:text="Bookmark News Article" />
-        
-        
     </RelativeLayout>
-    
-    </RelativeLayout>
-    
+
     </ScrollView>
 
     <ProgressBar

@@ -35,13 +35,25 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="furious.viewfragments.bookmark.PoliceNews" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"> </activity>
+        <activity
+            android:name="furious.viewfragments.bookmark.PoliceNews"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="furious.viewfragments.main.MainStartFragmentActivity" />
+
+        </activity>
          <service android:name="furious.phillypolicemobile.PoliceUpdateService"></service>
          <activity android:name="furious.viewfragments.PoliceNewsAll" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
          <activity android:name="furious.viewfragments.preferences.MainPreferenceActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
          <activity android:name="furious.viewfragments.district.DistrictFragmentActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
          <activity android:name="furious.viewfragments.bookmark.BookmarkFragmentActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
-         <activity android:name=".StartUpSplash1"></activity>
+         <activity android:name="furious.viewfragments.usmurders.MainUSMurderActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
+
+
+        <activity android:name=".StartUpSplash1"></activity>
          
     </application>
 

@@ -2,6 +2,7 @@ package furious.viewfragments.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -26,48 +27,33 @@ public class MainStartFragmentActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainstart);
 
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+		tabLayout.addTab(tabLayout.newTab().setText("Main News"));
+		tabLayout.addTab(tabLayout.newTab().setText("District News"));
+		tabLayout.addTab(tabLayout.newTab().setText("Shootings"));
+		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+
 		Toolbar mractionbar = (Toolbar) findViewById(R.id.mr_toolbar);
 		setSupportActionBar(mractionbar);
 
-        ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
+        final ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
         pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
-        
-        pager.addOnPageChangeListener(new OnPageChangeListener() {
+        pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+			public void onTabSelected(TabLayout.Tab tab) {
+
+				pager.setCurrentItem(tab.getPosition());
+			}
+
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
 
 			}
 
 			@Override
-			public void onPageSelected(int position) {
-
-				switch(position){
-					case 0:
-						findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
-						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
-						findViewById(R.id.thirdd_tab).setVisibility(View.INVISIBLE);
-						break;
-
-					case 1:
-
-						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
-						findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
-						findViewById(R.id.thirdd_tab).setVisibility(View.INVISIBLE);
-						break;
-
-
-					case 2:
-
-						findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
-						findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
-						findViewById(R.id.thirdd_tab).setVisibility(View.VISIBLE);
-						break;
-				}
-
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
+			public void onTabReselected(TabLayout.Tab tab) {
 
 			}
 		});

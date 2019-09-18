@@ -24,14 +24,14 @@ public class MainPreferenceActivity extends Activity {
 
  }
  
- @Override
- public void onBackPressed(){
-   super.onBackPressed();
-   	Intent intent = new Intent(MainPreferenceActivity.this, MainStartFragmentActivity.class);
-	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-	startActivity(intent);
-	finish();
- }
+// @Override
+// public void onBackPressed(){
+//   super.onBackPressed();
+//   	Intent intent = new Intent(MainPreferenceActivity.this, MainStartFragmentActivity.class);
+//	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//	startActivity(intent);
+//	finish();
+// }
  
 
 }

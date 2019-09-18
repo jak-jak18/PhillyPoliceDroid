@@ -9,66 +9,18 @@
         android:id="@+id/mr_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
- 
-    <TableLayout
-        style="@style/layout_f_w"
-        android:stretchColumns="*" >
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:background="#dddddd"
-            style="@style/layout_wrap">
-            
-            <!-- First Tab -->
-            <LinearLayout
-                style="@style/layout_f_w"
-                android:id="@+id/second_text"
-                android:orientation="vertical" >
- 
-                    <TextView
-                        android:id="@+id/textView1"
-                        style="@style/text_title"
-                        android:textStyle="bold"
-                        android:textSize="20dp"
-                        android:text="Main News" />
-             
-               </LinearLayout>
-             
-              <!-- Second Tab -->
-                <LinearLayout
-                style="@style/layout_f_w"
-                android:id="@+id/first_text"
-                android:orientation="vertical" >
-                 
-                      <TextView
-                        android:id="@+id/textView2"
-                        style="@style/text_title"
-                        android:textStyle="bold"
-                          android:textSize="20dp"
-                        android:text="District News" />
-               </LinearLayout>
 
-            <!-- Third Tab -->
-            <LinearLayout
-                style="@style/layout_f_w"
-                android:id="@+id/thirdd_text"
-                android:orientation="vertical" >
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/Theme.AppCompat.Light"/>
 
-                <TextView
-                    android:id="@+id/textView4"
-                    style="@style/text_title"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    android:text="Shootings" />
-            </LinearLayout>
-                
-            
-                
-             
-        </TableRow>
-    </TableLayout>
-    <!-- Include Tab Indicator  -->
- <include layout="@layout/mainindicator" android:layout_width="fill_parent" android:layout_height="wrap_content"  />
-  
+
  <android.support.v4.view.ViewPager
         android:layout_width="fill_parent" android:layout_height="fill_parent"
         android:id="@+id/viewPager" />

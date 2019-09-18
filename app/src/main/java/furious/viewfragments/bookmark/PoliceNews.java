@@ -1,20 +1,21 @@
 package furious.viewfragments.bookmark;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.MediaController;
@@ -39,14 +40,15 @@ import java.util.ArrayList;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
 import furious.utils.ImageLoader;
+import furious.viewfragments.preferences.MainPreferenceActivity;
 
-public class PoliceNews extends Activity {
+public class PoliceNews extends AppCompatActivity {
 
 
-	MediaController media;
-	ListView listview;
+
 	ImageView imgHolder;
 	ImageView ytHolder;
+	Toolbar mractionbar;
 	String Desc;
 	String storyTitle;
 	String URL;
@@ -59,7 +61,7 @@ public class PoliceNews extends Activity {
 	boolean isUCVid = false;
 	ArrayList<String> headers;
 	ImageLoader imgLoader;
-	Button bookMarkButton;
+//	Button bookMarkButton;
 	ProgressBar diaLog;
 	
 
@@ -67,7 +69,8 @@ public class PoliceNews extends Activity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.policenews);
-        
+
+		mractionbar = (Toolbar) findViewById(R.id.mr_toolbar2);
         imgHolder = (ImageView) findViewById(R.id.PoliceImageHolder);
         ytHolder = (ImageView) findViewById(R.id.ImagetubeHolder);
         diaLog = (ProgressBar) findViewById(R.id.progressBar1);
@@ -78,18 +81,16 @@ public class PoliceNews extends Activity {
         img_URL = (String) this.getIntent().getExtras().getString("ImageURL");
         isUCVid = (boolean) this.getIntent().getExtras().getBoolean("isUCVid");
         isAlrBk = (boolean) this.getIntent().getExtras().getBoolean("isAlrBk");
-        
+
+        mractionbar.setTitle("Police News Story");
+		setSupportActionBar(mractionbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
         
         
         imgLoader = new ImageLoader(this); 		//Network Intense; need to pass IMG through intent
         imgLoader.DisplayImage(img_URL, imgHolder);
-        
-        bookMarkButton = (Button) findViewById(R.id.bookmarkButton1);
-        
-	        if(isAlrBk){
-	        	bookMarkButton.setVisibility(View.INVISIBLE);
-	        }
+
 
     		if(URL.equals("No Video") || URL.isEmpty()){
     			ytHolder.setVisibility(View.INVISIBLE);
@@ -106,7 +107,7 @@ public class PoliceNews extends Activity {
     		}
         		
     		if(isUCVid){
-    			bookMarkButton.setText("Bookmark Video");
+//    			bookMarkButton.setText("Bookmark Video");
     			
     			BOOKMARK_NEWS = "false";
     			BOOKMARK_VIDEOS = "true";
@@ -116,22 +117,7 @@ public class PoliceNews extends Activity {
     			BOOKMARK_VIDEOS = "false";
     		}
     		
-			bookMarkButton.setOnClickListener(new OnClickListener(){
-	
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					bookMarkButton.setEnabled(false);
-					new fetchBokmarks().execute();
-					
-				}
-		
-			});
-	        
-        
-        	
-        
-        
+
         
         
         TextView text = (TextView) findViewById(R.id.PoliceNewsDesc);
@@ -161,7 +147,7 @@ public class PoliceNews extends Activity {
 
 
     
-    public class fetchBokmarks extends AsyncTask<String, Void, String>{
+    public class fetchBookmarks extends AsyncTask<String, Void, String>{
     	
 		 @Override
 		    protected void onPreExecute() {
@@ -206,15 +192,69 @@ public class PoliceNews extends Activity {
 		
 	}
 
+	public void alertTwoButtons() {
+		new AlertDialog.Builder(PoliceNews.this)
+				.setTitle("Add Bookmark")
+				.setMessage("Are you sure you want to add this bookmark?")
+				.setIcon(R.drawable.bookmark_b)
+				.setPositiveButton("YES",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog, int id) {
+								//showToast("Thank you! You're awesome too!");
+								new fetchBookmarks().execute();
+								dialog.cancel();
+							}
+						})
+				.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int id) {
+					//	showToast("Mike is not awesome for you. :(");
+						dialog.cancel();
+					}
+				}).show();
+	}
+
 
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.policemenu, menu);
         return true;
     }
-    
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+			case android.R.id.home:
+				onBackPressed();
+				return true;
+
+			case R.id.action_settings:
+				Intent intent = new Intent();
+				intent.setClass(PoliceNews.this, MainPreferenceActivity.class);
+				startActivity(intent);
+
+				return true;
+
+			case R.id.action_bookmark_p:
+				Intent bookIntent = new Intent();
+				bookIntent.setClass(PoliceNews.this, BookmarkFragmentActivity.class);
+				startActivity(bookIntent);
+
+				return true;
+
+			case R.id.action_bookmark_s:
+				alertTwoButtons();
+
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
     
     @Override
     protected void onDestroy() {
@@ -318,14 +358,14 @@ public class PoliceNews extends Activity {
 	}
     
     
-	    @Override
-	    public void onConfigurationChanged(Configuration newConfig) {
-	    	super.onConfigurationChanged(newConfig);
-	    		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-	                 
-	    		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-	    			Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-	    		}
-	    	}
+//	    @Override
+//	    public void onConfigurationChanged(Configuration newConfig) {
+//	    	super.onConfigurationChanged(newConfig);
+//	    		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//
+//	    		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+//	    			Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+//	    		}
+//	    	}
     
 }
