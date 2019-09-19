@@ -49,7 +49,7 @@ public class MainUSMurderActivity extends AppCompatActivity {
 
     //ListView listview;
     private RecyclerView listview;
-    private RecyclerView.Adapter newsAdapter;
+    private USMurderAdapter newsAdapter;
     private RecyclerView.LayoutManager layoutManager;
     RelativeLayout footer;
     TextView footerTxt;
@@ -90,6 +90,24 @@ public class MainUSMurderActivity extends AppCompatActivity {
 
         progress = (ProgressBar) findViewById(R.id.usm_progressBar);
         ismore = (TextView) findViewById(R.id.usm_nomore);
+
+        
+
+        footer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(TOTAL_COUNT == newsAdapter.getItemCount()){
+                    Toast.makeText(MainUSMurderActivity.this, "NO MORE", Toast.LENGTH_LONG).show();
+                }else{
+                    new getMoreUSMurders().execute();
+                }
+
+
+            }
+
+        });
+
 
         new getUSMurders().execute();
 
@@ -135,6 +153,141 @@ public class MainUSMurderActivity extends AppCompatActivity {
     }
 
 
+
+
+    class getMoreUSMurders extends AsyncTask<String, Void, ArrayList<USMurderObject>> {
+
+        @Override
+        protected void onPreExecute() {
+            // Runs on the UI thread before doInBackground
+            // Good for toggling visibility of a progress indicator
+            progress.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected ArrayList<USMurderObject> doInBackground(String... arg0) {
+
+            try {
+
+                String data =null;
+
+                if((TOTAL_COUNT - newsAdapter.getItemCount()) <= 5){
+                    data = getListData(HttpClientInfo.URL,newsAdapter.getItemCount(),TOTAL_COUNT);
+                }else if((TOTAL_COUNT - newsAdapter.getItemCount()) > 5){
+                    data = getListData(HttpClientInfo.URL,newsAdapter.getItemCount(),5);
+                }
+
+                if(data.equals("No Data Connection") || data.isEmpty() || data.length() == 0){
+                    Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_LONG).show();
+                }else{
+
+                    JSONObject jObj = new JSONObject(data);
+                    JSONArray jArray = jObj.getJSONArray("Unsolved Murders");
+
+                    TOTAL_COUNT = jObj.getInt("TotalCount");
+                    int count = jArray.length();
+                    listofMurders = new ArrayList<USMurderObject>();
+
+                    for(int i=0;i<count;i++){
+
+                        JSONObject daObj = jArray.getJSONObject(i);
+                        USMurderObject nObj = new USMurderObject();
+                        nObj.setDCNumber(daObj.getString("DCNumber"));
+                        nObj.setDesc(daObj.getString("Description"));
+                        nObj.setNewsURL(daObj.getString("NewsURL"));
+                        nObj.setVictimName(daObj.getString("VictimName"));
+                        int newCT = daObj.getJSONArray("NewsStory").length();
+//                        if(newCT >= 1){
+//
+//                        }else{
+//
+//                        }
+                        int imgCT = daObj.getJSONArray("Images").length();
+                        if(imgCT >= 1){
+                            nObj.setImageURL(daObj.getJSONArray("Images").getString(0));
+                        }else if(newCT >= 1){
+
+                            String imgUrl = daObj.getJSONArray("NewsStory").getJSONObject(0).getString("ImageURL");
+                            String title = daObj.getJSONArray("NewsStory").getJSONObject(0).getString("Title");
+                            String descTxt = daObj.getJSONArray("NewsStory").getJSONObject(0).getString("Description");
+                            String pubDate = daObj.getJSONArray("NewsStory").getJSONObject(0).getString("PubDate");
+                            nObj.setNewsStory(true);
+                            nObj.setNewsStoryTitle(title);
+                            nObj.setNewsStoryDesc(descTxt);
+                            nObj.setNewsStoryPubDate(pubDate);
+
+
+
+                            if(!imgUrl.isEmpty()){
+                                nObj.setImageURL(imgUrl);
+                            }else{
+                                nObj.setImageURL("0");
+                            }
+                        }else{
+                            nObj.setImageURL("0");
+                        }
+
+
+                        listofMurders.add(nObj);
+                    }
+
+
+
+                }
+
+            } catch (IOException e) {
+
+                Log.e("LOG_TAG", "Connection Error", e);
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+
+                Log.e("LOG_TAG", "Connection Error 111", e);
+                e.printStackTrace();
+            }
+
+
+
+            return listofMurders;
+        }
+
+        protected void onPostExecute(final ArrayList<USMurderObject> news_short_Objs) {
+
+
+            //newsAdapter = new USMurderAdapter(getApplicationContext(), news_short_Objs);
+            newsAdapter.updateList(news_short_Objs);
+
+//            if(newsAdapter.getItemCount() == 0){
+//                ismore.setVisibility(View.VISIBLE);
+//                progress.setVisibility(View.GONE);
+//
+//            }
+
+                if(TOTAL_COUNT == newsAdapter.getItemCount()){
+
+
+                listview.setNestedScrollingEnabled(false);
+                footerTxt.setText("No More Stories");
+                footer.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.GONE);
+
+            }else{
+;
+                listview.setNestedScrollingEnabled(false);
+                footerTxt.setText("More Stories "+"( "+newsAdapter.getItemCount()+" of "+TOTAL_COUNT+" )");
+                footer.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.GONE);
+            }
+
+
+        }
+
+
+
+    }
+
+
+
     class getUSMurders extends AsyncTask<String, Void, ArrayList<USMurderObject>> {
 
         @Override
@@ -172,9 +325,19 @@ public class MainUSMurderActivity extends AppCompatActivity {
                             if(imgCT >= 1){
                                nObj.setImageURL(daObj.getJSONArray("Images").getString(0));
                             }else if(newCT >= 1){
-                                nObj.setNewsStory(true);
+
                                 String imgUrl = daObj.getJSONArray("NewsStory").getJSONObject(0).getString("ImageURL");
-                               if(!imgUrl.isEmpty()){
+                                String title = daObj.getJSONArray("NewsStory").getJSONObject(0).getString("Title");
+                                String descTxt = daObj.getJSONArray("NewsStory").getJSONObject(0).getString("Description");
+                                String pubDate = daObj.getJSONArray("NewsStory").getJSONObject(0).getString("PubDate");
+                                nObj.setNewsStory(true);
+                                nObj.setNewsStoryTitle(title);
+                                nObj.setNewsStoryDesc(descTxt);
+                                nObj.setNewsStoryPubDate(pubDate);
+
+
+
+                                if(!imgUrl.isEmpty()){
                                    nObj.setImageURL(imgUrl);
                                }else{
                                    nObj.setImageURL("0");

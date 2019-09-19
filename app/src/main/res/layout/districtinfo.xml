@@ -163,25 +163,18 @@
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/ic_launcher" />
 
-                <View
-                    android:id="@+id/dividerInfo"
-                    android:layout_below="@+id/DistrictInfoImageView"
-                    android:layout_width="match_parent"
-                    android:padding="5dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_height="1dp"
-                    android:background="#00F0FF"/>
 
                 <Button
                     android:id="@+id/usmurders_bt"
-                    android:layout_below="@+id/dividerInfo"
+                    android:layout_below="@+id/DistrictInfoImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_layout"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:padding="10dp"
                     android:layout_centerHorizontal="true"
-                    android:text="Unsolved Murders" />
+                    android:text="View Unsolved Murders" />
             </RelativeLayout>
 
             <LinearLayout
