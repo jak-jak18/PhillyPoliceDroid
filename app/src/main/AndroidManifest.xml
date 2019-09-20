@@ -39,6 +39,14 @@
         <activity android:name="furious.viewfragments.district.DistrictFragmentActivity"/>
         <activity android:name="furious.viewfragments.bookmark.BookmarkFragmentActivity"/>
 
+<!--        <activity android:name="furious.test.fragments.main.MainActivity"-->
+<!--            android:theme="@style/TestMainActivityTheme">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.SAMPLE_CODE" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
         <receiver android:name=".PoliceBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
