@@ -1,9 +1,11 @@
 package furious.objadapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +24,7 @@ import furious.viewfragments.usmurders.USMurderStories;
 import static furious.utils.Utils.ellipsize;
 
 
-public class USMurderAdapter extends RecyclerView.Adapter<USMurderAdapter.ViewHolder> {
+public class USMurderAdapter extends RecyclerView.Adapter<USMurderAdapter.ViewHolder> implements View.OnClickListener {
 
     Context context;
     ArrayList<USMurderObject> crimeList;
@@ -39,6 +41,11 @@ public class USMurderAdapter extends RecyclerView.Adapter<USMurderAdapter.ViewHo
             crimeList = list;
         }
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -122,12 +129,16 @@ public class USMurderAdapter extends RecyclerView.Adapter<USMurderAdapter.ViewHo
                     intent.putExtra("VictimName", crObj.getVictimName());
                     intent.putExtra("Description", crObj.getDesc());
                     intent.putExtra("NewsStoryDesc", crObj.getNewsStoryDesc());
+                    intent.putExtra("ItemPosition", position);
                     intent.putExtra("NewsStoryTitle", crObj.getNewsStoryTitle());
+                    intent.putExtra("ParentActivity", "USMurderAdapter");
                     intent.putExtra("isNewsStory",crObj.isNewsStory());
+                    intent.putExtra("USMurderID",crObj.getUSMurderID());
                     intent.putExtra("VictimImage", byteArray);
 
 
-                    view.getContext().startActivity(intent);
+                    //view.getContext().startActivity(intent);
+                    ((Activity) view.getContext()).startActivityForResult(intent,0000);
                 }
             });
 
@@ -150,4 +161,6 @@ public class USMurderAdapter extends RecyclerView.Adapter<USMurderAdapter.ViewHo
 
 
 
-}
+
+
+    }

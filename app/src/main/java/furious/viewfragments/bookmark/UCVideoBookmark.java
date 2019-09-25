@@ -102,6 +102,7 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 				bundle.putString("StoryTitle", lObj.getTitle());
 				bundle.putString("URL", lObj.getVideoURL());
 				bundle.putString("ImageURL", lObj.getImageURL());
+				bundle.putString("ParentActivity", "UCVideoBookmark");
 				bundle.putBoolean("isVideo", isVid);
 				bundle.putBoolean("isUCVid", false);
 				bundle.putBoolean("isAlrBk", true);

@@ -116,6 +116,7 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 				bundle.putString("URL", lObj.getTubeURL());
 				bundle.putString("StoryID", lObj.getNewsStoryID());
 				bundle.putString("ImageURL", lObj.getImageURL());
+				bundle.putString("ParentActivity", "DistrictNewsList");
 				bundle.putBoolean("isVideo", isVid);
 				bundle.putBoolean("isUCVid", false);
 				bundle.putBoolean("isAlrBk", false);

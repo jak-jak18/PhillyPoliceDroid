@@ -2,6 +2,7 @@ package furious.dataobjs;
 
 public class USMurderObject {
 
+    public String USMurderID;
     public String VictimName;
     public String NewsURL;
     public String Desc;
@@ -98,6 +99,13 @@ public class USMurderObject {
 
 
 
+    public String getUSMurderID() {
+        return USMurderID;
+    }
+
+    public void setUSMurderID(String USMurderID) {
+        this.USMurderID = USMurderID;
+    }
 
 
 }

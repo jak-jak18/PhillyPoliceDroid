@@ -16,7 +16,9 @@ public class NewsStoryBookmarkObject{
 	private String CrimeType;
 	private String VideoURL;
 	private String Author;
-	
+	private String DCNumber;
+
+
 	public String getTitle() {
 		return Title;
 	}
@@ -88,6 +90,13 @@ public class NewsStoryBookmarkObject{
 	}
 	public void setID(String iD) {
 		ID = iD;
-	} 
+	}
+	public String getDCNumber() {
+		return DCNumber;
+	}
+
+	public void setDCNumber(String DCNumber) {
+		this.DCNumber = DCNumber;
+	}
 	
 }

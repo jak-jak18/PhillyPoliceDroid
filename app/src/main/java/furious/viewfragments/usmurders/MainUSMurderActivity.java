@@ -193,9 +193,11 @@ public class MainUSMurderActivity extends AppCompatActivity {
                         JSONObject daObj = jArray.getJSONObject(i);
                         USMurderObject nObj = new USMurderObject();
                         nObj.setDCNumber(daObj.getString("DCNumber"));
+                        nObj.setUSMurderID(daObj.getString("USMurderID"));
                         nObj.setDesc(daObj.getString("Description"));
                         nObj.setNewsURL(daObj.getString("NewsURL"));
                         nObj.setVictimName(daObj.getString("VictimName"));
+                        nObj.setUSMurderID(daObj.getString("USMurderID"));
                         int newCT = daObj.getJSONArray("NewsStory").length();
 //                        if(newCT >= 1){
 //
@@ -312,6 +314,7 @@ public class MainUSMurderActivity extends AppCompatActivity {
                         JSONObject daObj = jArray.getJSONObject(i);
                         USMurderObject nObj = new USMurderObject();
                         nObj.setDCNumber(daObj.getString("DCNumber"));
+                        nObj.setUSMurderID(daObj.getString("USMurderID"));
                         nObj.setDesc(daObj.getString("Description"));
                         nObj.setNewsURL(daObj.getString("NewsURL"));
                         nObj.setVictimName(daObj.getString("VictimName"));
