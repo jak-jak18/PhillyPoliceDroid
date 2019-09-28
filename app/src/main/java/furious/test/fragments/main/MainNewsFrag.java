@@ -111,15 +111,10 @@ public class MainNewsFrag extends Fragment {
                     policeNews.putExtra("isUCVid", false);
                     policeNews.putExtra("isAlrBk", false);
                     startActivity(policeNews);
-
-
                 }
-
-
             }
 
         });
-
 
         return layout;
     }

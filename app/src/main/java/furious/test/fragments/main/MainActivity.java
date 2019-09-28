@@ -20,14 +20,13 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPager pager = findViewById(R.id.viewPager);
         pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
-        pager.setCurrentItem(0);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(pager);
     }
 
     public class NewsPagerAdapter extends FragmentPagerAdapter {
         private String[] Positions = {"District News","Main News","Shootings"};
-        private Fragment[] frags = {
+                private Fragment[] frags = {
                 new MainNewsFrag(),
                 new DistrictNewsFrag(),
                 new ShootingFrag()
@@ -43,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position){ return frags[position]; }
 
-        public String getTitle(int position) {
+        @Override
+        public CharSequence getPageTitle(int position) {
             return Positions[position];
         }
     }

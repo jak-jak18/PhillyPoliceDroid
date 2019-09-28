@@ -14,7 +14,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppBaseTheme" >
 
         <activity android:name=".StartUpSplash">
             <intent-filter>
@@ -39,13 +39,13 @@
         <activity android:name="furious.viewfragments.district.DistrictFragmentActivity"/>
         <activity android:name="furious.viewfragments.bookmark.BookmarkFragmentActivity"/>
 
-<!--        <activity android:name="furious.test.fragments.main.MainActivity"-->
-<!--            android:theme="@style/TestMainActivityTheme">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.SAMPLE_CODE" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        <activity android:name="furious.test.fragments.main.MainActivity"
+            android:theme="@style/TestMainActivityTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
 
         <receiver android:name=".PoliceBroadcastReceiver" >
             <intent-filter>

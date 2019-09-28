@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import furious.test.fragments.main.MainActivity;
 import furious.utils.HttpClientInfo;
 import furious.viewfragments.main.MainStart;
 
@@ -50,7 +51,8 @@ public class StartUpSplash1 extends Activity {
 		SharedPreferences isAG = getApplicationContext().getSharedPreferences("Agreement", MODE_PRIVATE);
 
 		if(isAG.contains("isAgreement")){
-			Intent intent = new Intent(StartUpSplash1.this, MainStart.class);
+//			Intent intent = new Intent(StartUpSplash1.this, MainStart.class);
+			Intent intent = new Intent(StartUpSplash1.this, MainActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			startActivity(intent);
 			finish();
