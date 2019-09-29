@@ -9,6 +9,7 @@ public class CrimeObject {
     private String PSArea;
     private String DispatchTime;
     private String AddressBlock;
+    private String HashTag;
 
     public String getTimeStamp() {
         return TimeStamp;
@@ -61,4 +62,11 @@ public class CrimeObject {
     private String CrimeName;
 
 
+    public String getHashTag() {
+        return HashTag;
+    }
+
+    public void setHashTag(String hashTag) {
+        HashTag = hashTag;
+    }
 }

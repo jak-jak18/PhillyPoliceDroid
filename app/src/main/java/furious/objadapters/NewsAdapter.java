@@ -1,10 +1,6 @@
 package furious.objadapters;
 
-
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +9,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import furious.dataobjs.NewStoryObject;
 import furious.phillypolicemobile.R;
 import furious.utils.ImageLoader;
 
+import static furious.utils.Utils.ellipsize;
+
 
 public class NewsAdapter extends BaseAdapter{
 
 	Thread thread;
-	private final static String NON_THIN = "[^iIl1\\.,']";
 	private final static String READ_MORE = "[Click to Read More]";
 	Context context;
 	ImageLoader imageLoader;
@@ -47,40 +40,7 @@ public class NewsAdapter extends BaseAdapter{
 		public TextView storyDate;
 		public TextView titleView;
 	}
-	
-	private static int textWidth(String str) {
-	    return (int) (str.length() - str.replaceAll(NON_THIN, "").length() / 2);
-	}
 
-	public static String ellipsize(String text, int max) {
-
-	    if (textWidth(text) <= max)
-	        return text;
-
-	    // Start by chopping off at the word before max
-	    // This is an over-approximation due to thin-characters...
-	    int end = text.lastIndexOf(' ', max - 3);
-
-	    // Just one long word. Chop it off.
-	    if (end == -1)
-	        return text.substring(0, max-3) + "...";
-
-	    // Step forward as long as textWidth allows.
-	    int newEnd = end;
-	    do {
-	        end = newEnd;
-	        newEnd = text.indexOf(' ', end + 1);
-
-	        // No more spaces.
-	        if (newEnd == -1)
-	            newEnd = text.length();
-
-	    } while (textWidth(text.substring(0, newEnd) + "...") < max);
-
-	    return text.substring(0, end) + "...";
-	}
-	
-	
 	
 	public NewsAdapter(Context context, ArrayList<NewStoryObject> list){
 		this.context = context;
@@ -105,7 +65,7 @@ public class NewsAdapter extends BaseAdapter{
 		return arg0;
 	}
 	
-	@SuppressLint("NewApi") @Override
+	@Override
 	public View getView(int arg0, View arg1, ViewGroup arg2) {
 		// TODO Auto-generated method stub
 		View convertView = arg1;
@@ -164,22 +124,7 @@ public class NewsAdapter extends BaseAdapter{
 		return convertView;
 	}
 	
-	
-	
-	public static Bitmap getBitmapFromURL(String src){
-	    try {
-	        URL url = new URL(src);
-	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	        connection.setDoInput(true);
-	        connection.connect();
-	        InputStream input = connection.getInputStream();
-	        Bitmap myBitmap = BitmapFactory.decodeStream(input);
-	        return myBitmap;
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return null;
-	    }
-	}
+
 	
 	public void updateList(ArrayList<NewStoryObject> list) {
         this.newsList = list;

@@ -1,13 +1,22 @@
 package furious.viewfragments.district;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,9 +35,11 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import furious.dataobjs.CrimeObject;
+import furious.dataobjs.NewStoryObject;
 import furious.objadapters.CrimesAdapter;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
+import furious.viewfragments.main.MainNews;
 
 public class CrimeFragment extends ListFragment {
 
@@ -37,6 +48,7 @@ public class CrimeFragment extends ListFragment {
     int TOTAL_COUNT;
     CrimesAdapter adapter;
     HttpURLConnection httpcon;
+    TextView Ftitle;
 
     private String addTH(String dNum){
 
@@ -79,7 +91,33 @@ public class CrimeFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedState) {
         super.onActivityCreated(savedState);
+
+       // registerForContextMenu(getListView());
         new getCrimeList().execute(HttpClientInfo.URL);
+
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(view.findViewById(R.id.MoreListUCTextView) != null){
+                    TextView txtV = (TextView) view.findViewById(R.id.MoreListUCTextView);
+                    String no = (String) txtV.getText();
+
+                    if(no.equals("More Crime Incidents")){
+                        Toast.makeText(getActivity(), "TIme to write", Toast.LENGTH_SHORT).show();
+
+
+                    }else{
+                        new getMoreCrimesData().execute();
+                    }
+
+
+
+                }
+
+
+            }
+        });
 
     }
 
@@ -101,9 +139,26 @@ public class CrimeFragment extends ListFragment {
 
 
 
+
+
         return layout;
 
     }
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        menu.setHeaderTitle("Context Menu");
+//        menu.add(0, v.getId(), 0, "Upload");
+//        menu.add(0, v.getId(), 0, "Search");
+//        menu.add(0, v.getId(), 0, "Share");
+//        menu.add(0, v.getId(), 0, "Bookmark");
+//    }
+//
+//    public boolean onContextItemSelected(MenuItem item) {
+//        Toast.makeText(getActivity(), "Selected Item: " +item.getTitle(), Toast.LENGTH_SHORT).show();
+//        return true;
+//    }
 
 
 
@@ -122,8 +177,8 @@ public class CrimeFragment extends ListFragment {
                 TOTAL_COUNT = Integer.parseInt(tcct);
                 JSONArray objectArray = object.getJSONArray("CrimeIncidents");
                 int ct = objectArray.length();
+
                 for(int i=0;i<ct;i++){
-                    //	Log.i("THIS_MANY_STING", ct+" "+objectArray.getString(ct));
                     CrimeObject info = new CrimeObject();
                     JSONObject Dobject = objectArray.getJSONObject(i);
                     info.setDispatchTime(Dobject.getString("DispatchDate"));
@@ -150,13 +205,13 @@ public class CrimeFragment extends ListFragment {
 
             }else{
                 String ct = Integer.toString(TOTAL_COUNT);
-                //String dc = Integer.toString(DISPLAY_COUNT);
+
                 if(TOTAL_COUNT == uc_vid_objs.size()){
-                    View title = Header("No More Videos "+"( "+uc_vid_objs.size()+" of "+TOTAL_COUNT+" )");
+                    View title = Header("More Crime Incidents");
                     getListView().addFooterView(title);
                     getListView().setAdapter(adapter);
                 }else{
-                    View title = Header("More Videos "+"( "+uc_vid_objs.size()+" of "+ct+" )");
+                    View title = Header("More Incidents "+"( "+uc_vid_objs.size()+" of "+ct+" )");
                     getListView().addFooterView(title);
                     getListView().setAdapter(adapter);
                 }
@@ -166,12 +221,88 @@ public class CrimeFragment extends ListFragment {
 
         }
 
-        private View Header(String string) {
-            View k = getActivity().getLayoutInflater().inflate(R.layout.uc_more_header, null);
-            TextView title = (TextView) k.findViewById(R.id.MoreListUCTextView);
-            title.setText(string);
-            return k;
+
+    }
+
+
+    class getMoreCrimesData extends AsyncTask<String, Void, ArrayList<CrimeObject>>{
+
+        @Override
+        protected ArrayList<CrimeObject> doInBackground(String... arg0) {
+
+            try {
+
+                String data = null;
+                if((TOTAL_COUNT - CR_Obj.size()) <=10){
+                    data = getListData(HttpClientInfo.URL, CR_Obj.size(),TOTAL_COUNT);
+                }else if((TOTAL_COUNT - CR_Obj.size()) > 10){
+                    data = getListData(HttpClientInfo.URL, CR_Obj.size(),10);
+                }
+
+
+                if(data.equals("No Data Connection") || data.equals(null)){
+                    Toast.makeText(getActivity(), "No Data", Toast.LENGTH_LONG).show();
+                }else{
+
+                    JSONObject jObj = new JSONObject(data);
+                    JSONArray jArray = jObj.getJSONArray("CrimeIncidents");
+                    TOTAL_COUNT = jObj.getInt("TotalCount");
+                    int count = jArray.length();
+
+                    for(int i=0;i<count;i++){
+
+                        CrimeObject info = new CrimeObject();
+                        JSONObject Dobject = jArray.getJSONObject(i);
+                        info.setDispatchTime(Dobject.getString("DispatchDate"));
+                        info.setPSArea(Dobject.getString("PSAArea"));
+                        info.setAddressBlock(Dobject.getString("Address"));
+                        info.setCrimeName(Dobject.getString("CrimeType"));
+
+                        CR_Obj.add(info);
+                    }
+
+                }
+
+            } catch (IOException e) {
+
+                Log.e("LOG_TAG", "Connection Error", e);
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+            }
+
+
+
+
+            return CR_Obj;
         }
+
+        protected void onPostExecute(final ArrayList<CrimeObject> news_short_Objs) {
+
+            adapter.updateList(news_short_Objs);
+
+            if(TOTAL_COUNT == news_short_Objs.size()){
+
+                Ftitle.setText("More Crime Incidents");
+
+            }else if(news_short_Objs == null){
+                Toast.makeText(getActivity(),"Hello",Toast.LENGTH_LONG).show();
+            }
+
+            else{
+
+                Ftitle.setText("More Incidents "+"( "+news_short_Objs.size()+" of "+TOTAL_COUNT+" )");
+
+            }
+
+
+
+
+        }
+
+
 
     }
 
@@ -228,5 +359,11 @@ public class CrimeFragment extends ListFragment {
     }
 
 
+    private View Header(String string) {
+        View k = getActivity().getLayoutInflater().inflate(R.layout.uc_more_header, null);
+        Ftitle = (TextView) k.findViewById(R.id.MoreListUCTextView);
+        Ftitle.setText(string);
+        return k;
+    }
 
 }

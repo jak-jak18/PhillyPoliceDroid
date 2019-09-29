@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class NewsPagerAdapter extends FragmentPagerAdapter {
         private String[] Positions = {"District News","Main News","Shootings"};
-                private Fragment[] frags = {
+        private Fragment[] frags = {
                 new MainNewsFrag(),
                 new DistrictNewsFrag(),
                 new ShootingFrag()

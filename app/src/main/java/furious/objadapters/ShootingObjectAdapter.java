@@ -1,4 +1,4 @@
-package furious.dataobjs;
+package furious.objadapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import furious.dataobjs.ShootingObject;
 import furious.phillypolicemobile.R;
 
 public class ShootingObjectAdapter  extends BaseAdapter {

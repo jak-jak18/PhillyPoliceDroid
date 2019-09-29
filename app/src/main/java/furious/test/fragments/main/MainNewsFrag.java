@@ -49,6 +49,7 @@ public class MainNewsFrag extends Fragment {
     int Srt = 0, End = 3, TOTAL_COUNT = 0;
     ListView listView;
     private boolean isNoMore;
+    final String title = "Main News";
 
     @Override
     public void onCreate(Bundle savedInstanceState){

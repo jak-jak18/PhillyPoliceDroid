@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import furious.viewfragments.main.MainStart;
-
 
 public class MainPreferenceActivity extends Activity {
 
@@ -18,12 +16,12 @@ public class MainPreferenceActivity extends Activity {
                 .commit();
     }
 
-    @Override
-    public void onBackPressed(){
-        super.onBackPressed();
-        Intent intent = new Intent(MainPreferenceActivity.this, MainStart.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
-    }
+//    @Override
+//    public void onBackPressed(){
+//        super.onBackPressed();
+//        Intent intent = new Intent(MainPreferenceActivity.this, MainStart.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        startActivity(intent);
+//        finish();
+//    }
 }

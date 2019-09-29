@@ -1,5 +1,6 @@
 package furious.viewfragments.main;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -29,7 +30,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import furious.dataobjs.ShootingObject;
-import furious.dataobjs.ShootingObjectAdapter;
+import furious.objadapters.ShootingObjectAdapter;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
 
@@ -41,6 +42,7 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
     HttpURLConnection httpcon;
     TextView headerTxt;
     TextView noNewsTxt;
+    TextView Htitle;
     ShootingObjectAdapter adapter;
     private int TOTAL_COUNT;
     private int DISPLAY_COUNT;
@@ -90,9 +92,9 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
 
         View layout = inflater.inflate(R.layout.shooting, container, false);
         noNewsTxt = (TextView) layout.findViewById(R.id.NoNewsTxtViewS);
-        headerTxt = (TextView) layout.findViewById(R.id.ShootHeaderTextView);
-        headerTxt.setText("Lastest Shootings");
-        headerTxt.setVisibility(View.VISIBLE);
+//        headerTxt = (TextView) layout.findViewById(R.id.ShootHeaderTextView);
+//        headerTxt.setText("Lastest Shootings");
+//        headerTxt.setVisibility(View.VISIBLE);
 
         return layout;
 
@@ -131,9 +133,11 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
                 String Data = getListData();
                 JSONObject object = new JSONObject(Data);
                 JSONArray objectArray = object.getJSONArray("Shootings");
+                TOTAL_COUNT = Integer.parseInt(object.getString("TotalCount"));
                 int count = objectArray.length();
 
                 for(int i=0;i<count;i++){
+
                     ShootingObject item = new ShootingObject();
                     JSONObject newobject = objectArray.getJSONObject(i);
                     item.setShootingID(newobject.getString("ShootingID"));
@@ -157,6 +161,7 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
                     }else if(newobject.getString("isFatal").equalsIgnoreCase("false")){
                         item.setFatal(false);
                     }
+
                     newsObjs.add(item);
                 }
 
@@ -179,11 +184,13 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
                 String ct = Integer.toString(TOTAL_COUNT);
 
                 if(TOTAL_COUNT == lockers.size()){
-                    View title = Header("No More News");
+                    View title = addTheFooter("No More Shootings");
+                    getListView().addHeaderView(addTheHeader("Latest Shootings"));
                     getListView().addFooterView(title);
                     getListView().setAdapter(adapter);
                 }else{
-                    View title = Header("More News "+"( "+lockers.size()+" of "+ct+" )");
+                    View title = addTheFooter("More Shootings "+"( "+lockers.size()+" of "+ct+" )");
+                    getListView().addHeaderView(addTheHeader("Latest Shootings"));
                     getListView().addFooterView(title);
                     getListView().setAdapter(adapter);
                 }
@@ -280,10 +287,18 @@ public class ShootingFragment extends ListFragment implements AdapterView.OnItem
         return true;
     }
 
-    private View Header(String string) {
+    private View addTheFooter(String string) {
         View k = getActivity().getLayoutInflater().inflate(R.layout.news_more_header, null);
         TextView title = (TextView) k.findViewById(R.id.MoreListTextView);
         title.setText(string);
+        return k;
+    }
+
+    private View addTheHeader(String string){
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View k = inflater.inflate(R.layout.main_news_more_1, null);
+        Htitle = (TextView) k.findViewById(R.id.MainNewsListTextView2);
+        Htitle.setText(string);
         return k;
     }
 

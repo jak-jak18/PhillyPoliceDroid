@@ -26,6 +26,8 @@
     <ListView
         android:id="@id/android:list"
         android:layout_below="@+id/NewsListHeader"
+        android:divider="#00000000"
+        android:dividerHeight="0dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </ListView>

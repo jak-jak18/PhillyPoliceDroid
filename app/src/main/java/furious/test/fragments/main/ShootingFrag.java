@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import furious.dataobjs.ShootingObject;
-import furious.dataobjs.ShootingObjectAdapter;
+import furious.objadapters.ShootingObjectAdapter;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
 
@@ -90,9 +90,9 @@ public class ShootingFrag extends ListFragment implements AdapterView.OnItemLong
 
         View layout = inflater.inflate(R.layout.shooting, container, false);
         noNewsTxt = (TextView) layout.findViewById(R.id.NoNewsTxtViewS);
-        headerTxt = (TextView) layout.findViewById(R.id.ShootHeaderTextView);
-        headerTxt.setText("Lastest Shootings");
-        headerTxt.setVisibility(View.VISIBLE);
+//        headerTxt = (TextView) layout.findViewById(R.id.ShootHeaderTextView);
+//        headerTxt.setText("Lastest Shootings");
+//        headerTxt.setVisibility(View.VISIBLE);
 
         return layout;
 

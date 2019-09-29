@@ -33,224 +33,245 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import furious.test.fragments.main.MainActivity;
 import furious.utils.HttpClientInfo;
-import furious.viewfragments.main.MainStart;
+import furious.viewfragments.main.MainStartFragmentActivity;
 
 public class StartUpSplash1 extends Activity {
 
-	ProgressBar progress;
-	String URL = HttpClientInfo.URL;
-	HttpURLConnection httpcon;
+    ProgressBar progress;
+    String URL = HttpClientInfo.URL;
+    HttpURLConnection httpcon;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.startupsplash1);
-
-		SharedPreferences isAG = getApplicationContext().getSharedPreferences("Agreement", MODE_PRIVATE);
-
-		if(isAG.contains("isAgreement")){
-//			Intent intent = new Intent(StartUpSplash1.this, MainStart.class);
-			Intent intent = new Intent(StartUpSplash1.this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			startActivity(intent);
-			finish();
-
-		}else{
-
-			final Button done = (Button) findViewById(R.id.donebutton);
-			final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox1);
-			progress = (ProgressBar) findViewById(R.id.progressBar1);
-
-			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView,
-											 boolean isChecked) {
-					// TODO Auto-generated method stub
-
-					if(isChecked){
-						done.setEnabled(true);
-					}else if(!isChecked){
-						done.setEnabled(false);
-					}
-
-				}
-
-			});
-
-			done.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-
-					progress.setVisibility(View.VISIBLE);
-					done.setEnabled(false);
-					checkBox.setEnabled(false);
-					new pushDevID().execute();
-
-				}
-
-			});
-		}
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.startupsplash1);
 
 
-	public boolean isServerUp() {
+        SharedPreferences isAG = getApplicationContext().getSharedPreferences("Agreement", MODE_PRIVATE);
 
-		try{
-			URL myUrl = new URL(HttpClientInfo.URL);
-			URLConnection connection = myUrl.openConnection();
-			connection.setConnectTimeout(10000);
-			connection.connect();
-			return true;
-		}
+        if(isAG.contains("isAgreement")){
+            Intent intent = new Intent(StartUpSplash1.this, MainStartFragmentActivity.class);
+            //Intent intent = new Intent(StartUpSplash1.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
 
-		catch (Exception e) { return false; }
-	}
+        }else{
+
+            final Button done = (Button) findViewById(R.id.donebutton);
+            final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox1);
+            progress = (ProgressBar) findViewById(R.id.progressBar1);
+
+            checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView,
+                                             boolean isChecked) {
+                    // TODO Auto-generated method stub
+
+                    if(isChecked){
+                        done.setEnabled(true);
+                    }else if(!isChecked){
+                        done.setEnabled(false);
+                    }
+
+                }
+
+            });
+
+
+            done.setOnClickListener(new OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+
+                    progress.setVisibility(View.VISIBLE);
+                    done.setEnabled(false);
+                    checkBox.setEnabled(false);
+                    new pushDevID().execute();
+
+                }
+
+            });
+
+
+        }
 
 
 
-	public class pushDevID extends AsyncTask<String, Void, String>{
 
-		@Override
-		protected String doInBackground(String... params) {
-
-			try {
-				if(isConnected()){
-					String jsonData = getJSONData();
-					Log.i("PHILLY_POLICE", jsonData);
-					JSONObject jsonObj = new JSONObject(jsonData);
-					String isGood = jsonObj.getString("error");
-					String isSuccess = jsonObj.getString("msg");
-
-					if(isGood.equals("false") && isSuccess.equals("success")){
-
-						SharedPreferences AGR = getApplicationContext().getSharedPreferences("Agreement", MODE_PRIVATE);
-
-						if (AGR.contains("isAgreement")) {
-							Editor edit = AGR.edit();
-							edit.clear();
-							edit.putString("isAgreement", "true");
-							edit.commit();
-						}else{
-							Editor edit = AGR.edit();
-							edit.clear();
-							edit.putString("isAgreement", "true");
-							edit.commit();
-						}
-
-						Intent intent = new Intent(StartUpSplash1.this, MainStart.class);
-						intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-						startActivity(intent);
-						finish();
-
-					}else if(isGood.equals("false")){
-
-						Toast.makeText(getApplicationContext(), jsonObj.getString("msg"), Toast.LENGTH_LONG).show();
-					}
-
-				}
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			return null;
-		}
-
-	}
+    }
 
 
-	private boolean isConnected() throws IOException{
-		boolean isGood = false;
-		ConnectivityManager connMgr = (ConnectivityManager)  getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-		if (networkInfo != null && networkInfo.isConnected()) {
-
-			java.net.URL Srvurl = new java.net.URL(URL);
-			HttpURLConnection conn = (HttpURLConnection) Srvurl.openConnection();
-			conn.setConnectTimeout(20000);
-			conn.connect();
-			int ok = conn.getResponseCode();
-			if(ok == HttpURLConnection.HTTP_OK){
-				isGood = true;
-				Log.i("POLICE_N", "Connection to server is OK");
-			}else if(ok == -1 || ok != HttpURLConnection.HTTP_OK){
-				isGood = false;
-				Log.i("POLICE_N","SERVER Said "+ok+" NOT UP");
-			}
-			isGood = true;
-		}else{
-			Log.i("POLICE_N", "NETWORK NOT UP");
-			isGood = false;
-		}
-
-		return isGood;
-	};
 
 
-	public String getJSONData() throws JSONException, IOException{
+    public boolean isServerUp() {
 
-		String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
-		String deviceID = HttpClientInfo.getMD5(macAddss);
+        try{
 
-		String result = null;
+            URL myUrl = new URL(HttpClientInfo.URL);
+            URLConnection connection = myUrl.openConnection();
+            connection.setConnectTimeout(10000);
+            connection.connect();
+            return true;
 
-		try {
+        }
 
-			JSONObject postObj = new JSONObject();
-			postObj.put("isAgreement", "true");
-			postObj.put("DeviceID", deviceID);
-			String data = postObj.toString();
-			Log.e("PUSHING_THIS",postObj.toString());
+        catch (Exception e) {
+
+            return false;
+        }
+    }
 
 
-			//Connect
-			httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
-			httpcon.setDoOutput(true);
-			httpcon.setRequestProperty("Content-Type", "application/json");
-			httpcon.setRequestProperty("Accept", "application/json");
-			httpcon.setRequestProperty("Accept-Language","en-US");
-			httpcon.setRequestMethod("POST");
-			httpcon.connect();
 
-			//Write
-			OutputStream os = httpcon.getOutputStream();
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-			writer.write(data);
-			writer.close();
-			os.close();
 
-			//Read
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(
-							httpcon.getInputStream(),"UTF-8"
-					)
-			);
 
-			String line;
-			StringBuilder sb = new StringBuilder();
+    public class pushDevID extends AsyncTask<String, Void, String>{
 
-			while ((line = br.readLine()) != null) {
-				sb.append(line);
-			}
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
 
-			br.close();
-			result = sb.toString();
+            try {
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+                if(isConnected()){
 
-		return result;
-	}
+                    String jsonData = getJSONData();
+                    Log.i("PHILLY_POLICE", jsonData);
+                    JSONObject jsonObj = new JSONObject(jsonData);
+                    String isGood = jsonObj.getString("error");
+                    String isSuccess = jsonObj.getString("msg");
+
+                    if(isGood.equals("false") && isSuccess.equals("success")){
+
+                        SharedPreferences AGR = getApplicationContext().getSharedPreferences("Agreement", MODE_PRIVATE);
+
+                        if (AGR.contains("isAgreement")) {
+                            Editor edit = AGR.edit();
+                            edit.clear();
+                            edit.putString("isAgreement", "true");
+                            edit.commit();
+                        }else{
+                            Editor edit = AGR.edit();
+                            edit.clear();
+                            edit.putString("isAgreement", "true");
+                            edit.commit();
+                        }
+
+                        Intent intent = new Intent(StartUpSplash1.this, MainStartFragmentActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        finish();
+
+                    }else if(isGood.equals("false")){
+
+                        Toast.makeText(getApplicationContext(), jsonObj.getString("msg"), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+    }
+
+
+
+
+    private boolean isConnected() throws IOException{
+        boolean isGood = false;
+        ConnectivityManager connMgr = (ConnectivityManager)  getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            java.net.URL Srvurl = new java.net.URL(URL);
+            HttpURLConnection conn = (HttpURLConnection) Srvurl.openConnection();
+            conn.setConnectTimeout(20000);
+            conn.connect();
+            int ok = conn.getResponseCode();
+            if(ok == HttpURLConnection.HTTP_OK){
+                isGood = true;
+                Log.i("POLICE_N", "Connection to server is OK");
+            }else if(ok == -1 || ok != HttpURLConnection.HTTP_OK){
+                isGood = false;
+                Log.i("POLICE_N","SERVER Said "+ok+" NOT UP");
+            }
+            isGood = true;
+        }else{
+            Log.i("POLICE_N", "NETWORK NOT UP");
+            isGood = false;
+        }
+
+        return isGood;
+    };
+
+
+    public String getJSONData() throws JSONException, IOException{
+
+        String macAddss = HttpClientInfo.getMacAddress(getApplicationContext());
+        String deviceID = HttpClientInfo.getMD5(macAddss);
+
+        String result = null;
+
+        try {
+
+            JSONObject postObj = new JSONObject();
+            postObj.put("isAgreement", "true");
+            postObj.put("DeviceID", deviceID);
+            String data = postObj.toString();
+            Log.e("PUSHING_THIS",postObj.toString());
+
+
+            //Connect
+            httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+            httpcon.setDoOutput(true);
+            httpcon.setRequestProperty("Content-Type", "application/json");
+            httpcon.setRequestProperty("Accept", "application/json");
+            httpcon.setRequestProperty("Accept-Language","en-US");
+            httpcon.setRequestMethod("POST");
+            httpcon.connect();
+
+            //Write
+            OutputStream os = httpcon.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(data);
+            writer.close();
+            os.close();
+
+            //Read
+            BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(),"UTF-8"));
+
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            br.close();
+            result = sb.toString();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+
+    }
+
 }
 
 
