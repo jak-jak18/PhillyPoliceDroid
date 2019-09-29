@@ -13,6 +13,10 @@
 
     </style>
 
+    <style name="TestMainActivityTheme" parent="Theme.AppCompat.Light">
+<!--        <item name="android:textColorPrimary">@color/text_color_primary</item>-->
+    </style>
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
