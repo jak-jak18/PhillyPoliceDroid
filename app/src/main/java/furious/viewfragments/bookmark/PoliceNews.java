@@ -64,13 +64,12 @@ public class PoliceNews extends AppCompatActivity {
 	String BOOKMARK_VIDEOS = "false";
 	String actparent;
 	int listPos;
-	int districtNum;
+	String districtNum;
 	HttpURLConnection httpcon;
 	boolean isAlrBk = false;
 	boolean isUCVid = false;
 	ArrayList<String> headers;
 	ImageLoader imgLoader;
-//	Button bookMarkButton;
 	ProgressBar diaLog;
 	
 
@@ -94,7 +93,7 @@ public class PoliceNews extends AppCompatActivity {
         actparent = (String) this.getIntent().getExtras().getString("ParentActivity");
         listPos = this.getIntent().getExtras().getInt("ItemPosition");
         crimeType = this.getIntent().getExtras().getString("CrimeType");
-        districtNum = this.getIntent().getIntExtra("District",0);
+        districtNum = this.getIntent().getExtras().getString("District");
 
 		if(getIntent().hasExtra("VictimImage")){
 			byte[] byteArray = getIntent().getByteArrayExtra("VictimImage");
@@ -105,19 +104,34 @@ public class PoliceNews extends AppCompatActivity {
 
 		if(actparent.equals("NewsStoryBookmark")){
 			mractionbar.setTitle("Saved Bookmark");
-			mractionbar.setSubtitle(crimeType+" "+addTH(Integer.toString(districtNum))+" District");
+			mractionbar.setSubtitle(crimeType+" "+addTH(districtNum)+" District");
+			BOOKMARK_NEWS = "true";
+			BOOKMARK_VIDEOS = "false";
 
+		}else if(actparent.equals("USCrimesAdapter")){
+			mractionbar.setTitle("Unsolved Crimes");
+			mractionbar.setSubtitle(crimeType);
+			BOOKMARK_NEWS = "false";
+			BOOKMARK_VIDEOS = "true";
+
+			if(isUCVid){
+				storyID = this.getIntent().getExtras().getString("UCVideoID");
+			}
+
+		}else if(actparent.equals("UCVideoBookmark")){
+			mractionbar.setTitle("Saved Bookmarks");
+			mractionbar.setSubtitle(crimeType);
+			BOOKMARK_NEWS = "false";
+			BOOKMARK_VIDEOS = "true";
 		}else{
 			mractionbar.setTitle("Police News Story");
+			BOOKMARK_NEWS = "true";
+			BOOKMARK_VIDEOS = "false";
 		}
 
 		setSupportActionBar(mractionbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        
-        
-       // imgLoader = new ImageLoader(this); 		//Network Intense; need to pass IMG through intent
-       // imgLoader.DisplayImage(img_URL, imgHolder);
+
 
 
 
@@ -127,28 +141,8 @@ public class PoliceNews extends AppCompatActivity {
     			ytHolder.setEnabled(false);
     			imgHolder.setEnabled(false);
     			
-    			BOOKMARK_NEWS = "true";
-    			BOOKMARK_VIDEOS = "false";
-    			
-    		}else{
-    			
-    			BOOKMARK_NEWS = "false";
-    			BOOKMARK_VIDEOS = "true";
     		}
-        		
-    		if(isUCVid){
-//    			bookMarkButton.setText("Bookmark Video");
-    			
-    			BOOKMARK_NEWS = "false";
-    			BOOKMARK_VIDEOS = "true";
-    		}else{
-    			
-    			BOOKMARK_NEWS = "true";
-    			BOOKMARK_VIDEOS = "false";
-    		}
-    		
 
-        
         
         TextView text = (TextView) findViewById(R.id.PoliceNewsDesc);
         TextView titleText = (TextView) findViewById(R.id.PoliceNewsInfoTitle);
@@ -257,7 +251,7 @@ public class PoliceNews extends AppCompatActivity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-		if(actparent.equals("NewsStoryBookmark")){
+		if(actparent.equals("NewsStoryBookmark")||actparent.equals("UCVideoBookmark")){
 			getMenuInflater().inflate(R.menu.bookmarkstory, menu);
 			return true;
 		}else{
@@ -407,7 +401,6 @@ public class PoliceNews extends AppCompatActivity {
 	private String deleteListData() throws IOException, JSONException{
 
 		String result = null;
-		//client = AndroidHttpClient.newInstance("ComboNation");
 		String macAddss = HttpClientInfo.getMacAddress(getApplication());
 		String deviceID = HttpClientInfo.getMD5(macAddss);
 
@@ -476,8 +469,8 @@ public class PoliceNews extends AppCompatActivity {
 			JSONObject postObj = new JSONObject();
 			postObj.put("Bookmark", "true");
 			postObj.put("DeviceID", deviceID);
-			postObj.put("Bookmark_UCVideos", "false");
-			postObj.put("Bookmark_NewsStory", "false");
+			postObj.put("Bookmark_UCVideos", "false"); //BOOKMARK DISPLAY
+			postObj.put("Bookmark_NewsStory", "false"); //BOOKMARK DISPLAY
 			postObj.put("Bookmark_Submit", "true");
 			postObj.put("BookmarkID", storyID);
 			postObj.put("BookmarkNews", BOOKMARK_NEWS);

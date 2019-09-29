@@ -152,7 +152,7 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 				bundle.putString("StoryTitle", lObj.getTitle());
 				bundle.putString("URL", lObj.getVideoURL());
 				bundle.putString("StoryID", lObj.getID());
-				bundle.putInt("District",lObj.getDistrict());
+				bundle.putString("District",lObj.getDistrict());
 				bundle.putString("ImageURL", lObj.getImageURL());
 				bundle.putInt("ItemPosition", arg2);
 				bundle.putString("ParentActivity", "NewsStoryBookmark");
@@ -237,7 +237,7 @@ public class NewsStoryBookmark extends ListFragment implements AdapterView.OnIte
 									
 								NewsStoryBookmarkObject item = new NewsStoryBookmarkObject();
 								JSONObject news_object = news_story_Array.getJSONObject(i);
-								item.setDistrict(news_object.getInt("District"));
+								item.setDistrict(news_object.getString("District"));
 								item.setTitle(news_object.getString("Title"));
 								item.setID(news_object.getString("NewsID"));
 								item.setDescription(news_object.getString("Description"));

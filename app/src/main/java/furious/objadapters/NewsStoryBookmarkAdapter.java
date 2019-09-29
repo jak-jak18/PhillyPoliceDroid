@@ -137,7 +137,7 @@ public class NewsStoryBookmarkAdapter extends BaseAdapter{
 			viewHolder.videoTitle.setText(News_Obj.getTitle());
 			viewHolder.videoCrimeType.setText(News_Obj.getCategory());
 			viewHolder.videoDate.setText(News_Obj.getStoryDate());
-			viewHolder.districtNumber.setText(Utils.addTH(Integer.toString(News_Obj.getDistrict()))+" District");
+			viewHolder.districtNumber.setText(Utils.addTH(News_Obj.getDistrict())+" District");
 
 			String idDc = News_Obj.getDCNumber();
 			if(idDc == "false"){

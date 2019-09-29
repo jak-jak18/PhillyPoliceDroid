@@ -9,7 +9,6 @@ public class NewsStoryBookmarkObject{
 	private String Description;
 	private String ImageURL;
 	private String StoryDate;
-	private int District;
 	private String Division;
 	private boolean UCVideo;
 	private String Category;
@@ -17,6 +16,7 @@ public class NewsStoryBookmarkObject{
 	private String VideoURL;
 	private String Author;
 	private String DCNumber;
+	private String District;
 
 
 	public String getTitle() {
@@ -42,12 +42,6 @@ public class NewsStoryBookmarkObject{
 	}
 	public void setStoryDate(String storyDate) {
 		StoryDate = storyDate;
-	}
-	public int getDistrict() {
-		return District;
-	}
-	public void setDistrict(int district) {
-		District = district;
 	}
 	public String getDivision() {
 		return Division;
@@ -94,9 +88,14 @@ public class NewsStoryBookmarkObject{
 	public String getDCNumber() {
 		return DCNumber;
 	}
-
 	public void setDCNumber(String DCNumber) {
 		this.DCNumber = DCNumber;
 	}
-	
+	public String getDistrict() {
+		return District;
+	}
+
+	public void setDistrict(String district) {
+		District = district;
+	}
 }
