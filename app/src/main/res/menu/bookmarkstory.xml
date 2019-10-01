@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_rm_bmk"
+        android:title="Remove"
+        android:icon="@drawable/removebmk"
+        app:showAsAction="ifRoom" />
+
+    <!--<item-->
+        <!--android:id="@+id/action_bookmark_p"-->
+        <!--android:title="@string/action_bookmark"-->
+        <!--app:showAsAction="never" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/action_bookmark_s"-->
+        <!--android:icon="@drawable/bookmark_b"-->
+        <!--android:title="@string/action_bookmark"-->
+        <!--app:showAsAction="ifRoom" />-->
+
+</menu>

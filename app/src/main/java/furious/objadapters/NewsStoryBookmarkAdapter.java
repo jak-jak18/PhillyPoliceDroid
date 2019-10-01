@@ -23,6 +23,7 @@ import android.widget.TextView;
 import furious.dataobjs.NewsStoryBookmarkObject;
 import furious.phillypolicemobile.R;
 import furious.utils.ImageLoader;
+import furious.utils.Utils;
 
 public class NewsStoryBookmarkAdapter extends BaseAdapter{
 	
@@ -41,8 +42,9 @@ public class NewsStoryBookmarkAdapter extends BaseAdapter{
 		public TextView videoDescription;
 		public ImageView captionURL;
 		public TextView videoDate;
-		public TextView videoRegion;
+		public TextView districtNumber;
 		public TextView videoCrimeType;
+		public TextView dcNumber;
 		//public ImageView videoURL;
 	}
 	
@@ -117,9 +119,10 @@ public class NewsStoryBookmarkAdapter extends BaseAdapter{
 			viewHolder.videoTitle = (TextView) convertView.findViewById(R.id.BookmarkTitle);
 			viewHolder.videoDescription = (TextView) convertView.findViewById(R.id.BookmarkDescription);
 			viewHolder.videoDate = (TextView) convertView.findViewById(R.id.BookmarkVideoDate);
-			viewHolder.videoRegion = (TextView) convertView.findViewById(R.id.BookmarkRegion);
+			viewHolder.districtNumber = (TextView) convertView.findViewById(R.id.BookmarkRegion);
 			viewHolder.videoCrimeType = (TextView) convertView.findViewById(R.id.BookmarkCrimeType);
 			viewHolder.captionURL = (ImageView) convertView.findViewById(R.id.BookmarkImageView);
+			viewHolder.dcNumber = (TextView) convertView.findViewById(R.id.boomark_row_news_dcnum);
 
 			convertView.setTag(viewHolder);
 
@@ -132,30 +135,29 @@ public class NewsStoryBookmarkAdapter extends BaseAdapter{
 			String stitle = ellipsize(News_Obj.getDescription(), 400);
 			viewHolder.videoDescription.setText(stitle+READ_MORE);
 			viewHolder.videoTitle.setText(News_Obj.getTitle());
-			viewHolder.videoCrimeType.setText(News_Obj.getCrimeType());
+			viewHolder.videoCrimeType.setText(News_Obj.getCategory());
 			viewHolder.videoDate.setText(News_Obj.getStoryDate());
-			viewHolder.videoRegion.setText(News_Obj.getDivision()+" Division");
+			viewHolder.districtNumber.setText(Utils.addTH(News_Obj.getDistrict())+" District");
+
+			String idDc = News_Obj.getDCNumber();
+			if(idDc == "false"){
+				viewHolder.dcNumber.setVisibility(View.GONE);
+			}else{
+				viewHolder.dcNumber.setText(News_Obj.getDCNumber());
+			}
+
+
+
+
+
 			
 			imageLoader.DisplayImage(News_Obj.getImageURL(), viewHolder.captionURL);
+
 			return convertView;
 	}
 	
 	
-	
-	public static Bitmap getBitmapFromURL(String src){
-	    try {
-	        URL url = new URL(src);
-	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	        connection.setDoInput(true);
-	        connection.connect();
-	        InputStream input = connection.getInputStream();
-	        Bitmap myBitmap = BitmapFactory.decodeStream(input);
-	        return myBitmap;
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return null;
-	    }
-	}
+
 	
 	public void updateList(ArrayList<NewsStoryBookmarkObject> list) {
         this.bookmark_list = list;

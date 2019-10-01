@@ -38,6 +38,7 @@ import furious.dataobjs.PoliceDistricts;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
 import furious.viewfragments.preferences.MainPreferenceFragment;
+import furious.viewfragments.uscrimes.MainUSCrimesActivity;
 import furious.viewfragments.usmurders.MainUSMurderActivity;
 
 public class DistrictInfoFragment extends Fragment{
@@ -50,6 +51,7 @@ public class DistrictInfoFragment extends Fragment{
 	TextView districtCity;
 	TextView captainName;
 	Button usmurders;
+	Button uscrimev;
 	HttpURLConnection httpcon;
 	RelativeLayout nothingSch;
 	LinearLayout table;
@@ -106,6 +108,19 @@ public class DistrictInfoFragment extends Fragment{
 			}
 		});
 
+		uscrimev.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+
+				Intent intent = new Intent();
+				intent.setClass(context, MainUSCrimesActivity.class);
+				intent.putExtra("DistrictNumber", DISTRICT_NUM);
+				startActivity(intent);
+
+
+			}
+		});
+
     }
 	
 	 @Override
@@ -119,6 +134,7 @@ public class DistrictInfoFragment extends Fragment{
 	        districtEmail = (TextView) layout.findViewById(R.id.DistrictInfoEmail);
 	        districtPhone = (TextView) layout.findViewById(R.id.DistictInfoPhone);
 	        usmurders = (Button) layout.findViewById(R.id.usmurders_bt);
+	        uscrimev = (Button) layout.findViewById(R.id.usmurders_bt2);
 	        captainName = (TextView) layout.findViewById(R.id.DistrictInfoCaptain);
 	        captainImage = (ImageView) layout.findViewById(R.id.DistrictInfoImageView);
 	        table = (LinearLayout) layout.findViewById(R.id.DistrictInfoRowLayout);

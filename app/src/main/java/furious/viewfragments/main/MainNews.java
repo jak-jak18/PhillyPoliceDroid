@@ -3,6 +3,7 @@ package furious.viewfragments.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -103,12 +105,21 @@ import furious.viewfragments.bookmark.PoliceNews;
 					}else{
 						
 						NewStoryObject lObj = (NewStoryObject) parent.getItemAtPosition(position);
-						
+
+						View v = view.findViewById(R.id.DistrictNewsImageView);
+						v.setDrawingCacheEnabled(true);
+						Bitmap capturedBitmap = Bitmap.createBitmap(v.getDrawingCache());
+						v.setDrawingCacheEnabled(false);
+						ByteArrayOutputStream stream = new ByteArrayOutputStream();
+						capturedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+						byte[] byteArray = stream.toByteArray();
+
 						String vidURL = lObj.getTubeURL();
 						String desc = lObj.getDescription();
 						String storyTil = lObj.getTitle();
 						String imgURL = lObj.getImageURL();
 						String imgID = lObj.getNewsStoryID();
+
 						
 						Intent policeNews = new Intent(getActivity(), PoliceNews.class);
 						policeNews.putExtra("URL", vidURL);
@@ -116,8 +127,10 @@ import furious.viewfragments.bookmark.PoliceNews;
 						policeNews.putExtra("StoryTitle", storyTil);
 						policeNews.putExtra("ImageURL", imgURL);
 						policeNews.putExtra("StoryID", imgID);
+						policeNews.putExtra("ParentActivity", "MainNews");
 						policeNews.putExtra("isUCVid", false);
 						policeNews.putExtra("isAlrBk", false);
+						policeNews.putExtra("VictimImage", byteArray);
 		            	startActivity(policeNews);
 
 

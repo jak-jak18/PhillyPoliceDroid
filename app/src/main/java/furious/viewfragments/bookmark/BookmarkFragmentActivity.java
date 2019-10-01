@@ -1,13 +1,19 @@
 package furious.viewfragments.bookmark;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,11 +26,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
+import furious.utils.Utils;
 
-public class BookmarkFragmentActivity extends FragmentActivity{
+public class BookmarkFragmentActivity extends AppCompatActivity {
 
 	String JSON_DATA;
 	HttpURLConnection httpcon;
@@ -34,48 +42,47 @@ public class BookmarkFragmentActivity extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bookmark_mainstart);
 
-        ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_bmrk);
+		tabLayout.addTab(tabLayout.newTab().setText("News Stories"));
+		tabLayout.addTab(tabLayout.newTab().setText("Unsolved Murders"));
+		tabLayout.addTab(tabLayout.newTab().setText("US Crime Videos"));
+		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+		Toolbar mractionbar = (Toolbar) findViewById(R.id.mr_toolbar_bmrk);
+		mractionbar.setTitle("Bookmarks");
+		setSupportActionBar(mractionbar);
+
+        final ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
         pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
-        
-        pager.setOnPageChangeListener(new OnPageChangeListener(){
+        pager.setOffscreenPageLimit(2);
+		pager.setPageTransformer(true, new Utils.DepthPageTransformer());
+
+		pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+		tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
 			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				// TODO Auto-generated method stub
-				
+			public void onTabSelected(TabLayout.Tab tab) {
+				pager.setCurrentItem(tab.getPosition());
 			}
 
 			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO Auto-generated method stub
-				
+			public void onTabUnselected(TabLayout.Tab tab) {
+
 			}
 
 			@Override
-			public void onPageSelected(int position) {
-				// TODO Auto-generated method stub
-				switch(position){
-                case 0:
-                	findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
-                    findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
-                    break;
+			public void onTabReselected(TabLayout.Tab tab) {
 
-                case 1:
-                	
-                    findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
-                    break;
-                }
 			}
-        	
-        });
+		});
+
         
 	
 	}
 
 	
 	public class NewsPagerAdapter extends FragmentPagerAdapter{
-    	private String[] Positions = {"News Stories","UC Videos"};
+    	private String[] Positions = {"News Stories","Unsolved Murers","UC Crime Videos"};
 
         public NewsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -88,6 +95,7 @@ public class BookmarkFragmentActivity extends FragmentActivity{
 
         @Override
         public Fragment getItem(int position){
+
         	if(position == 0){
         		Fragment nwsStryBkm = new NewsStoryBookmark();
         		Bundle args1 = new Bundle();
@@ -95,15 +103,16 @@ public class BookmarkFragmentActivity extends FragmentActivity{
                 nwsStryBkm.setArguments(args1);
 
         		return nwsStryBkm;
+
         	}else if(position == 1){
-        		Fragment nwsStryBkm = new UCVideoBookmark();
+        		Fragment nwsStryBkm = new USMurderBookmark();
         		Bundle args1 = new Bundle();
                 args1.putString("JSON_DATA", JSON_DATA);
                 nwsStryBkm.setArguments(args1);
 
         		return nwsStryBkm;
         	}else{
-        		Fragment nwsStryBkm = new NewsStoryBookmark();
+        		Fragment nwsStryBkm = new UCVideoBookmark();
         		Bundle args1 = new Bundle();
                 args1.putString("JSON_DATA", JSON_DATA);
                 nwsStryBkm.setArguments(args1);
@@ -188,10 +197,27 @@ public class BookmarkFragmentActivity extends FragmentActivity{
 		
 		
 	}
-		
-	
-	
-	
-	
-	
+
+
+
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data){
+		super.onActivityResult(requestCode, resultCode, data);
+		//Log.e("ERROR","MAIN PARENT HIT ON ACTIVITY RESULTS "+Integer.toString(data.getIntExtra("ItemPosition",99)));
+		List<Fragment> fragments = getSupportFragmentManager().getFragments();
+		if (fragments != null) {
+			for (Fragment fragment : fragments) {
+				fragment.onActivityResult(requestCode, resultCode, data);
+
+			}
+		}
+
+
+	}
+
+
+
+
+
 }

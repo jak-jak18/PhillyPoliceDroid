@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="6dp">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/uscrime_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/uscrimes_imgview"
+                    android:layout_width="220dp"
+                    android:layout_height="160dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/uscrimes_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="15dp"
+                    android:textColor="#000000"
+                    android:layout_below="@+id/us_cimrestype"
+                    android:gravity="center"
+                    android:text="TextView"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/us_cimrestype"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:gravity="center"
+                    android:layout_marginBottom="10px"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:textColor="#FF0000"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/uscrimes_imgview"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/uscrimes_excert"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginRight="10px"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="17dp"
+                    android:textColor="#000000"
+                    android:layout_marginTop="10px"
+                    android:layout_below="@+id/uscrimes_add"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/uscrimes_Dcnum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/uscrimes_excert"
+                    android:layout_below="@+id/uscrimes_excert"
+                    android:padding="5dp"
+                    android:textStyle="bold|italic"
+                    android:textSize="15dp"
+                    android:textColor="#000000"
+                    android:layout_marginTop="13px"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/us_crimedate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textStyle="bold|italic"
+                    android:textColor="#000000"
+                    android:textSize="15dp"
+                    android:layout_alignBaseline="@+id/uscrimes_Dcnum"
+                    android:layout_alignBottom="@+id/uscrimes_Dcnum"
+                    android:layout_alignEnd="@+id/uscrimes_excert"
+                    android:text="TextView" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>
+

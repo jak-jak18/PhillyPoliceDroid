@@ -3,6 +3,7 @@ package furious.viewfragments.bookmark;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -24,6 +25,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -95,6 +97,14 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 				if(!lObj.getVideoURL().equals(0) || !lObj.getVideoURL().equals(null)){
 					isVid = true;
 				}
+
+			View v = arg1.findViewById(R.id.BookmarkImageView);
+			v.setDrawingCacheEnabled(true);
+			Bitmap capturedBitmap = Bitmap.createBitmap(v.getDrawingCache());
+			v.setDrawingCacheEnabled(false);
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			capturedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+			byte[] byteArray = stream.toByteArray();
 				
 				Intent policeNews = new Intent(getActivity(),PoliceNews.class);
 				Bundle bundle = new Bundle();
@@ -102,10 +112,14 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 				bundle.putString("StoryTitle", lObj.getTitle());
 				bundle.putString("URL", lObj.getVideoURL());
 				bundle.putString("ImageURL", lObj.getImageURL());
+				bundle.putString("CrimeType", lObj.getCategory());
+			    bundle.putString("DistrictNumber", lObj.getDistrict());
+				bundle.putString("ParentActivity", "UCVideoBookmark");
 				bundle.putBoolean("isVideo", isVid);
 				bundle.putBoolean("isUCVid", false);
 				bundle.putBoolean("isAlrBk", true);
 
+			    policeNews.putExtra("VictimImage", byteArray);
 				policeNews.putExtras(bundle);
 				
 				startActivity(policeNews);
@@ -169,6 +183,7 @@ public class UCVideoBookmark extends ListFragment implements AdapterView.OnItemL
 								item.setCategory(vid_object.getString("Category"));
 								item.setVideoURL(vid_object.getString("TubeURL"));
 								item.setDivision(vid_object.getString("Division"));
+								item.setDistrict(vid_object.getString("District"));
 								vidObjs.add(item);
 							}
 

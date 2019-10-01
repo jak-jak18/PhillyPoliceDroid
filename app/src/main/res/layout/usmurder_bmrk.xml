@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@id/android:list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </ListView>
+
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:id="@+id/usmurder_list_bmrk"-->
+                <!--android:scrollbars="none"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent" />-->
+
+            <RelativeLayout
+                android:id="@+id/usmurder_footer_brk"
+                android:padding="5dp"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="#000000">
+
+
+                <TextView
+                    android:id="@+id/usmurderfootertxt"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="7dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="23dp"
+                    android:textColor="#00F0FF"
+                    android:textStyle="bold"
+                    android:text="TextView" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    <TextView
+        android:id="@+id/BookmarkNoView_usm_bmrk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:text="No Bookmarks at This Time"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_usmuder_bmrk"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -3,12 +3,15 @@ package furious.viewfragments.bookmark;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +45,8 @@ import furious.utils.HttpClientInfo;
 import furious.utils.ImageLoader;
 import furious.viewfragments.preferences.MainPreferenceActivity;
 
+import static furious.utils.Utils.addTH;
+
 public class PoliceNews extends AppCompatActivity {
 
 
@@ -53,15 +58,18 @@ public class PoliceNews extends AppCompatActivity {
 	String storyTitle;
 	String URL;
 	String img_URL;
+	String crimeType;
 	String storyID;
 	String BOOKMARK_NEWS = "false";
 	String BOOKMARK_VIDEOS = "false";
+	String actparent;
+	int listPos;
+	String districtNum;
 	HttpURLConnection httpcon;
 	boolean isAlrBk = false;
 	boolean isUCVid = false;
 	ArrayList<String> headers;
 	ImageLoader imgLoader;
-//	Button bookMarkButton;
 	ProgressBar diaLog;
 	
 
@@ -74,6 +82,7 @@ public class PoliceNews extends AppCompatActivity {
         imgHolder = (ImageView) findViewById(R.id.PoliceImageHolder);
         ytHolder = (ImageView) findViewById(R.id.ImagetubeHolder);
         diaLog = (ProgressBar) findViewById(R.id.progressBar1);
+
         URL = (String) this.getIntent().getExtras().getString("URL");
 		Desc = (String) this.getIntent().getExtras().getString("Description");
         storyTitle = (String) this.getIntent().getExtras().getString("StoryTitle");
@@ -81,15 +90,50 @@ public class PoliceNews extends AppCompatActivity {
         img_URL = (String) this.getIntent().getExtras().getString("ImageURL");
         isUCVid = (boolean) this.getIntent().getExtras().getBoolean("isUCVid");
         isAlrBk = (boolean) this.getIntent().getExtras().getBoolean("isAlrBk");
+        actparent = (String) this.getIntent().getExtras().getString("ParentActivity");
+        listPos = this.getIntent().getExtras().getInt("ItemPosition");
+        crimeType = this.getIntent().getExtras().getString("CrimeType");
+        districtNum = this.getIntent().getExtras().getString("District");
 
-        mractionbar.setTitle("Police News Story");
+		if(getIntent().hasExtra("VictimImage")){
+			byte[] byteArray = getIntent().getByteArrayExtra("VictimImage");
+			Bitmap capturedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+			imgHolder.setImageBitmap(capturedBitmap);
+		}
+
+
+		if(actparent.equals("NewsStoryBookmark")){
+			mractionbar.setTitle("Saved Bookmark");
+			mractionbar.setSubtitle(crimeType+" "+addTH(districtNum)+" District");
+			BOOKMARK_NEWS = "true";
+			BOOKMARK_VIDEOS = "false";
+
+		}else if(actparent.equals("USCrimesAdapter")){
+			mractionbar.setTitle("Unsolved Crimes");
+			mractionbar.setSubtitle(crimeType);
+			BOOKMARK_NEWS = "false";
+			BOOKMARK_VIDEOS = "true";
+
+			if(isUCVid){
+				storyID = this.getIntent().getExtras().getString("UCVideoID");
+			}
+
+		}else if(actparent.equals("UCVideoBookmark")){
+			mractionbar.setTitle("Saved Bookmarks");
+			mractionbar.setSubtitle(crimeType);
+			BOOKMARK_NEWS = "false";
+			BOOKMARK_VIDEOS = "true";
+		}else{
+			mractionbar.setTitle("Police News Story");
+			BOOKMARK_NEWS = "true";
+			BOOKMARK_VIDEOS = "false";
+		}
+
 		setSupportActionBar(mractionbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        
-        
-        imgLoader = new ImageLoader(this); 		//Network Intense; need to pass IMG through intent
-        imgLoader.DisplayImage(img_URL, imgHolder);
+
+
+
 
 
     		if(URL.equals("No Video") || URL.isEmpty()){
@@ -97,28 +141,8 @@ public class PoliceNews extends AppCompatActivity {
     			ytHolder.setEnabled(false);
     			imgHolder.setEnabled(false);
     			
-    			BOOKMARK_NEWS = "true";
-    			BOOKMARK_VIDEOS = "false";
-    			
-    		}else{
-    			
-    			BOOKMARK_NEWS = "false";
-    			BOOKMARK_VIDEOS = "true";
     		}
-        		
-    		if(isUCVid){
-//    			bookMarkButton.setText("Bookmark Video");
-    			
-    			BOOKMARK_NEWS = "false";
-    			BOOKMARK_VIDEOS = "true";
-    		}else{
-    			
-    			BOOKMARK_NEWS = "true";
-    			BOOKMARK_VIDEOS = "false";
-    		}
-    		
 
-        
         
         TextView text = (TextView) findViewById(R.id.PoliceNewsDesc);
         TextView titleText = (TextView) findViewById(R.id.PoliceNewsInfoTitle);
@@ -192,7 +216,7 @@ public class PoliceNews extends AppCompatActivity {
 		
 	}
 
-	public void alertTwoButtons() {
+	public void alertTwoButtons(final String addrmv) {
 		new AlertDialog.Builder(PoliceNews.this)
 				.setTitle("Add Bookmark")
 				.setMessage("Are you sure you want to add this bookmark?")
@@ -202,8 +226,15 @@ public class PoliceNews extends AppCompatActivity {
 
 							public void onClick(DialogInterface dialog, int id) {
 								//showToast("Thank you! You're awesome too!");
-								new fetchBookmarks().execute();
-								dialog.cancel();
+								if(addrmv.equals("ADD")){
+									new fetchBookmarks().execute();
+									dialog.cancel();
+								}else if(addrmv.equals("REMOVE")){
+									new deleteBookmark().execute();
+									dialog.cancel();
+								}
+
+
 							}
 						})
 				.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -220,8 +251,14 @@ public class PoliceNews extends AppCompatActivity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.policemenu, menu);
-        return true;
+		if(actparent.equals("NewsStoryBookmark")||actparent.equals("UCVideoBookmark")){
+			getMenuInflater().inflate(R.menu.bookmarkstory, menu);
+			return true;
+		}else{
+			getMenuInflater().inflate(R.menu.policemenu, menu);
+			return true;
+		}
+
     }
 
 	@Override
@@ -247,7 +284,12 @@ public class PoliceNews extends AppCompatActivity {
 				return true;
 
 			case R.id.action_bookmark_s:
-				alertTwoButtons();
+				alertTwoButtons("ADD");
+
+				return true;
+
+			case R.id.action_rm_bmk:
+				alertTwoButtons("REMOVE");
 
 				return true;
 
@@ -295,7 +337,124 @@ public class PoliceNews extends AppCompatActivity {
 		
     	
     }
-    
+
+	public class deleteBookmark extends AsyncTask<String, Void, String>{
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+
+			String data = null;
+			try {
+
+				data = deleteListData();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+
+
+			return data;
+		}
+
+		protected void onPostExecute(String jsonData) {
+
+			JSONObject jsonObj;
+			try {
+
+				jsonObj = new JSONObject(jsonData);
+				String isErr = jsonObj.getString("error");
+
+				if(isErr.equals("false")){
+					//Toast.makeText(getApplicationContext(), jsonObj.getString("msg"), Toast.LENGTH_LONG).show();
+					Intent bIntent = new Intent();
+					bIntent.putExtra("ItemPosition",listPos);
+					setResult(RESULT_OK,bIntent);
+					finish();
+
+				}else if(isErr.equals("true")){
+					Log.e("NETWORK_ERROR", jsonObj.getString("msg"));
+				}
+
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+
+
+
+		}
+
+	}
+
+
+	private String deleteListData() throws IOException, JSONException{
+
+		String result = null;
+		String macAddss = HttpClientInfo.getMacAddress(getApplication());
+		String deviceID = HttpClientInfo.getMD5(macAddss);
+
+		try {
+			JSONObject postObj = new JSONObject();
+			postObj.put("NewsID", storyID);
+			postObj.put("Bookmark", "true");
+			postObj.put("DeviceID", deviceID);
+			postObj.put("BookmarkRemove", "true");
+			postObj.put("News", "true");
+			postObj.put("Video", "false");
+			String data = postObj.toString();
+			Log.e("THIS IS SENDING", postObj.toString());
+
+
+			//Connect
+			httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
+			httpcon.setDoOutput(true);
+			httpcon.setRequestProperty("Content-Type", "application/json");
+			httpcon.setRequestProperty("Accept", "application/json");
+			httpcon.setRequestMethod("POST");
+			httpcon.connect();
+
+			//Write
+			OutputStream os = httpcon.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			writer.write(data);
+			writer.close();
+			os.close();
+
+			//Read
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpcon.getInputStream(), "UTF-8"));
+
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			br.close();
+			result = sb.toString();
+		}
+
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+
+
+	}
     
     private String saveBookmark() throws IOException, JSONException{
 
@@ -310,8 +469,8 @@ public class PoliceNews extends AppCompatActivity {
 			JSONObject postObj = new JSONObject();
 			postObj.put("Bookmark", "true");
 			postObj.put("DeviceID", deviceID);
-			postObj.put("Bookmark_UCVideos", "false");
-			postObj.put("Bookmark_NewsStory", "false");
+			postObj.put("Bookmark_UCVideos", "false"); //BOOKMARK DISPLAY
+			postObj.put("Bookmark_NewsStory", "false"); //BOOKMARK DISPLAY
 			postObj.put("Bookmark_Submit", "true");
 			postObj.put("BookmarkID", storyID);
 			postObj.put("BookmarkNews", BOOKMARK_NEWS);
@@ -356,16 +515,9 @@ public class PoliceNews extends AppCompatActivity {
 		return result;
 		
 	}
-    
-    
-//	    @Override
-//	    public void onConfigurationChanged(Configuration newConfig) {
-//	    	super.onConfigurationChanged(newConfig);
-//	    		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//
-//	    		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-//	    			Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-//	    		}
-//	    	}
+
+
+
+
     
 }

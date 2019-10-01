@@ -52,6 +52,7 @@
          <activity android:name="furious.viewfragments.bookmark.BookmarkFragmentActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
          <activity android:name="furious.viewfragments.usmurders.MainUSMurderActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
         <activity android:name="furious.viewfragments.usmurders.USMurderStories" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
+        <activity android:name="furious.viewfragments.uscrimes.MainUSCrimesActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
 
 
         <activity android:name=".StartUpSplash1"></activity>

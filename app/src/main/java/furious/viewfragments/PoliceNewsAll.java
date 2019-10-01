@@ -100,6 +100,7 @@ public class PoliceNewsAll extends Activity{
 					bundle.putString("Description", lObj.getStoryExcert());
 					bundle.putString("StoryTitle", lObj.getStoryTitle());
 					bundle.putString("ImageURL", lObj.getCaptionURL());
+					bundle.putString("ParentActivity", "PoliceNewsAll");
 					bundle.putString("StoryID", lObj.getID());
 					bundle.putBoolean("isVideo", isVid);
 					bundle.putBoolean("isUCVid", lObj.isUC_Vid());
