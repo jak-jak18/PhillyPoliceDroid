@@ -35,6 +35,7 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 		pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
 		TabLayout tabLayout = findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(pager);
+
 	}
 
 	@Override

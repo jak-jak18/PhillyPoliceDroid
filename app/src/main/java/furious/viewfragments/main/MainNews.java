@@ -119,6 +119,7 @@ import furious.viewfragments.bookmark.PoliceNews;
 						String storyTil = lObj.getTitle();
 						String imgURL = lObj.getImageURL();
 						String imgID = lObj.getNewsStoryID();
+						String cat = lObj.getCategory();
 
 						
 						Intent policeNews = new Intent(getActivity(), PoliceNews.class);
@@ -127,6 +128,7 @@ import furious.viewfragments.bookmark.PoliceNews;
 						policeNews.putExtra("StoryTitle", storyTil);
 						policeNews.putExtra("ImageURL", imgURL);
 						policeNews.putExtra("StoryID", imgID);
+						policeNews.putExtra("CrimeType", cat);
 						policeNews.putExtra("ParentActivity", "MainNews");
 						policeNews.putExtra("isUCVid", false);
 						policeNews.putExtra("isAlrBk", false);

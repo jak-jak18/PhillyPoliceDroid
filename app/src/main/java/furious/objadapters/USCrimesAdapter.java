@@ -79,6 +79,7 @@ public class USCrimesAdapter extends RecyclerView.Adapter<USCrimesAdapter.ViewHo
         holder.pubDate.setText(crObj.getPubDate());
         holder.address.setText(crObj.getVideoTitle());
         holder.crimeType.setText(crObj.getCrimeType());
+        holder.dcNumber.setText(crObj.getDCNumber());
         imageLoader.DisplayImage(crObj.getVideoImgURL(),holder.crmImg);
         holder.crmImg.buildDrawingCache();
 

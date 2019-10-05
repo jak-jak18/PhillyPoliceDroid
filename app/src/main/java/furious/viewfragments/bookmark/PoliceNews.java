@@ -123,8 +123,14 @@ public class PoliceNews extends AppCompatActivity {
 			mractionbar.setSubtitle(crimeType);
 			BOOKMARK_NEWS = "false";
 			BOOKMARK_VIDEOS = "true";
-		}else{
-			mractionbar.setTitle("Police News Story");
+		}else if(actparent.equals("MainNews")){
+			mractionbar.setTitle("Latest Police News");
+			mractionbar.setSubtitle(crimeType);
+			BOOKMARK_NEWS = "true";
+			BOOKMARK_VIDEOS = "false";
+		}else if(actparent.equals("DistrictNewsList")){
+			mractionbar.setTitle("Latest Police News");
+			mractionbar.setSubtitle(crimeType);
 			BOOKMARK_NEWS = "true";
 			BOOKMARK_VIDEOS = "false";
 		}
