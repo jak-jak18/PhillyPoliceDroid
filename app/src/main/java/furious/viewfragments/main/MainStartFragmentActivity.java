@@ -36,7 +36,6 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 		TabLayout tabLayout = findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(pager);
 
-
 	}
 
 	@Override
@@ -80,7 +79,6 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 
 		NewsPagerAdapter(FragmentManager fm) {
 			super(fm);
-
 		}
 
 		@Override

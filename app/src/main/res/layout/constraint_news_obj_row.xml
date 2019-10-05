@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+
+        app:cardCornerRadius="6dp" app:cardElevation="6dp"
+
+        android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp" android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="match_parent"
+
+            android:orientation="vertical">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/NewsObjHeaderLayout"
+
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+
+                android:layout_marginBottom="5dp" android:background="@drawable/header_layout">
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+                    android:text="Video Available" android:textColor="#000000"
+                    android:textAppearance="?android:attr/textAppearanceMedium" android:textStyle="bold"
+
+                    app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+                    android:src="@drawable/cam"
+
+                    app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/textView1" app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintHorizontal_bias="0.1"/>
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/DistrictNewsImageView"
+
+                    android:layout_width="220dp" android:layout_height="160dp"
+
+                    android:src="@drawable/ic_launcher"
+                    android:adjustViewBounds="true" android:scaleType="fitCenter"
+
+                    app:layout_constraintBottom_toTopOf="@id/NewsObjectALertType" app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/NewsObjectALertType"
+
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+
+                    android:text="NewsObjectALertType" android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="15sp" android:textStyle="bold" android:textColor="#FF0000"
+                    android:padding="3dp"
+
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/DistrictNewsImageView"
+                    app:layout_constraintBottom_toTopOf="@id/DistrictNewsTitle" />
+
+                <TextView
+                    android:id="@+id/DistrictNewsTitle"
+
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+                    android:textSize="15sp" android:text="DistrictNewsTitle"
+                    android:textStyle="bold" android:textColor="#000000"
+                    android:paddingLeft="12dp" android:paddingRight="12dp"
+
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/NewsObjectALertType"
+                    app:layout_constraintBottom_toTopOf="@id/DistrictNewsExcert" />
+
+                <TextView
+                    android:id="@+id/DistrictNewsExcert"
+
+                    android:layout_width="fill_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="12dp" android:layout_marginRight="12dp"
+
+                    android:fontFamily="monospace" android:text="DistrictNewsExcert"
+                    android:textSize="12sp" android:textColor="#000000"
+
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/DistrictNewsTitle"
+                    app:layout_constraintBottom_toTopOf="@id/DistrictNewsAuthor" />
+
+                <TextView
+                    android:id="@+id/DistrictNewsAuthor"
+
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+
+                    android:padding="5dp" android:text="DistrictNewsAuthor" android:textColor="#000000"
+                    android:textSize="15sp" android:textStyle="bold|italic"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/DistrictNewsExcert"
+                    app:layout_constraintTop_toBottomOf="@id/DistrictNewsExcert" />
+
+                <TextView
+                    android:id="@+id/DistrictNewsDate"
+
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+
+                    android:padding="5dp" android:text="DistrictNewsDate" android:textColor="#000000"
+                    android:textSize="15sp" android:textStyle="bold|italic"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/DistrictNewsExcert"
+                    app:layout_constraintTop_toBottomOf="@id/DistrictNewsExcert" />
+
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>
