@@ -1,12 +1,12 @@
 package furious.objadapters;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,7 +35,8 @@ public class NewsAdapter extends BaseAdapter{
 		public TextView alertType;
 		public TextView videoTxtV;
 		public ImageView videoImg;
-		public RelativeLayout layout;
+		public ConstraintLayout layout;
+//		public RelativeLayout layout;
 		public TextView author;
 		public TextView storyDate;
 		public TextView titleView;
@@ -74,10 +75,11 @@ public class NewsAdapter extends BaseAdapter{
 		if(arg1 == null){
 
 			viewHolder = new NEWS_ViewHolder();
-			
-			convertView = inflater.inflate(R.layout.news_obj_row, arg2, false);
+
+			convertView = inflater.inflate(R.layout.constraint_news_obj_row, arg2, false);
 			viewHolder.storyTitle = (TextView) convertView.findViewById(R.id.DistrictNewsTitle);
-			viewHolder.layout = (RelativeLayout) convertView.findViewById(R.id.NewsObjHeaderLayout);
+			viewHolder.layout = (ConstraintLayout) convertView.findViewById(R.id.NewsObjHeaderLayout);
+//			viewHolder.layout = (RelativeLayout) convertView.findViewById(R.id.NewsObjHeaderLayout);
 			viewHolder.titleView = (TextView) convertView.findViewById(R.id.textView1);
 			viewHolder.caption = (ImageView) convertView.findViewById(R.id.DistrictNewsImageView);
 			viewHolder.storyExcert = (TextView) convertView.findViewById(R.id.DistrictNewsExcert);

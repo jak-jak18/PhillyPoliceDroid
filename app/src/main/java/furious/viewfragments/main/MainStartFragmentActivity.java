@@ -35,26 +35,6 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 		pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
 		TabLayout tabLayout = findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(pager);
-//        pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//			@Override
-//			public void onTabSelected(TabLayout.Tab tab) {
-//
-//				pager.setCurrentItem(tab.getPosition());
-//			}
-//
-//			@Override
-//			public void onTabUnselected(TabLayout.Tab tab) {
-//
-//			}
-//
-//			@Override
-//			public void onTabReselected(TabLayout.Tab tab) {
-//
-//			}
-//		});
-
-
 	}
 
 	@Override
@@ -87,36 +67,6 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 
 		return false;
 	}
-<<<<<<< HEAD
-	
-	public class NewsPagerAdapter extends FragmentStatePagerAdapter {
-    	private String[] Positions = {"District News","Main News","Shootings"};
-
-        public NewsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public int getCount() {
-            return Positions.length;
-        }
-
-        @Override
-        public Fragment getItem(int position){
-        	if(position == 0){
-        		return new MainNews();
-        	}else if(position == 1){
-        		return new MainDistrictNews();
-        	}else if(position == 2){
-				return new ShootingFragment();
-			}else{
-        		return new MainDistrictNews();
-        	}
-        }
-
-		public String getTitle(int position) {
-			return Positions[position];
-=======
 
 	public class NewsPagerAdapter extends FragmentPagerAdapter{
 		private String[] Positions = {"District News","Main News","Shootings"};
@@ -128,7 +78,6 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 
 		NewsPagerAdapter(FragmentManager fm) {
 			super(fm);
->>>>>>> debug
 		}
 
 		@Override
