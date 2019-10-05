@@ -84,11 +84,6 @@ public class MainUSCrimesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-//                if(TOTAL_COUNT == newsAdapter.getItemCount()){
-//                    Toast.makeText(MainUSCrimesActivity.this, "NO MORE", Toast.LENGTH_LONG).show();
-//                }else{
-//                    new getMoreUSMurders().execute();
-//                }
 
 
             }

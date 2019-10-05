@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -104,7 +105,17 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 					Toast.makeText(getActivity(), "No more news at this time", Toast.LENGTH_LONG).show();
 				}
 			}else{
+
 				NewStoryObject lObj = (NewStoryObject) arg0.getItemAtPosition(arg2);
+
+				View v = arg1.findViewById(R.id.DistrictNewsImageView);
+				v.setDrawingCacheEnabled(true);
+				Bitmap capturedBitmap = Bitmap.createBitmap(v.getDrawingCache());
+				v.setDrawingCacheEnabled(false);
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				capturedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				byte[] byteArray = stream.toByteArray();
+
 				boolean isVid = false;
 					if(!lObj.getTubeURL().equals(0) || !lObj.getTubeURL().equals(null)){
 						isVid = true;
@@ -116,10 +127,12 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 				bundle.putString("URL", lObj.getTubeURL());
 				bundle.putString("StoryID", lObj.getNewsStoryID());
 				bundle.putString("ImageURL", lObj.getImageURL());
+				bundle.putString("CrimeType",lObj.getCategory());
 				bundle.putString("ParentActivity", "DistrictNewsList");
 				bundle.putBoolean("isVideo", isVid);
 				bundle.putBoolean("isUCVid", false);
 				bundle.putBoolean("isAlrBk", false);
+				policeNews.putExtra("VictimImage", byteArray);
 				
 				policeNews.putExtras(bundle);
 				
@@ -194,7 +207,6 @@ public class DistrictNewsList extends ListFragment implements AdapterView.OnItem
 									item.setURL(newobject.getString("URL"));
 									item.setTitle(newobject.getString("Title"));
 									item.setTubeURL(newobject.getString("TubeURL"));
-									//item.setDescription(newobject.getString("Description"));
 									item.setCategory(newobject.getString("Category"));
 									item.setStoryAuthor(newobject.getString("StoryAuthor"));
 									newsObjs.add(item);
