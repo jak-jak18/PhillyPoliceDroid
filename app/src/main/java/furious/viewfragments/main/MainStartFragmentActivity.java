@@ -31,6 +31,8 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 		Toolbar mractionbar = findViewById(R.id.mr_toolbar);
 		setSupportActionBar(mractionbar);
 
+		mractionbar.setTitle("Philly Police Droid");
+
 		final ViewPager pager = findViewById(R.id.viewPager);
 		pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
 		TabLayout tabLayout = findViewById(R.id.tab_layout);

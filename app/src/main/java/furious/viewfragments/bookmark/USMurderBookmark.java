@@ -1,25 +1,21 @@
 package furious.viewfragments.bookmark;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,28 +43,18 @@ import furious.viewfragments.usmurders.USMurderStories;
 
 import static android.app.Activity.RESULT_OK;
 
-public class USMurderBookmark extends ListFragment implements AdapterView.OnItemLongClickListener {
+public class USMurderBookmark extends ListFragment {
 
-//    private RecyclerView listview;
     private ProgressBar progress;
     private TextView isnomore;
-    private RelativeLayout footer;
     private HttpURLConnection httpcon;
-    private RecyclerView.LayoutManager layoutManager;
 
     ArrayList<USMurderObject> newsObjs;
     USMurderBookmarkAdapter adapter;
     int TOTAL_COUNT;
+    View header;
 
-    static USMurderBookmark newInstance(String jsonData){
 
-        USMurderBookmark frag = new USMurderBookmark();
-        Bundle args = new Bundle();
-        args.putString("JSON_DATA", jsonData);
-        frag.setArguments(args);
-
-        return frag;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -86,13 +72,9 @@ public class USMurderBookmark extends ListFragment implements AdapterView.OnItem
         super.onCreateView(inflater, container, savedInstanceState);
 
         View layout = inflater.inflate(R.layout.usmurder_bmrk, container, false);
-        //listview = (RecyclerView) layout.findViewById(R.id.usmurder_list_bmrk);
         progress = (ProgressBar) layout.findViewById(R.id.progressBar_usmuder_bmrk);
         isnomore = (TextView) layout.findViewById(R.id.BookmarkNoView_usm_bmrk);
-        footer = (RelativeLayout) layout.findViewById(R.id.usmurder_footer_brk);
 
-        //layoutManager = new LinearLayoutManager(getContext());
-       // listview.setLayoutManager(layoutManager);
 
         return layout;
 
@@ -101,52 +83,54 @@ public class USMurderBookmark extends ListFragment implements AdapterView.OnItem
     @Override
     public void onActivityCreated(Bundle savedState) {
         super.onActivityCreated(savedState);
-        registerForContextMenu(getListView());
 
         this.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final USMurderObject crObj = (USMurderObject) adapterView.getItemAtPosition(i);
-                ImageView v = (ImageView) view.findViewById(R.id.Imageview_usm_bmrk_row);
-                v.setDrawingCacheEnabled(true);
-                Bitmap capturedBitmap = Bitmap.createBitmap(v.getDrawingCache());
-                v.setDrawingCacheEnabled(false);
 
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                capturedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
+                if (view.findViewById(R.id.MoreListTextView) != null) {
+                    TextView ismore = (TextView) view.findViewById(R.id.MoreListTextView);
+                    if (!ismore.getText().equals("No More Bookmarks")) {
+                        Toast.makeText(getActivity(), "Need top write more code", Toast.LENGTH_SHORT).show();
+                    } else {
 
-                Intent intent = new Intent(getActivity(), USMurderStories.class);
-                intent.putExtra("VictimName", crObj.getVictimName());
-                intent.putExtra("Description", crObj.getDesc());
-                intent.putExtra("NewsStoryDesc", crObj.getNewsStoryDesc());
-                intent.putExtra("ItemPosition", i);
-                intent.putExtra("NewsStoryTitle", crObj.getNewsStoryTitle());
-                intent.putExtra("ParentActivity", "USMurderBookmark");
-                intent.putExtra("isNewsStory",crObj.isNewsStory());
-                intent.putExtra("USMurderID",crObj.getUSMurderID());
-                intent.putExtra("VictimImage", byteArray);
+                    }
 
-                startActivityForResult(intent,0000);
+                }else{
+
+                    final USMurderObject crObj = (USMurderObject) adapterView.getItemAtPosition(i);
+                    ImageView v = (ImageView) view.findViewById(R.id.Imageview_usm_bmrk_row);
+                    v.setDrawingCacheEnabled(true);
+                    Bitmap capturedBitmap = Bitmap.createBitmap(v.getDrawingCache());
+                    v.setDrawingCacheEnabled(false);
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    capturedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    Intent intent = new Intent(getActivity(), USMurderStories.class);
+                    intent.putExtra("VictimName", crObj.getVictimName());
+                    intent.putExtra("Description", crObj.getDesc());
+                    intent.putExtra("NewsStoryDesc", crObj.getNewsStoryDesc());
+                    intent.putExtra("ItemPosition", i);
+                    intent.putExtra("NewsStoryTitle", crObj.getNewsStoryTitle());
+                    intent.putExtra("ParentActivity", "USMurderBookmark");
+                    intent.putExtra("isNewsStory",crObj.isNewsStory());
+                    intent.putExtra("USMurderID",crObj.getUSMurderID());
+                    intent.putExtra("VictimImage", byteArray);
+
+                    startActivityForResult(intent,0000);
+
+                }
+
+
             }
         });
 
     }
 
 
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.newsobject_menu, menu);
-
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        registerForContextMenu(this.getListView());
-        getListView().showContextMenu();
-        return true;
-    }
 
 
 
@@ -160,6 +144,7 @@ public class USMurderBookmark extends ListFragment implements AdapterView.OnItem
             try{
 
                 String Data = getBookmarkListData();
+                Log.i("LOG HERE",Data);
 
                 JSONObject object = new JSONObject(Data);
                 JSONObject bookMarks = object.getJSONObject("Bookmarks");
@@ -199,25 +184,27 @@ public class USMurderBookmark extends ListFragment implements AdapterView.OnItem
             adapter = new USMurderBookmarkAdapter(getActivity(),lockers);
 
             if(lockers.size() <= 0){
+
                 isnomore.setVisibility(View.VISIBLE);
                 progress.setVisibility(View.GONE);
+
             }else{
+
                 String ct = Integer.toString(TOTAL_COUNT);
 
                 if(TOTAL_COUNT == lockers.size()){
+
+                    header = Header("No More Bookmarks");
+                    getListView().addFooterView(header);
                     getListView().setAdapter(adapter);
-                   // getListView().setNestedScrollingEnabled(false);
                     progress.setVisibility(View.GONE);
-//                    View title = Header("No More News "+"( "+lockers.size()+" of "+TOTAL_COUNT+" )");
-//                    getListView().addFooterView(title);
-//                    getListView().setAdapter(adapter);
 
 
                 }else{
-//                    View title = Header("More News "+"( "+lockers.size()+" of "+ct+" )");
-//                    getListView().addFooterView(title);
+
+                    header = Header("More News "+"( "+lockers.size()+" of "+ct+" )");
+                    getListView().addFooterView(header);
                     getListView().setAdapter(adapter);
-                   // getListView().setNestedScrollingEnabled(false);
                     progress.setVisibility(View.GONE);
 
                 }
@@ -291,7 +278,6 @@ public class USMurderBookmark extends ListFragment implements AdapterView.OnItem
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-       // Log.e("ERROR","child HIT ON ACTIVITY RESULTS "+Integer.toString(data.getIntExtra("ItemPosition",99)));
 
 
         if (requestCode == 0000 && resultCode == RESULT_OK){
@@ -299,7 +285,6 @@ public class USMurderBookmark extends ListFragment implements AdapterView.OnItem
             newsObjs.remove(data.getIntExtra("ItemPosition",0));
             adapter.notifyDataSetChanged();
 
-           // int cout = newsObjs.size();
 
             Toast.makeText(getActivity(), "Record Deleted", Toast.LENGTH_LONG).show();
 
@@ -307,6 +292,15 @@ public class USMurderBookmark extends ListFragment implements AdapterView.OnItem
         }
 
 
+    }
+
+    private View Header(String string) {
+
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View kfoot = inflater.inflate(R.layout.news_more_header, null);
+        TextView title = (TextView) kfoot.findViewById(R.id.MoreListTextView);
+        title.setText(string);
+        return kfoot;
     }
 
 

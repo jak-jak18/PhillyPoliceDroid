@@ -66,8 +66,10 @@ public class PoliceNews extends AppCompatActivity {
 	int listPos;
 	String districtNum;
 	HttpURLConnection httpcon;
-	boolean isAlrBk = false;
-	boolean isUCVid = false;
+	String isAlrBk;
+	String isUCVid;
+	String idType;
+	boolean isviD = false;
 	ArrayList<String> headers;
 	ImageLoader imgLoader;
 	ProgressBar diaLog;
@@ -88,8 +90,7 @@ public class PoliceNews extends AppCompatActivity {
         storyTitle = (String) this.getIntent().getExtras().getString("StoryTitle");
         storyID = (String) this.getIntent().getExtras().getString("StoryID");
         img_URL = (String) this.getIntent().getExtras().getString("ImageURL");
-        isUCVid = (boolean) this.getIntent().getExtras().getBoolean("isUCVid");
-        isAlrBk = (boolean) this.getIntent().getExtras().getBoolean("isAlrBk");
+        isviD = this.getIntent().getExtras().getBoolean("isUCVid");
         actparent = (String) this.getIntent().getExtras().getString("ParentActivity");
         listPos = this.getIntent().getExtras().getInt("ItemPosition");
         crimeType = this.getIntent().getExtras().getString("CrimeType");
@@ -114,9 +115,6 @@ public class PoliceNews extends AppCompatActivity {
 			BOOKMARK_NEWS = "false";
 			BOOKMARK_VIDEOS = "true";
 
-			if(isUCVid){
-				storyID = this.getIntent().getExtras().getString("UCVideoID");
-			}
 
 		}else if(actparent.equals("UCVideoBookmark")){
 			mractionbar.setTitle("Saved Bookmarks");
@@ -171,10 +169,19 @@ public class PoliceNews extends AppCompatActivity {
         	
         });
 
+        if(isviD){
+            storyID = this.getIntent().getExtras().getString("UCVideoID");
+            isUCVid = "true";
+            isAlrBk = "false";
+            idType = "VideoID";
+        }else{
+            isAlrBk = "true";
+            isUCVid = "false";
+            idType = "NewsID";
+        }
+
     }
     
-    
-
 
     
     public class fetchBookmarks extends AsyncTask<String, Void, String>{
@@ -412,12 +419,12 @@ public class PoliceNews extends AppCompatActivity {
 
 		try {
 			JSONObject postObj = new JSONObject();
-			postObj.put("NewsID", storyID);
+			postObj.put(idType, storyID);
 			postObj.put("Bookmark", "true");
 			postObj.put("DeviceID", deviceID);
 			postObj.put("BookmarkRemove", "true");
-			postObj.put("News", "true");
-			postObj.put("Video", "false");
+			postObj.put("News",  isAlrBk);
+			postObj.put("Video", isUCVid);
 			String data = postObj.toString();
 			Log.e("THIS IS SENDING", postObj.toString());
 
