@@ -8,9 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -92,8 +90,9 @@ public class USMurderBookmark extends ListFragment {
                 if (view.findViewById(R.id.MoreListTextView) != null) {
                     TextView ismore = (TextView) view.findViewById(R.id.MoreListTextView);
                     if (!ismore.getText().equals("No More Bookmarks")) {
-                        Toast.makeText(getActivity(), "Need top write more code", Toast.LENGTH_SHORT).show();
+                        new fetchMoreBookmarks().execute();
                     } else {
+                        Toast.makeText(getActivity(), "Need top write more code", Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -131,6 +130,86 @@ public class USMurderBookmark extends ListFragment {
     }
 
 
+    public class fetchMoreBookmarks extends AsyncTask<String, Void, ArrayList<USMurderObject>> {
+
+
+        @Override
+        protected ArrayList<USMurderObject> doInBackground(String... params) {
+
+            try{
+
+                String Data = null;
+
+                if((TOTAL_COUNT - newsObjs.size()) <=5){
+                    Data = getBookmarkListData(newsObjs.size(),TOTAL_COUNT);
+                }else if((TOTAL_COUNT - newsObjs.size()) > 5){
+                    Data = getBookmarkListData(newsObjs.size(),5);
+                }
+
+                Log.i("GOT BACK News",Data);
+
+                JSONObject object = new JSONObject(Data);
+                JSONObject bookMarks = object.getJSONObject("Bookmarks");
+                JSONArray news_story_Array = bookMarks.getJSONArray("USMurders");
+
+                int news_story_count = news_story_Array.length();
+
+
+                for(int i=0;i<news_story_count;i++){
+
+                    USMurderObject item = new USMurderObject();
+                    JSONObject news_object = news_story_Array.getJSONObject(i);
+                    item.setDesc(news_object.getString("Description"));
+                    item.setDCNumber(news_object.getString("DCNumber"));
+                    item.setNewsStoryPubDate(news_object.getString("MurderDate"));
+                    item.setVictimName(news_object.getString("VictimName"));
+                    item.setUSMurderID(news_object.getString("USMurderID"));
+                    item.setImageURL(news_object.getString("ImageURL"));
+
+                    newsObjs.add(item);
+                }
+
+
+
+                TOTAL_COUNT = object.getInt("TotalCount");
+            }
+
+            catch (IOException e) {e.printStackTrace();}
+            catch (JSONException e) {e.printStackTrace();}
+
+
+            return newsObjs;
+        }
+
+        protected void onPostExecute(ArrayList<USMurderObject> lockers) {
+
+           adapter.updateList(lockers);
+
+                String ct = Integer.toString(TOTAL_COUNT);
+
+                if(TOTAL_COUNT == lockers.size()){
+
+                    TextView tit = (TextView) getListView().findViewById(R.id.MoreListTextView);
+                    tit.setText("No More Bookmarks");
+
+                }else{
+
+                    TextView tit = (TextView) getListView().findViewById(R.id.MoreListTextView);
+                    tit.setText("More Bookmarks "+"( "+lockers.size()+" of "+ct+" )");
+
+                }
+
+
+
+            //progress.setVisibility(View.INVISIBLE);
+
+
+
+        }
+
+    }
+
+
 
 
 
@@ -143,7 +222,7 @@ public class USMurderBookmark extends ListFragment {
 
             try{
 
-                String Data = getBookmarkListData();
+                String Data = getBookmarkListData(0,5);
                 Log.i("LOG HERE",Data);
 
                 JSONObject object = new JSONObject(Data);
@@ -219,9 +298,10 @@ public class USMurderBookmark extends ListFragment {
 
     }
 
-    private String getBookmarkListData() throws IOException, JSONException {
+    private String getBookmarkListData(int Start, int End) throws IOException, JSONException {
 
         String result = null;
+
         try{
 
             String macAddss = HttpClientInfo.getMacAddress(getActivity());
@@ -234,7 +314,11 @@ public class USMurderBookmark extends ListFragment {
             postObj.put("Bookmark_UCVideos", "false");
             postObj.put("Bookmark_NewsStory", "false");
             postObj.put("BookmarkUSMurderList","true");
+            postObj.put("Start",Start);
+            postObj.put("End",End);
+
             String data = postObj.toString();
+            Log.i("MurderSED",data);
 
             httpcon = (HttpURLConnection) ((new URL(HttpClientInfo.URL).openConnection()));
             httpcon.setDoOutput(true);

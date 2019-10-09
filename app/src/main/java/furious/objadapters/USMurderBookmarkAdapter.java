@@ -2,9 +2,6 @@ package furious.objadapters;
 
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +10,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import furious.dataobjs.USMurderObject;
 import furious.phillypolicemobile.R;
 import furious.utils.ImageLoader;
-import furious.viewfragments.usmurders.USMurderStories;
 
 import static furious.utils.Utils.ellipsize;
 
@@ -41,7 +36,6 @@ public class USMurderBookmarkAdapter extends BaseAdapter {
         public TextView mDate;
         public TextView distN;
         public RelativeLayout layout_holder;
-        public View layoutview;
 
     }
 
@@ -102,6 +96,8 @@ public class USMurderBookmarkAdapter extends BaseAdapter {
         viewHolder.mDate.setText(crObj.getNewsStoryPubDate());
         if(!crObj.getImageURL().equals("0")){
             imageLoader.DisplayImage(crObj.getImageURL(), viewHolder.vitimImg);
+        }else{
+            viewHolder.vitimImg.setImageResource(R.drawable.badgelogo);
         }
 
         return convertView;

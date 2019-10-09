@@ -76,9 +76,10 @@ public class UCVideoBookmark extends ListFragment{
 			if (arg1.findViewById(R.id.MoreListTextView) != null) {
 				TextView ismore = (TextView) arg1.findViewById(R.id.MoreListTextView);
 				if (!ismore.getText().equals("No More Bookmarks")) {
-					Toast.makeText(getActivity(), "Need top write more code", Toast.LENGTH_SHORT).show();
-				} else {
+					new fetchMoreBokmarks().execute();
 
+				} else {
+					Toast.makeText(getActivity(), "Need top write more code", Toast.LENGTH_SHORT).show();
 				}
 
 			}else{
@@ -118,9 +119,7 @@ public class UCVideoBookmark extends ListFragment{
 			}
 
 
-			
 
-			
 		}});
 
  	}
@@ -140,14 +139,96 @@ public class UCVideoBookmark extends ListFragment{
      return layout;	        
 	
     }
+
+	public class fetchMoreBokmarks extends AsyncTask<String, Void, ArrayList<NewsStoryBookmarkObject>>{
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			//progress.setVisibility(View.VISIBLE);
+		}
+
+		@Override
+		protected ArrayList<NewsStoryBookmarkObject> doInBackground(String... params) {
+
+			try{
+
+				String Data = null;
+				if((TOTAL_COUNT - vidObjs.size()) <= 5){
+					Data = getBookmarkListData(vidObjs.size(),TOTAL_COUNT);
+				}else if((TOTAL_COUNT - vidObjs.size()) > 5){
+					Data = getBookmarkListData(vidObjs.size(),5);
+
+				}
+
+
+				Log.i("UCVID_GOT",Data);
+				JSONObject object = new JSONObject(Data);
+				JSONObject bookMarks = object.getJSONObject("Bookmarks");
+				JSONArray uc_vid_Array = bookMarks.getJSONArray("UCVideos");
+
+				int uc_vid_count = uc_vid_Array.length();
+
+				for(int i=0;i<uc_vid_count;i++){
+
+					NewsStoryBookmarkObject item = new NewsStoryBookmarkObject();
+					JSONObject vid_object = uc_vid_Array.getJSONObject(i);
+					item.setID(vid_object.getString("VideoID"));
+					item.setTitle(vid_object.getString("Title"));
+					item.setDescription(vid_object.getString("Description"));
+					item.setStoryDate(vid_object.getString("PubDate"));
+					item.setImageURL(vid_object.getString("ImageURL"));
+					item.setCategory(vid_object.getString("Category"));
+					item.setVideoURL(vid_object.getString("TubeURL"));
+					item.setDivision(vid_object.getString("Division"));
+					item.setDistrict(vid_object.getString("District"));
+					vidObjs.add(item);
+				}
+
+
+				//TOTAL_COUNT = object.getInt("TotalCount");
+			}
+			catch (IOException e) {e.printStackTrace();}
+			catch (JSONException e) {e.printStackTrace();}
+
+
+			return vidObjs;
+		}
+
+		protected void onPostExecute(ArrayList<NewsStoryBookmarkObject> lockers) {
+
+			adapter.updateList(lockers);
+
+				String ct = Integer.toString(TOTAL_COUNT);
+
+				if(TOTAL_COUNT == lockers.size()){
+					TextView tit = (TextView) getListView().findViewById(R.id.MoreListTextView);
+					tit.setText("No More Bookmarks");
+
+				}else{
+
+					TextView tit = (TextView) getListView().findViewById(R.id.MoreListTextView);
+					tit.setText("More Bookmarks "+"( "+lockers.size()+" of "+ct+" )");
+
+				}
+
+
+
+			progress.setVisibility(View.INVISIBLE);
+
+
+		}
+
+	}
+
+
 	
 	
 	public class fetchBokmarks extends AsyncTask<String, Void, ArrayList<NewsStoryBookmarkObject>>{
 		 
 		 @Override
 		    protected void onPreExecute() {
-			 super.onPreExecute();	
-
+			 super.onPreExecute();
 
 		 }
 		 
@@ -158,7 +239,7 @@ public class UCVideoBookmark extends ListFragment{
 				
 					try{
 						
-						String Data = getBookmarkListData();
+						String Data = getBookmarkListData(0,5);
 						Log.i("UCVID_PASS",Data);
 						JSONObject object = new JSONObject(Data);
 						JSONObject bookMarks = object.getJSONObject("Bookmarks");
@@ -182,9 +263,7 @@ public class UCVideoBookmark extends ListFragment{
 								vidObjs.add(item);
 							}
 
-							
 
-							
 								TOTAL_COUNT = object.getInt("TotalCount");
 					}	
 									catch (IOException e) {e.printStackTrace();}
@@ -200,22 +279,25 @@ public class UCVideoBookmark extends ListFragment{
 
 					if(lockers.size() <= 0){
 							noBookmark.setVisibility(View.VISIBLE);
-						}else{
+					}else{
 							String ct = Integer.toString(TOTAL_COUNT);
 
-							if(TOTAL_COUNT == lockers.size()){
-								View title = Header("No More News "+"( "+lockers.size()+" of "+TOTAL_COUNT+" )");
+                        if (lockers.size() == 1) {
+                            getListView().setAdapter(adapter);
+
+                        }else if(TOTAL_COUNT == lockers.size()){
+								View title = Header("No More Bookmarks");
 								getListView().addFooterView(title);
 								getListView().setAdapter(adapter);
 
-							}else{
-								View title = Header("More News "+"( "+lockers.size()+" of "+ct+" )");
+                        }else{
+								View title = Header("More Bookmarks "+"( "+lockers.size()+" of "+ct+" )");
 								getListView().addFooterView(title);
 								getListView().setAdapter(adapter);
 
-							}
+                        }
 							
-						}
+					}
 						
 						progress.setVisibility(View.INVISIBLE);
 					
@@ -259,7 +341,7 @@ public class UCVideoBookmark extends ListFragment{
 
 		  
 
-		private String getBookmarkListData() throws IOException, JSONException{
+		private String getBookmarkListData(int Start, int End) throws IOException, JSONException{
 
 				String macAddss = HttpClientInfo.getMacAddress(getActivity());
 			 	String deviceID = HttpClientInfo.getMD5(macAddss);
@@ -273,7 +355,11 @@ public class UCVideoBookmark extends ListFragment{
 		 		postObj.put("DeviceID", deviceID);
 		 		postObj.put("Bookmark_UCVideos", "true");
 		 		postObj.put("Bookmark_NewsStory", "false");
+		 		postObj.put("Start", Start);
+		 		postObj.put("End",End);
+
 		 		String data = postObj.toString();
+		 		Log.i("UC_PASS",data);
 
 
 			//Connect
