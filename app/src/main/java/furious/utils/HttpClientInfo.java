@@ -12,7 +12,8 @@ import android.telephony.TelephonyManager;
 public class HttpClientInfo{
 
 //	public static final String URL = "http://10.20.30.11/PhilaPolice-Info-API/phila_pd_api.php";
-public static final String URL = "http://sensationalsettings.info/api/api.php";
+//public static final String URL = "http://sensationalsettings.info/api/api.php";
+	public static final String URL = URLDataClass.getURL();
 
 	public static String getMacAddress(Context context) {
 	    WifiManager wimanager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
