@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent" android:layout_height="match_parent"
+
+        app:cardCornerRadius="6dp" app:cardElevation="6dp"
+
+        android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp" android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/Imageview_usm_bmrk_row"
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/badgelogo" />
+
+                <TextView
+                    android:id="@+id/VictimName_bmrkrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/Imageview_usm_bmrk_row"
+                    android:layout_toEndOf="@+id/Imageview_usm_bmrk_row"
+                    android:layout_marginStart="5dp"
+                    android:padding="5dp"
+                    android:text="VictimName_bmrkrow"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/Imageview_usm_bmrk_row"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/DistrictNum_bmrk_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/VictimName_bmrkrow"
+                    android:layout_toEndOf="@+id/Imageview_usm_bmrk_row"
+                    android:layout_marginStart="5dp"
+                    android:padding="5dp"
+                    android:text="22nd District"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/Imageview_usm_bmrk_row"
+                    app:layout_constraintTop_toBottomOf="@+id/VictimName_bmrkrow"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/DCnumber_bmrk_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/DistrictNum_bmrk_row"
+                    android:layout_toEndOf="@+id/Imageview_usm_bmrk_row"
+                    android:layout_marginStart="5dp"
+                    android:padding="5dp"
+                    android:text="DC# 19-39-493-3434"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/Imageview_usm_bmrk_row"
+                    app:layout_constraintTop_toBottomOf="@+id/DistrictNum_bmrk_row"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/Description_bmrk_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:layout_margin="5dp"
+                android:text="Description" />
+
+            <TextView
+                android:id="@+id/Date_usm_bmrk_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/Description_bmrk_row"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="end"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="Tue Nov 19, 2019" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>

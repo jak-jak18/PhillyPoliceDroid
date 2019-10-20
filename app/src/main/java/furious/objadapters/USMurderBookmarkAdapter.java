@@ -70,7 +70,7 @@ public class USMurderBookmarkAdapter extends BaseAdapter {
 
         if(view == null) {
             viewHolder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.usmurder_bmrk_row, viewGroup, false);
+            convertView = inflater.inflate(R.layout.constraint_usmurder_bmrk_row, viewGroup, false);
 
             viewHolder.descData = (TextView) convertView.findViewById(R.id.Description_bmrk_row);
             viewHolder.victimName = (TextView) convertView.findViewById(R.id.VictimName_bmrkrow);
@@ -78,7 +78,7 @@ public class USMurderBookmarkAdapter extends BaseAdapter {
             viewHolder.dc_number = (TextView) convertView.findViewById(R.id.DCnumber_bmrk_row);
             viewHolder.mDate = (TextView) convertView.findViewById(R.id.Date_usm_bmrk_row);
             viewHolder.distN = (TextView) convertView.findViewById(R.id.DistrictNum_bmrk_row);
-            viewHolder.layout_holder = (RelativeLayout) convertView.findViewById(R.id.itembmklayout);
+//            viewHolder.layout_holder = (RelativeLayout) convertView.findViewById(R.id.itembmklayout);
 
             convertView.setTag(viewHolder);
 

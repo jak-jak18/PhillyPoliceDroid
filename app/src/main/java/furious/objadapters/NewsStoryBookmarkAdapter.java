@@ -114,7 +114,7 @@ public class NewsStoryBookmarkAdapter extends BaseAdapter{
 			
 			viewHolder = new Bookmark_ViewHolder();
 			Log.i("LOOKING AT", Integer.toString(arg0));
-			convertView = inflater.inflate(R.layout.bookmark_row, arg2, false);
+			convertView = inflater.inflate(R.layout.constraint_bookmark_row, arg2, false);
 			
 			viewHolder.videoTitle = (TextView) convertView.findViewById(R.id.BookmarkTitle);
 			viewHolder.videoDescription = (TextView) convertView.findViewById(R.id.BookmarkDescription);
