@@ -1,33 +1,32 @@
 package furious.viewfragments.main;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import furious.phillypolicemobile.R;
+import furious.utils.Utils;
 import furious.viewfragments.bookmark.BookmarkFragmentActivity;
 import furious.viewfragments.preferences.MainPreferenceActivity;
 
 
 public class MainStartFragmentActivity extends AppCompatActivity{
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mainstart);
 
+		Utils.checkforUpdate(this.getApplicationContext());
 		Toolbar mractionbar = findViewById(R.id.mr_toolbar);
 		setSupportActionBar(mractionbar);
 
@@ -39,6 +38,7 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 		tabLayout.setupWithViewPager(pager);
 
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,7 +71,7 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 		return false;
 	}
 
-	public class NewsPagerAdapter extends FragmentPagerAdapter{
+	public class NewsPagerAdapter extends FragmentPagerAdapter {
 		private String[] Positions = {"District News","Main News","Shootings"};
 		private Fragment[] frags = {
 				new MainNews(),

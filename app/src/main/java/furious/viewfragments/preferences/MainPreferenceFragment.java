@@ -1,27 +1,27 @@
 package furious.viewfragments.preferences;
 
 
-import android.annotation.TargetApi;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 
+import furious.phillypolicemobile.PoliceUpdateService;
 import furious.phillypolicemobile.R;
 import furious.utils.HttpClientInfo;
+import furious.utils.Utils;
 
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainPreferenceFragment extends PreferenceFragment {
 
 	CheckBoxPreference EN_ableSound, checkBox, checkBox1;
 	Preference devID_key;
 	MultiSelectListPreference district_list;
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,7 +56,25 @@ public class MainPreferenceFragment extends PreferenceFragment {
 
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				setItems(checkBox.isChecked());
+				if(checkBox.isChecked()){
+					Log.i("SETTING INFO","YOU CHECKED A BOX");
+					setItems(checkBox.isChecked());
+				}else{
+					Log.i("SETTING INFO","NO NO BOX CHECKED");
+					if(Utils.isMyServiceRunning(PoliceUpdateService.class, getActivity())){
+                        Intent intent = new Intent(getActivity(), PoliceUpdateService.class);
+                        intent.putExtra("PoliceServiceCode", 9911);
+                        getActivity().startService(intent);
+                        getActivity().stopService(intent);
+
+                        Log.i("KILL, KILL, KILL","STOPPING SERVICE STUFF");
+                    }else{
+                        Log.i("SERVICE NO RUNNING","NOT CHECKED, NO SERVICE");
+                    }
+
+
+				}
+
 				return true;
 			}
 

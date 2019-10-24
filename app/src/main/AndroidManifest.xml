@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="furious.phillypolicemobile"
     android:versionCode="1"
     android:versionName="1.0" >
@@ -14,7 +15,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name="furious.viewfragments.main.MainStartFragmentActivity">
 
@@ -45,17 +47,46 @@
                 android:value="furious.viewfragments.main.MainStartFragmentActivity" />
 
         </activity>
-         <service android:name="furious.phillypolicemobile.PoliceUpdateService"></service>
-         <activity android:name="furious.viewfragments.PoliceNewsAll" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
-         <activity android:name="furious.viewfragments.preferences.MainPreferenceActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
-         <activity android:name="furious.viewfragments.district.DistrictFragmentActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
-         <activity android:name="furious.viewfragments.bookmark.BookmarkFragmentActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
-         <activity android:name="furious.viewfragments.usmurders.MainUSMurderActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
-        <activity android:name="furious.viewfragments.usmurders.USMurderStories" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
-        <activity android:name="furious.viewfragments.uscrimes.MainUSCrimesActivity" android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait"></activity>
+
+        <service android:name="furious.phillypolicemobile.PoliceUpdateService" />
+
+        <activity
+            android:name="furious.viewfragments.PoliceNewsAll"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="furious.viewfragments.preferences.MainPreferenceActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="furious.viewfragments.district.DistrictFragmentActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="furious.viewfragments.bookmark.BookmarkFragmentActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="furious.viewfragments.usmurders.MainUSMurderActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="furious.viewfragments.usmurders.USMurderStories"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="furious.viewfragments.uscrimes.MainUSCrimesActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
 
 
-        <activity android:name=".StartUpSplash1"></activity>
+        <activity android:name=".StartUpSplash1" />
          
     </application>
 
