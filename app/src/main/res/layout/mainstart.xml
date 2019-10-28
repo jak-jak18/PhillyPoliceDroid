@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#eeeeee"
@@ -14,10 +15,11 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
         android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/Theme.AppCompat.Light"/>
+        android:theme="@style/Theme.AppCompat.Light"
+        app:tabIndicatorColor="@color/accent"
+        app:tabSelectedTextColor="@color/accent" />
 
 
  <android.support.v4.view.ViewPager

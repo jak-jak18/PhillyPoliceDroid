@@ -31,6 +31,10 @@ public class MainStartFragmentActivity extends AppCompatActivity{
 		setSupportActionBar(mractionbar);
 
 		mractionbar.setTitle("Philly Police Droid");
+		mractionbar.setNavigationIcon(R.drawable.ic_launcher);
+		mractionbar.setBackgroundColor(
+				getResources().getColor(R.color.primary)
+		);
 
 		final ViewPager pager = findViewById(R.id.viewPager);
 		pager.setAdapter(new NewsPagerAdapter(getSupportFragmentManager()));
