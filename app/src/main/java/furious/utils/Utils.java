@@ -1,10 +1,15 @@
 package furious.utils;
 
 	
+	import android.app.ActivityManager;
 	import android.content.Context;
+	import android.content.Intent;
+	import android.content.SharedPreferences;
 	import android.graphics.Bitmap;
 	import android.graphics.BitmapFactory;
+	import android.preference.PreferenceManager;
 	import android.support.v4.view.ViewPager;
+	import android.util.Log;
 	import android.view.LayoutInflater;
 	import android.view.View;
 	import android.widget.TextView;
@@ -15,9 +20,11 @@ package furious.utils;
 	import java.net.HttpURLConnection;
 	import java.net.URL;
 
+	import furious.phillypolicemobile.PoliceUpdateService;
 	import furious.phillypolicemobile.R;
 
 public class Utils {
+
 		private final static String NON_THIN = "[^iIl1\\.,']";
 
 	    public static void CopyStream(InputStream is, OutputStream os)
@@ -197,6 +204,36 @@ public class Utils {
 				view.setAlpha(0f);
 			}
 		}
+	}
+
+	public static void checkforUpdate(Context mContext){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+		boolean isEnabled = prefs.getBoolean("checkbox_preference", false);
+
+		if(isEnabled){
+
+			Log.i("YES THIS IS SERVICE","START IT UPP");
+			Intent service = new Intent(mContext, PoliceUpdateService.class);
+			service.putExtra("PoliceServiceCode", 888);
+			mContext.startService(service);
+
+		}else{
+
+			Log.i("NO SERVICE ENABLED","NOTJING TO START");
+		}
+
+
+	}
+
+
+	public static boolean isMyServiceRunning(Class<?> serviceClass, Context mCont) {
+		ActivityManager manager = (ActivityManager) mCont.getSystemService(Context.ACTIVITY_SERVICE);
+		for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (serviceClass.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 

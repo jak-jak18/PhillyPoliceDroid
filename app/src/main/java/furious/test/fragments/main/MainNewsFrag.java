@@ -54,9 +54,9 @@ public class MainNewsFrag extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        Intent service = new Intent(getActivity(),PoliceUpdateService.class);
-        service.putExtra("PoliceServiceCode", 200);
-        getActivity().startService(service);
+//        Intent service = new Intent(getActivity(),PoliceUpdateService.class);
+//        service.putExtra("PoliceServiceCode", 200);
+//        getActivity().startService(service);
 
     }
 

@@ -1,5 +1,6 @@
 package furious.viewfragments.main;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -63,9 +64,9 @@ import furious.viewfragments.bookmark.PoliceNews;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        Intent service = new Intent(getActivity(),PoliceUpdateService.class);
-        service.putExtra("PoliceServiceCode", 200);
-        getActivity().startService(service);
+//        Intent service = new Intent(getActivity(),PoliceUpdateService.class);
+//        service.putExtra("PoliceServiceCode", 200);
+//        getActivity().startService(service);
 
     }
     
